@@ -1,0 +1,8 @@
+.burger_ingredients_list {
+  list-style-type: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: calc(var(--offset-base-size) * 6);
+  row-gap: calc(var(--offset-base-size) * 8);
+}

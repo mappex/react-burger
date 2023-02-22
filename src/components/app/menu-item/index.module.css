@@ -1,0 +1,27 @@
+.menu_list_item {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  border-radius: var(--common-border-radius-s);
+  text-decoration: none;
+}
+
+li:nth-of-type(n+2) .menu_list_item {
+  margin-right: 0;
+}
+
+.menu_list_item_icon {
+  display: inherit;
+}
+
+.menu_list_item_active .menu_list_item_text {
+  color: var(--text-primary-color);
+}
+
+.menu_list_item:hover .menu_list_item_text {
+  color: var(--text-primary-color);
+}
+
+.menu_list_item:hover .menu_list_item_icon svg {
+  fill: var(--text-primary-color);
+}
