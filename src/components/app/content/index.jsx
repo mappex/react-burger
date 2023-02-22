@@ -1,7 +1,13 @@
 import styles from './index.module.css';
 
+// eslint-disable-next-line node/no-missing-import
 import AppHeader from '../header';
-import { BurgerConstructor, BurgerIngredients } from '../../burger';
+// eslint-disable-next-line node/no-missing-import
+import {
+  BurgerConstructor,
+  BurgerIngredients,
+// eslint-disable-next-line node/no-missing-import
+} from '../../burger';
 
 import data from '../../../utils/data.json';
 
