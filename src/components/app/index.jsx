@@ -1,15 +1,15 @@
 import styles from './index.module.css';
 
 // eslint-disable-next-line node/no-missing-import
-import AppHeader from '../header';
+import AppHeader from '../app-header';
 // eslint-disable-next-line node/no-missing-import
 import {
   BurgerConstructor,
   BurgerIngredients,
 // eslint-disable-next-line node/no-missing-import
-} from '../../burger';
+} from '../burger';
 
-import data from '../../../utils/data.json';
+import data from '../../utils/data.json';
 
 const topItem = data[0];
 const middleItems = data.slice(4, 12);
@@ -19,7 +19,7 @@ function App() {
   return (
     <>
       <AppHeader />
-      <div className = { styles.app_content }>
+      <main className = { styles.app_content }>
         <section className = { `${styles.app_container} mr-5` }>
           <BurgerIngredients items = { data } />
         </section>
@@ -29,7 +29,7 @@ function App() {
             middleItems = { middleItems }
             bottomItem = { bottomItem } />
         </section>
-      </div>
+      </main>
     </>
   );
 }

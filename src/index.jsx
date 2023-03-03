@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import './index.module.css';
 
 // eslint-disable-next-line node/no-missing-import
-import App from './components/app/content';
+import App from './components/app';
 
 ReactDOM.render(
   <React.StrictMode>

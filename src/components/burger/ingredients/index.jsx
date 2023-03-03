@@ -6,8 +6,11 @@ import styles from './index.module.css';
 
 // eslint-disable-next-line node/no-missing-import
 import { IngredientsCategory } from '../../ingredients';
+import {
+  ingredientsType,
+} from '../../../utils/prop-types';
 
-function BurgerIngredients(props) {
+function BurgerIngredients({ items }) {
   const [current, setCurrent] = React.useState('bun');
 
   return (
@@ -33,9 +36,9 @@ function BurgerIngredients(props) {
         </Tab>
       </div>
       <div className = { styles.scroll_container }>
-        <IngredientsCategory heading = 'Булки' items = { props.items.filter(item => item.type === 'bun') } />
-        <IngredientsCategory heading = 'Соусы' items = { props.items.filter(item => item.type === 'sauce') } />
-        <IngredientsCategory heading = 'Начинки' items = { props.items.filter(item => item.type === 'main') } />
+        <IngredientsCategory heading = 'Булки' items = { items.filter(item => item.type === 'bun') } />
+        <IngredientsCategory heading = 'Соусы' items = { items.filter(item => item.type === 'sauce') } />
+        <IngredientsCategory heading = 'Начинки' items = { items.filter(item => item.type === 'main') } />
       </div>
     </>
   );
@@ -43,6 +46,7 @@ function BurgerIngredients(props) {
 
 BurgerIngredients.propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({
+    ...ingredientsType,
     type: PropTypes.string.isRequired,
   }).isRequired).isRequired,
 };
