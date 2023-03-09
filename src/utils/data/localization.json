@@ -1,0 +1,42 @@
+{
+    "ingredient_details": {"ru":"Детали ингредиента","en":"Ingredient details"},
+    "loading_error": {"ru":"Ошибка загрузки","en":"Loading error"},
+    "loading": {"ru":"Загрузка","en":"Loading"},
+    "constructor": {"ru":"Конструктор","en":"Constructor"},
+    "order_feed": {"ru":"Лента заказов","en":"Order feed"},
+    "personal_area": {"ru":"Личный кабинет","en":"Personal Area"},
+    "add_ingredients": {"ru":"Добавьте ингредиенты","en":"Add Ingredients"},
+    "checkout": {"ru":"Оформить заказ","en":"Checkout"},
+    "assemble_burger": {"ru":"Соберите бургер","en":"Assemble a burger"},
+    "rolls": {"ru":"Булки","en":"rolls"},
+    "sauces": {"ru":"Соусы","en":"Sauces"},
+    "toppings": {"ru":"Начинки","en":"Toppings"},
+    "top": {"ru":"верх","en":"top"},
+    "bottom": {"ru":"низ","en":"bottom"},
+    "calories": {"ru":"Калории","en":"Calories"},
+    "proteins": {"ru":"Белки","en":"Proteins"},
+    "fats": {"ru":"Жиры","en":"Fats"},
+    "carbohydrates": {"ru":"Углеводы","en":"Carbohydrates"},
+    "kcal": {"ru":"ккал","en":"kcal"},
+    "g": {"ru":"г","en":"g"},
+    "category": {"ru":"Категория","en":"Category"},
+    "empty": {"ru":"пуста","en":"empty"},
+    "order_id": {"ru":"идентификатор заказа","en":"order ID"},
+    "order_is_accepted": {"ru":"Заказ принят","en":"Order is accepted"},
+    "your_order_has_started": {"ru":"Ваш заказ начали готовить","en":"Your order has started"},
+    "order_details_wait_readiness": {"ru":"Дождитесь готовности на орбитальной станции","en":"Wait for readiness at the orbital station"}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
