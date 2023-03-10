@@ -7,22 +7,21 @@ import {
 } from '../../../utils/prop-types';
 
 // eslint-disable-next-line node/no-missing-import
-import OrderDetails from '../order-details';
+import Description from '../description';
 
-function IngredientsCategory({ heading, items, onIngredientClick }) {
+function IngredientsCategory({ title, items }) {
   return (
     <section>
       <h2 className = 'text text_type_main-medium mt-10 mb-6'>
-        { heading }
+        { title }
       </h2>
       { (items.length > 0
         ? <ul className = { `${styles.burger_ingredients_list} ml-4 mt-6 mr-2 mb-10` }>
           { items.map(item => (
             <li key = { item._id }>
-              <OrderDetails
+              <Description
                 key = { item._id }
-                item = { item }
-                onIngredientClick = { onIngredientClick } />
+                item = { item } />
             </li>
           )) }
         </ul>
@@ -34,8 +33,8 @@ function IngredientsCategory({ heading, items, onIngredientClick }) {
 }
 
 IngredientsCategory.propTypes = {
+  title: PropTypes.string.isRequired,
   items: PropTypes.arrayOf(ingredientsType),
-  openModal: PropTypes.func,
 };
 
 export default IngredientsCategory;

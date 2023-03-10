@@ -1,4 +1,7 @@
-import React from 'react';
+import {
+  useState,
+  useContext,
+} from 'react';
 import PropTypes from 'prop-types';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
@@ -7,12 +10,14 @@ import l from '../../../utils/lang';
 import {
   ingredientsType,
 } from '../../../utils/prop-types';
+import { BurgerContext } from '../../../utils/context/burger';
 
 // eslint-disable-next-line node/no-missing-import
 import IngredientsCategory from '../../ingredients/category';
 
-function BurgerIngredients({ items, onIngredientClick }) {
-  const [current, setCurrent] = React.useState('bun');
+function BurgerIngredients() {
+  const [current, setCurrent] = useState('bun');
+  const { items } = useContext(BurgerContext);
 
   return (
     <>
@@ -41,17 +46,14 @@ function BurgerIngredients({ items, onIngredientClick }) {
       </div>
       <div className = { styles.scroll_container }>
         <IngredientsCategory
-          heading = { l('rolls') }
-          items = { items.filter(item => item.type === 'bun') }
-          onIngredientClick = { onIngredientClick } />
+          title = { l('rolls') }
+          items = { items.filter(item => item.type === 'bun') } />
         <IngredientsCategory
-          heading = { l('sauces') }
-          items = { items.filter(item => item.type === 'sauce') }
-          onIngredientClick = { onIngredientClick } />
+          title = { l('sauces') }
+          items = { items.filter(item => item.type === 'sauce') } />
         <IngredientsCategory
-          heading = { l('toppings') }
-          items = { items.filter(item => item.type === 'main') }
-          onIngredientClick = { onIngredientClick } />
+          title = { l('toppings') }
+          items = { items.filter(item => item.type === 'main') } />
       </div>
     </>
   );
