@@ -25,6 +25,7 @@ import {
   fetchIngredients,
   fetchCreateOrder,
 } from '../../utils/api';
+import { IngredientType as Type } from '../../utils/consts';
 
 const randomFirstIngredient = Math.floor(Math.random() * 12);
 const randomLastIngredient = Math.floor(Math.random() * 6) + 1 + randomFirstIngredient;
@@ -55,9 +56,9 @@ function App() {
       }));
   }, []);
 
-  const bunItem = ingredientsData.items.filter(item => item.type === 'bun')[0];
+  const bunItem = ingredientsData.items.find(item => item.type === Type.BUN);
   const middleItems = ingredientsData.items
-    .filter(item => item.type === 'sauce' || item.type === 'main')
+    .filter(item => item.type === Type.SAUCE || item.type === Type.MAIN)
     .slice(randomFirstIngredient, randomLastIngredient);
   const orderedItems = {
     bunItem,
@@ -70,8 +71,8 @@ function App() {
   };
 
   const openOrderModal = () => {
-    const ids = [bunItem._id];
-    middleItems.map(item => ids.push(item._id));
+    const stuffing = middleItems.map(x => x._id);
+    const ids = [bunItem._id, ...stuffing, bunItem._id];
 
     // eslint-disable-next-line promise/catch-or-return
     fetchCreateOrder({ ingredients: ids })

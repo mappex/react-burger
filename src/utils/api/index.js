@@ -2,12 +2,17 @@ import {
   API_HOST,
 } from './consts';
 
-export const fetchIngredients = async () => {
-  const response = await fetch(`${API_HOST}/api/ingredients`);
-  const result = await response.json();
+const checkReponse = (res) => {
+  return res.ok ? res.json() : res.json().then((error) => {
+    throw new Error(error);
+  });
+};
 
-  if (result.success === true) {
-    return result.data;
+export const fetchIngredients = async () => {
+  const response = await fetch(`${API_HOST}/api/ingredients1`).then(checkReponse);
+
+  if (response.success === true) {
+    return response.data;
   }
 
   throw new Error('Can\'t get data from server');
@@ -16,15 +21,16 @@ export const fetchIngredients = async () => {
 export const fetchCreateOrder = async ({ ingredients }) => {
   const response = await fetch(`${API_HOST}/api/orders`, {
     body: JSON.stringify({ ingredients }),
-    headers: new Headers([['Content-Type', 'application/json']]),
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+    },
     method: 'POST',
-  });
-  const result = await response.json();
+  }).then(checkReponse);
 
-  if (result.success === true) {
+  if (response.success === true) {
     return {
-      id: result.order.number,
-      success: result.success,
+      id: response.order.number,
+      success: response.success,
     };
   }
 

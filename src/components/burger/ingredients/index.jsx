@@ -11,12 +11,13 @@ import {
   ingredientsType,
 } from '../../../utils/prop-types';
 import { BurgerContext } from '../../../utils/context/burger';
+import { IngredientType as Type } from '../../../utils/consts';
 
 // eslint-disable-next-line node/no-missing-import
 import IngredientsCategory from '../../ingredients/category';
 
 function BurgerIngredients() {
-  const [current, setCurrent] = useState('bun');
+  const [current, setCurrent] = useState(Type.BUN);
   const { items } = useContext(BurgerContext);
 
   return (
@@ -26,20 +27,20 @@ function BurgerIngredients() {
       </h1>
       <div className = { styles.tab_selector }>
         <Tab
-          value = 'bun'
-          active = { current === 'bun' }
+          value = { Type.BUN }
+          active = { current === Type.BUN }
           onClick = { setCurrent }>
           { l('rolls') }
         </Tab>
         <Tab
-          value = 'sauce'
-          active = { current === 'sauce' }
+          value = { Type.SAUCE }
+          active = { current === Type.SAUCE }
           onClick = { setCurrent }>
           { l('sauces') }
         </Tab>
         <Tab
-          value = 'main'
-          active = { current === 'main' }
+          value = { Type.MAIN }
+          active = { current === Type.MAIN }
           onClick = { setCurrent }>
           { l('toppings') }
         </Tab>
@@ -47,13 +48,13 @@ function BurgerIngredients() {
       <div className = { styles.scroll_container }>
         <IngredientsCategory
           title = { l('rolls') }
-          items = { items.filter(item => item.type === 'bun') } />
+          items = { items.filter(item => item.type === Type.BUN) } />
         <IngredientsCategory
           title = { l('sauces') }
-          items = { items.filter(item => item.type === 'sauce') } />
+          items = { items.filter(item => item.type === Type.SAUCE) } />
         <IngredientsCategory
           title = { l('toppings') }
-          items = { items.filter(item => item.type === 'main') } />
+          items = { items.filter(item => item.type === Type.MAIN) } />
       </div>
     </>
   );
