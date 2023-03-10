@@ -9,7 +9,7 @@ const checkReponse = (res) => {
 };
 
 export const fetchIngredients = async () => {
-  const response = await fetch(`${API_HOST}/api/ingredients1`).then(checkReponse);
+  const response = await fetch(`${API_HOST}/api/ingredients`).then(checkReponse);
 
   if (response.success === true) {
     return response.data;
