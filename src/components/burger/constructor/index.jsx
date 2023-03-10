@@ -1,3 +1,8 @@
+import {
+  useContext,
+  useReducer,
+  useEffect,
+} from 'react';
 import PropTypes from 'prop-types';
 import {
   ConstructorElement,
@@ -11,8 +16,26 @@ import l from '../../../utils/lang';
 import {
   ingredientsType,
 } from '../../../utils/prop-types';
+import { BurgerContext } from '../../../utils/context/burger';
 
-function BurgerConstructor({ bunItem, middleItems, onOrderButtonClick }) {
+const initialTotalState = { total: 0 };
+
+function totalPriceReducer(totalPriceState, items) {
+  const newTotal = items.bunItem.price * 2 + items.middleItems.reduce((acc, p) => acc + p.price, 0);
+
+  return { total: newTotal };
+}
+
+function BurgerConstructor() {
+  const { orderedItems, onOrderButtonClick } = useContext(BurgerContext);
+  const [totalPriceState, totalPriceDispatch] = useReducer(totalPriceReducer, initialTotalState);
+
+  useEffect(() => {
+    totalPriceDispatch(orderedItems);
+  }, [orderedItems]);
+
+  const { bunItem, middleItems } = orderedItems;
+
   return (
     <>
       <ul className = { `${styles.burger_constructor_list} ml-4 mt-25 mb-10 pr-4` }>
@@ -57,9 +80,7 @@ function BurgerConstructor({ bunItem, middleItems, onOrderButtonClick }) {
       </ul>
       <div className = { `${styles.burger_constructor_order} mr-4 mb-10` }>
         <p className = 'text text_type_digits-medium'>
-          {
-            bunItem.price * 2  + middleItems.reduce((acc, p) => acc + p.price, 0)
-          }
+          { totalPriceState.total }
         </p>
         <span className = 'ml-2 mr-10'>
           <CurrencyIcon type = 'primary' />

@@ -1,12 +1,21 @@
-import PropTypes from 'prop-types';
+import {
+  memo,
+  useContext,
+} from 'react';
 import {
   Counter,
   CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styles from './index.module.css';
+import {
+  ingredientsType,
+} from '../../../utils/prop-types';
+import { BurgerContext } from '../../../utils/context/burger';
 
-function OrderDetails({ item, onIngredientClick }) {
+function Description({ item }) {
+  const { onIngredientClick } = useContext(BurgerContext);
+
   const handleIngredientClick = () => {
     onIngredientClick(item);
   };
@@ -28,14 +37,8 @@ function OrderDetails({ item, onIngredientClick }) {
   );
 }
 
-OrderDetails.propTypes = {
-  item: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-    image: PropTypes.string.isRequired,
-    _id: PropTypes.string.isRequired,
-  }).isRequired,
-  onIngredientClick: PropTypes.func.isRequired,
+Description.propTypes = {
+  item: ingredientsType.isRequired,
 };
 
-export default OrderDetails;
+export default memo(Description);

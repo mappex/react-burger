@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types';
-
 import styles from './index.module.css';
 import l from '../../../utils/lang';
 import {

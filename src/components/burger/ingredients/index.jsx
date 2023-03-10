@@ -1,4 +1,7 @@
-import React from 'react';
+import {
+  useState,
+  useContext,
+} from 'react';
 import PropTypes from 'prop-types';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
@@ -7,12 +10,15 @@ import l from '../../../utils/lang';
 import {
   ingredientsType,
 } from '../../../utils/prop-types';
+import { BurgerContext } from '../../../utils/context/burger';
+import { IngredientType as Type } from '../../../utils/consts';
 
 // eslint-disable-next-line node/no-missing-import
 import IngredientsCategory from '../../ingredients/category';
 
-function BurgerIngredients({ items, onIngredientClick }) {
-  const [current, setCurrent] = React.useState('bun');
+function BurgerIngredients() {
+  const [current, setCurrent] = useState(Type.BUN);
+  const { items } = useContext(BurgerContext);
 
   return (
     <>
@@ -21,37 +27,34 @@ function BurgerIngredients({ items, onIngredientClick }) {
       </h1>
       <div className = { styles.tab_selector }>
         <Tab
-          value = 'bun'
-          active = { current === 'bun' }
+          value = { Type.BUN }
+          active = { current === Type.BUN }
           onClick = { setCurrent }>
           { l('rolls') }
         </Tab>
         <Tab
-          value = 'sauce'
-          active = { current === 'sauce' }
+          value = { Type.SAUCE }
+          active = { current === Type.SAUCE }
           onClick = { setCurrent }>
           { l('sauces') }
         </Tab>
         <Tab
-          value = 'main'
-          active = { current === 'main' }
+          value = { Type.MAIN }
+          active = { current === Type.MAIN }
           onClick = { setCurrent }>
           { l('toppings') }
         </Tab>
       </div>
       <div className = { styles.scroll_container }>
         <IngredientsCategory
-          heading = { l('rolls') }
-          items = { items.filter(item => item.type === 'bun') }
-          onIngredientClick = { onIngredientClick } />
+          title = { l('rolls') }
+          items = { items.filter(item => item.type === Type.BUN) } />
         <IngredientsCategory
-          heading = { l('sauces') }
-          items = { items.filter(item => item.type === 'sauce') }
-          onIngredientClick = { onIngredientClick } />
+          title = { l('sauces') }
+          items = { items.filter(item => item.type === Type.SAUCE) } />
         <IngredientsCategory
-          heading = { l('toppings') }
-          items = { items.filter(item => item.type === 'main') }
-          onIngredientClick = { onIngredientClick } />
+          title = { l('toppings') }
+          items = { items.filter(item => item.type === Type.MAIN) } />
       </div>
     </>
   );

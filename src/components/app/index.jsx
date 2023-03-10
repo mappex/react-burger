@@ -14,15 +14,21 @@ import {
   BurgerIngredients,
 // eslint-disable-next-line node/no-missing-import
 } from '../burger';
-
 // eslint-disable-next-line node/no-missing-import
 import Modal from '../modal';
 // eslint-disable-next-line node/no-missing-import
 import OrderDetails from '../order-details';
 // eslint-disable-next-line node/no-missing-import
 import IngredientDetails from '../ingredients/details';
+import { BurgerContext } from '../../utils/context/burger';
+import {
+  fetchIngredients,
+  fetchCreateOrder,
+} from '../../utils/api';
+import { IngredientType as Type } from '../../utils/consts';
 
-import { apiIngredientsList } from '../../utils/api';
+const randomFirstIngredient = Math.floor(Math.random() * 12);
+const randomLastIngredient = Math.floor(Math.random() * 6) + 1 + randomFirstIngredient;
 
 function App() {
   const [ingredientsData, setIngredientsData] = useState({
@@ -33,41 +39,31 @@ function App() {
   });
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
   const [isIngredientModalOpen, setIsIngredientModalOpen] = useState(false);
-
-  const [orderId, setOrderId] = useState('034536');
-
+  const [orderData, setOrderData] = useState({});
   const [selectedItem, setSelectedItem] = useState([]);
 
   useEffect(() => {
-    const getIngredientsData = () => {
-      setIngredientsData({
-        ...ingredientsData, isLoading: true, hasError: false, hasLoaded: false,
-      });
+    setIngredientsData({
+      ...ingredientsData, isLoading: true, hasError: false, hasLoaded: false,
+    });
 
-      return fetch(apiIngredientsList)
-        .then((res) => {
-          if (!res.ok) {
-            res.reject(res.statusText);
-          }
-
-          return res.json();
-        })
-        // eslint-disable-next-line promise/always-return
-        .then(({ data }) => {
-          setIngredientsData({
-            ...ingredientsData, items: data, isLoading: false, hasLoaded: true, hasError: false,
-          });
-        })
-        // eslint-disable-next-line handle-callback-err
-        .catch((error) => {
-          setIngredientsData({
-            ...ingredientsData, isLoading: false, hasError: true, hasLoaded: false,
-          });
-        });
-    };
-
-    getIngredientsData();
+    fetchIngredients()
+      .then(data => setIngredientsData({
+        ...ingredientsData, items: data, isLoading: false, hasLoaded: true, hasError: false,
+      }))
+      .catch(() => setIngredientsData({
+        ...ingredientsData, isLoading: false, hasError: true, hasLoaded: false,
+      }));
   }, []);
+
+  const bunItem = ingredientsData.items.find(item => item.type === Type.BUN);
+  const middleItems = ingredientsData.items
+    .filter(item => item.type === Type.SAUCE || item.type === Type.MAIN)
+    .slice(randomFirstIngredient, randomLastIngredient);
+  const orderedItems = {
+    bunItem,
+    middleItems,
+  };
 
   const closeAllModals = () => {
     setIsOrderModalOpen(false);
@@ -75,7 +71,16 @@ function App() {
   };
 
   const openOrderModal = () => {
-    setIsOrderModalOpen(true);
+    const stuffing = middleItems.map(x => x._id);
+    const ids = [bunItem._id, ...stuffing, bunItem._id];
+
+    // eslint-disable-next-line promise/catch-or-return
+    fetchCreateOrder({ ingredients: ids })
+      .then(data => setOrderData({ ...data }))
+      .catch(() => setOrderData({ success: false }))
+      .finally(() => {
+        setIsOrderModalOpen(true);
+      });
   };
 
   const openIngredientModal = useCallback((clickedItem) => {
@@ -83,9 +88,6 @@ function App() {
     setIsIngredientModalOpen(true);
   }, [],
   );
-
-  const bunItem = ingredientsData.items.filter(item => item.type === 'bun')[0];
-  const middleItems = ingredientsData.items.filter(item => item.type === 'sauce' || item.type === 'main').slice(4, 12);
 
   return (
     <>
@@ -104,18 +106,21 @@ function App() {
         ) }
       {
         ingredientsData.hasLoaded && !ingredientsData.hasError && !ingredientsData.isLoading && (
-          <div className = { styles.container }>
-            <section className = { `${styles.container_left} mr-5` }>
-              <BurgerIngredients
-                items = { ingredientsData.items }
-                onIngredientClick = { openIngredientModal } />
-            </section>
-            <section className = { `${styles.container_right} ml-5` }>
-              <BurgerConstructor
-                bunItem = { bunItem } middleItems = { middleItems }
-                onOrderButtonClick = { openOrderModal } />
-            </section>
-          </div>
+          <BurgerContext.Provider value = { {
+            items: ingredientsData.items,
+            orderedItems,
+            onOrderButtonClick: openOrderModal,
+            onIngredientClick: openIngredientModal,
+          } }>
+            <div className = { styles.container }>
+              <section className = { `${styles.container_left} mr-5` }>
+                <BurgerIngredients />
+              </section>
+              <section className = { `${styles.container_right} ml-5` }>
+                <BurgerConstructor />
+              </section>
+            </div>
+          </BurgerContext.Provider>
         ) }
       {
         isOrderModalOpen && (
@@ -123,7 +128,7 @@ function App() {
             header = { null }
             closeModal = { closeAllModals }
             isFancyCloseIcon >
-            <OrderDetails orderId = { orderId } />
+            <OrderDetails orderData = { orderData } />
           </Modal>
         ) }
       {
