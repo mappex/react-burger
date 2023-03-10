@@ -1,27 +1,9 @@
 .tab_selector {
-  display: flex;
+  composes: flex_row from global;
   justify-content: flex-end;
 }
 
 .scroll_container {
-  overflow-y: auto;
+  composes: scroll from global;
   height: calc(100vh - 244px);
-  scrollbar-color: #2F2F37 #8585AD;
-  scrollbar-width: thin;
-}
-
-@-moz-document url-prefix() {
-  .scroll_container {
-    scrollbar-color: #8585AD #2F2F37;
-  }
-}
-
-.scroll_container::-webkit-scrollbar {
-  width: calc(var(--offset-base-size) * 2);
-}
-.scroll_container::-webkit-scrollbar-track {
-  background: #2F2F37;
-}
-.scroll_container::-webkit-scrollbar-thumb {
-  background: #8585AD;
 }

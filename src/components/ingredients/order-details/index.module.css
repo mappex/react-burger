@@ -1,0 +1,19 @@
+.ingredient_card {
+  composes: flex_column from global;
+  flex-basis: 50%;
+  position: relative;
+}
+
+.ingredient_price {
+  composes: flex_row from global;
+}
+
+.ingredient_image {
+  width: 100%;
+  height: auto;
+}
+
+.ingredient_name {
+  text-align: center;
+  flex-basis: 48px;
+}

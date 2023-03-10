@@ -1,45 +1,31 @@
-nav {
-  box-shadow: 0px 24px 32px rgba(0, 0, 0, 0.04),
-  0px 16px 24px rgba(0, 0, 0, 0.04),
-  0px 4px 8px rgba(0, 0, 0, 0.04),
-  0px 0px 1px rgba(0, 0, 0, 0.04);
-}
-
-.header_container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: center;
-  justify-content: center;
-  list-style-type: none;
+.menu_container {
+  composes: flex_row from global;
+  composes: card_box_shadow from global;
   background: var(--background);
 }
 
-.header_list {
-  composes: header_container;
-
+.menu_list {
+  composes: flex_row from global;
   margin: 0;
-  padding: 0;
   flex-basis: 1280px;
 }
 
-.header_align_left {
-  composes: header_container;
-
-  padding: 0;
+.menu_list_left {
   flex-basis: 40%;
+}
+
+.menu_list_left_items {
+  composes: flex_row from global;
   justify-content: flex-start;
 }
 
-.header_align_center {
-  composes: header_container;
-
+.menu_list_center {
+  composes: flex_row from global;
   flex-basis: 20%;
 }
 
-.header_align_right {
-  composes: header_container;
-
+.menu_list_right {
+  composes: flex_row from global;
   flex-basis: 40%;
   justify-content: flex-end;
 }

@@ -1,39 +1,41 @@
 import PropTypes from 'prop-types';
 
 import styles from './index.module.css';
-
-// eslint-disable-next-line node/no-missing-import
-import IngredientsDetails from '../details';
+import l from '../../../utils/lang';
 import {
   ingredientsType,
 } from '../../../utils/prop-types';
 
-function IngredientsCategory({ heading, items }) {
+// eslint-disable-next-line node/no-missing-import
+import OrderDetails from '../order-details';
+
+function IngredientsCategory({ heading, items, onIngredientClick }) {
   return (
     <section>
       <h2 className = 'text text_type_main-medium mt-10 mb-6'>
         { heading }
       </h2>
-      <ul className = { `${styles.burger_ingredients_list} ml-4 mt-6 mr-2 mb-10` }>
-        { items.map(item =>
-          <IngredientsDetails
-            name = { item.name }
-            price = { item.price }
-            image = { item.image }
-            value = { item.__v }
-            key = { item._id } />)
-        }
-      </ul>
+      { (items.length > 0
+        ? <ul className = { `${styles.burger_ingredients_list} ml-4 mt-6 mr-2 mb-10` }>
+          { items.map(item => (
+            <li key = { item._id }>
+              <OrderDetails
+                key = { item._id }
+                item = { item }
+                onIngredientClick = { onIngredientClick } />
+            </li>
+          )) }
+        </ul>
+        : <h3 className = 'text text_type_main-default text_color_inactive pb-6'>
+          { l('category') } { l('empty') }
+        </h3>) }
     </section>
   );
 }
 
 IngredientsCategory.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.shape({
-    ...ingredientsType,
-    _id: PropTypes.string.isRequired,
-    __v: PropTypes.number.isRequired,
-  }).isRequired).isRequired,
+  items: PropTypes.arrayOf(ingredientsType),
+  openModal: PropTypes.func,
 };
 
-export { IngredientsCategory };
+export default IngredientsCategory;
