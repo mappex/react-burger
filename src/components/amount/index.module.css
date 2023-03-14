@@ -1,0 +1,10 @@
+.amount {
+  display: grid;
+  grid-gap: 9px;
+  grid-template-columns: repeat(2, min-content);
+}
+
+.amount_type_total svg {
+  height: 36px;
+  width: 36px;
+}

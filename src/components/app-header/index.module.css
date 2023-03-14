@@ -1,31 +1,17 @@
-.menu_container {
-  composes: flex_row from global;
-  composes: card_box_shadow from global;
-  background: var(--background);
+.app-header {
 }
 
-.menu_list {
-  composes: flex_row from global;
-  margin: 0;
-  flex-basis: 1280px;
+.app-header__menu-list {
+    align-items: center;
+    display: grid;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    grid-template-columns: max-content max-content 1fr max-content;
 }
 
-.menu_list_left {
-  flex-basis: 40%;
-}
-
-.menu_list_left_items {
-  composes: flex_row from global;
-  justify-content: flex-start;
-}
-
-.menu_list_center {
-  composes: flex_row from global;
-  flex-basis: 20%;
-}
-
-.menu_list_right {
-  composes: flex_row from global;
-  flex-basis: 40%;
-  justify-content: flex-end;
+.app-header__logo-wrapper {
+    align-items: center;
+    display: flex;
+    justify-content: center;
 }

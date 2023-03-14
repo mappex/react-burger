@@ -1,14 +1,19 @@
+/* eslint-disable node/no-missing-import */
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 
 import './index.module.css';
 
-// eslint-disable-next-line node/no-missing-import
 import App from './components/app';
+import store from './services/store';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store = { store }>
+      <App />
+    </Provider>
+    <div id = 'modal-container' />
   </React.StrictMode>,
   document.getElementById('root'),
 );

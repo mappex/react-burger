@@ -1,30 +1,37 @@
+/* eslint-disable node/no-missing-import */
 import PropTypes from 'prop-types';
 
 import styles from './index.module.css';
 
-function MenuItem({
-  active, link, text, icon,
-}) {
+const MenuItem = ({
+  className, Icon, isActive, text,
+}) => {
+  let style = `${styles['menu-item']} ${className} p-5 text`;
+
+  if (isActive) {
+    style += ` ${styles['menu-item_active']}`;
+  } else {
+    style += ' text_color_inactive';
+  }
+
   return (
-    <a
-      className = { `${styles.menu_list_item} pl-5 pr-5 pt-4 pb-4 mt-4 mb-4 mr-2 ${active ? styles.menu_list_item_active : null}` }
-      href = { link }
-      title = { text }>
-      <span className = { `${styles.menu_list_item_icon} mr-2` }>
-        { icon }
-      </span>
-      <span className = { `${styles.menu_list_item_text} text text_type_main-default text_color_inactive` }>
-        { text }
-      </span>
-    </a>
+    <li
+      className = { style }>
+      <Icon type = { isActive ? 'primary' : 'secondary' } />
+      <span className = 'ml-2'>{ text }</span>
+    </li>
   );
-}
+};
 
 MenuItem.propTypes = {
-  active: PropTypes.bool,
-  link: PropTypes.string.isRequired,
+  className: PropTypes.string,
+  Icon: PropTypes.elementType.isRequired,
+  isActive: PropTypes.bool,
   text: PropTypes.string.isRequired,
-  icon: PropTypes.element.isRequired,
+};
+
+MenuItem.defaultProps = {
+  isActive: true,
 };
 
 export default MenuItem;

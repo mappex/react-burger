@@ -1,53 +1,70 @@
+/* eslint-disable node/no-missing-import */
+import {
+  useCallback,
+  useEffect,
+  useRef,
+} from 'react';
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
-import ReactDOM from 'react-dom';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styles from './index.module.css';
-// eslint-disable-next-line node/no-missing-import
-import ModalOverlay from '../modal-overlay';
 
-const renderTo = document.getElementById('modal-container');
+import ModalOverlay from './overlay';
 
-function Modal({
-  children, header, closeModal, isFancyCloseIcon = false,
-}) {
-  const handleEscKey = (event) => {
-    if (event.key === 'Escape') closeModal();
-
-    event.stopImmediatePropagation();
-  };
+const Modal = ({
+  children, className, onClose, title,
+}) => {
+  const modalElementRef = useRef(null);
 
   useEffect(() => {
-    document.addEventListener('keydown', handleEscKey);
+    const {
+      current: modalElement,
+    } = modalElementRef;
 
-    return () => {
-      document.removeEventListener('keydown', handleEscKey);
-    };
+    if (modalElement) {
+      modalElement.focus();
+    }
   }, []);
 
-  return ReactDOM.createPortal(
+  const keyDownHandler = useCallback(({ key }) => {
+    if (key === 'Escape' && onClose) {
+      onClose();
+    }
+  }, [onClose]);
+
+  return (
     <>
-      <ModalOverlay closeModal = { closeModal } />
-      <div className = { `${styles.modal_container} pl-10 pt-10 pr-10 pb-15` }>
-        <h3 className = { `${styles.modal_header} text text_type_main-large` }>
-          { header }
-        </h3>
-        <span className = { `${styles.close_icon} ${isFancyCloseIcon ? styles.fancy_icon : null}` } >
-          <CloseIcon onClick = { closeModal } />
-        </span>
-        { children }
+      <ModalOverlay className = { styles.modal__overlay } onClick = { onClose } />
+      <div
+        ref = { modalElementRef }
+        className = { `${styles.modal} p-10 ${className}` }
+        onKeyDown = { keyDownHandler }
+        tabIndex = { 0 }>
+        <div className = { styles.modal__header }>
+          <div
+            className = { `${styles.modal__title} text text_type_main-large` }>
+            { title }
+          </div>
+          <button className = { styles['modal__close-button'] } onClick = { onClose }>
+            <CloseIcon type = { 'primary' } />
+          </button>
+        </div>
+        <div className = { styles.modal__content }>
+          { children }
+        </div>
       </div>
-    </>,
-    renderTo,
+    </>
   );
-}
+};
 
 Modal.propTypes = {
-  header: PropTypes.string,
-  fancyCloseIcon: PropTypes.bool,
-  closeModal: PropTypes.func.isRequired,
-  children: PropTypes.element.isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
+  className: PropTypes.string,
+  onClose: PropTypes.func.isRequired,
+  title: PropTypes.string,
 };
 
 export default Modal;

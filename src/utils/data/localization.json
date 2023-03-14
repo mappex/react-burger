@@ -1,42 +1,26 @@
 {
     "ingredient_details": {"ru":"Детали ингредиента","en":"Ingredient details"},
-    "loading_error": {"ru":"Ошибка загрузки","en":"Loading error"},
-    "loading": {"ru":"Загрузка","en":"Loading"},
     "constructor": {"ru":"Конструктор","en":"Constructor"},
     "order_feed": {"ru":"Лента заказов","en":"Order feed"},
     "personal_area": {"ru":"Личный кабинет","en":"Personal Area"},
-    "add_ingredients": {"ru":"Добавьте ингредиенты","en":"Add Ingredients"},
     "checkout": {"ru":"Оформить заказ","en":"Checkout"},
-    "assemble_burger": {"ru":"Соберите бургер","en":"Assemble a burger"},
+    "top": {"ru":"верх","en":"top"},
+    "bottom": {"ru":"низ","en":"bottom"},
     "rolls": {"ru":"Булки","en":"rolls"},
     "sauces": {"ru":"Соусы","en":"Sauces"},
     "toppings": {"ru":"Начинки","en":"Toppings"},
-    "top": {"ru":"верх","en":"top"},
-    "bottom": {"ru":"низ","en":"bottom"},
-    "calories": {"ru":"Калории","en":"Calories"},
-    "proteins": {"ru":"Белки","en":"Proteins"},
-    "fats": {"ru":"Жиры","en":"Fats"},
-    "carbohydrates": {"ru":"Углеводы","en":"Carbohydrates"},
-    "kcal": {"ru":"ккал","en":"kcal"},
-    "g": {"ru":"г","en":"g"},
-    "category": {"ru":"Категория","en":"Category"},
-    "empty": {"ru":"пуста","en":"empty"},
-    "order_id": {"ru":"идентификатор заказа","en":"order ID"},
-    "order_is_accepted": {"ru":"Заказ принят","en":"Order is accepted"},
+    "assemble_burger": {"ru":"Соберите бургер","en":"Assemble a burger"},
+    "calories": {"ru":"Калории, ккал","en":"Calories, kcal"},
+    "carbohydrates": {"ru":"Углеводы, г","en":"Carbohydrates, g"},
+    "fat": {"ru":"Жиры, г","en":"Fats, g"},
+    "proteins": {"ru":"Белки, г","en":"Proteins, g"},
+    "order_id": {"ru":"Идентификатор заказа","en":"Order ID"},
     "your_order_has_started": {"ru":"Ваш заказ начали готовить","en":"Your order has started"},
-    "order_details_wait_readiness": {"ru":"Дождитесь готовности на орбитальной станции","en":"Wait for readiness at the orbital station"}
+    "loading_error": {"ru":"Ошибка загрузки","en":"Loading error"},
+    "loading": {"ru":"Загрузка","en":"Loading"},
+    "order_is_accepted": {"ru":"Заказ принят","en":"Order is accepted"},
+    "order_details_wait_readiness": {"ru":"Дождитесь готовности на орбитальной станции","en":"Wait for readiness at the orbital station"},
+    "order_prepared": {"ru":"Заказ приготовлен","en":"Order prepared"},
+    "your_order_is_being_delivered": {"ru":"Ваш заказ доставляется","en":"Your order is being delivered"},
+    "order_delivered": {"ru":"Заказ доставлен","en":"Order delivered"}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

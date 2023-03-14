@@ -1,67 +1,159 @@
+/* eslint-disable node/no-missing-import */
 import {
+  useEffect,
+  useMemo,
+  useRef,
   useState,
-  useContext,
 } from 'react';
 import PropTypes from 'prop-types';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styles from './index.module.css';
 import l from '../../../utils/lang';
-import {
-  ingredientsType,
-} from '../../../utils/prop-types';
-import { BurgerContext } from '../../../utils/context/burger';
-import { IngredientType as Type } from '../../../utils/consts';
 
-// eslint-disable-next-line node/no-missing-import
-import IngredientsCategory from '../../ingredients/category';
+import BurgerIngredientType from './ingredient-type';
 
-function BurgerIngredients() {
-  const [current, setCurrent] = useState(Type.BUN);
-  const { items } = useContext(BurgerContext);
+import { useAppSelector } from '../../../services/store';
+import { getIngredients } from '../../../services/selectors';
+
+const ingredientTypeTitles = {
+  bun: l('rolls'),
+  sauce: l('sauces'),
+  main: l('toppings'),
+};
+const ingredientTypes = Object.keys(ingredientTypeTitles);
+
+const thresholdsStepsCount = 50;
+const thresholds = [
+  ...Array.from({ length: thresholdsStepsCount - 1 }).map(
+    (_, ix) => ix / (thresholdsStepsCount - 1),
+  ),
+  1,
+];
+
+const BurgerIngredients = ({ className = '' }) => {
+  const { ingredients } = useAppSelector(getIngredients);
+  const [selectedIngredientType, setSelectedIngredientType] = useState(
+    ingredientTypes[0],
+  );
+  const ingredientTypeToIngredientsMap = useMemo(() => {
+    const axillaryMap = new Map();
+
+    ingredients.forEach((ingredient) => {
+      const { type } = ingredient;
+
+      if (!axillaryMap.has(type)) {
+        axillaryMap.set(type, []);
+      }
+
+      axillaryMap.get(type).push(ingredient);
+    });
+
+    const result = ingredientTypes.reduce((acc, ingredientType) => {
+      if (axillaryMap.has(ingredientType)) {
+        acc.set(ingredientType, axillaryMap.get(ingredientType));
+      } else {
+        acc.set(ingredientType, []);
+      }
+
+      return acc;
+    }, new Map());
+
+    axillaryMap.clear();
+
+    return result;
+  }, [ingredients]);
+  const typeListElementRef = useRef(null);
+
+  useEffect(() => {
+    const { current: typeListElement } = typeListElementRef;
+
+    const items = typeListElement.querySelectorAll(`.${styles['burger-ingredients__type-item']}`);
+
+    if (items.length > 0) {
+      const ingredientToIntersectionRatioMap = new Map();
+
+      const intersectionObserver = new IntersectionObserver((intersectionObserverEntries) => {
+        intersectionObserverEntries.forEach(({ target, intersectionRatio }) => {
+          const {
+            dataset: { type },
+          } = target;
+
+          if (type) {
+            ingredientToIntersectionRatioMap.set(type, intersectionRatio);
+          }
+        });
+
+        // eslint-disable-next-line max-len
+        const mostVisibleType = [...ingredientToIntersectionRatioMap.entries()].sort(([, irA], [, irB]) => irB - irA)[0][0];
+
+        setSelectedIngredientType(mostVisibleType);
+      },
+      {
+        root: typeListElement,
+        threshold: thresholds,
+      });
+
+      items.forEach((item) => {
+        ingredientToIntersectionRatioMap.set(item.dataset.type, 0);
+        intersectionObserver.observe(item);
+      });
+
+      return () => {
+        intersectionObserver.disconnect();
+        ingredientToIntersectionRatioMap.clear();
+      };
+    }
+  }, []);
 
   return (
-    <>
-      <h1 className = 'text text_type_main-large mt-10 mb-5'>
+    <div className = { `${styles['burger-ingredients']} pb-5 ${className}` }>
+      <div className = { `${styles['burger-ingredients__title']} pt-10 pb-5 text text_type_main-large` }>
         { l('assemble_burger') }
-      </h1>
-      <div className = { styles.tab_selector }>
-        <Tab
-          value = { Type.BUN }
-          active = { current === Type.BUN }
-          onClick = { setCurrent }>
-          { l('rolls') }
-        </Tab>
-        <Tab
-          value = { Type.SAUCE }
-          active = { current === Type.SAUCE }
-          onClick = { setCurrent }>
-          { l('sauces') }
-        </Tab>
-        <Tab
-          value = { Type.MAIN }
-          active = { current === Type.MAIN }
-          onClick = { setCurrent }>
-          { l('toppings') }
-        </Tab>
       </div>
-      <div className = { styles.scroll_container }>
-        <IngredientsCategory
-          title = { l('rolls') }
-          items = { items.filter(item => item.type === Type.BUN) } />
-        <IngredientsCategory
-          title = { l('sauces') }
-          items = { items.filter(item => item.type === Type.SAUCE) } />
-        <IngredientsCategory
-          title = { l('toppings') }
-          items = { items.filter(item => item.type === Type.MAIN) } />
-      </div>
-    </>
-  );
-}
+      <div className = { styles['burger-ingredients__filter'] }>
+        {
+          ingredientTypes.map(type => (
+            <Tab
+              key = { type }
+              active = { selectedIngredientType === type }
+              value = { type }
+              // eslint-disable-next-line @typescript-eslint/no-shadow
+              onClick = { (type) => {
+                const { current: typeListElement } = typeListElementRef;
 
-BurgerIngredients.propTypes = {
-  items: PropTypes.arrayOf(ingredientsType),
+                const currentListItemElement = typeListElement.querySelector(
+                  `.${styles['burger-ingredients__type-item']}[data-type="${type}"]`,
+                );
+
+                if (currentListItemElement) {
+                  currentListItemElement.scrollIntoView({ behavior: 'smooth' });
+                }
+              } }>
+              { ingredientTypeTitles[type] }
+            </Tab>
+          ))
+        }
+      </div>
+      <ul
+        ref = { typeListElementRef }
+        className = { styles['burger-ingredients__type-list'] }>
+        {
+          // eslint-disable-next-line @typescript-eslint/no-shadow
+          Array.from(ingredientTypeToIngredientsMap.entries()).map(([type, ingredients]) => (
+            <BurgerIngredientType
+              key = { type }
+              className = { styles['burger-ingredients__type-item'] }
+              ingredients = { ingredients }
+              title = { ingredientTypeTitles[type] }
+              type = { type } />
+          ))
+        }
+      </ul>
+    </div>
+  );
 };
 
-export { BurgerIngredients };
+BurgerIngredients.propTypes = { className: PropTypes.string };
+
+export default BurgerIngredients;
