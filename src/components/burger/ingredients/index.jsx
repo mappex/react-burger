@@ -121,7 +121,6 @@ const BurgerIngredients = ({ className = '' }) => {
               // eslint-disable-next-line @typescript-eslint/no-shadow
               onClick = { (type) => {
                 const { current: typeListElement } = typeListElementRef;
-                if (!typeListElement) return;
 
                 const currentListItemElement = typeListElement.querySelector(
                   `.${styles['burger-ingredients__type-item']}[data-type="${type}"]`,

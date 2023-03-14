@@ -23,7 +23,7 @@ import { moveIngredient } from '../../../../services/reducers/ingredients';
 
 const BurgerConstructorItem = ({
   className, index, ingredient: {
-    _id, image, name, price,
+    image, name, price,
   }, isLocked, onShowIngredientInfo, onDelete, type,
 }) => {
   const dispatch = useAppDispatch();

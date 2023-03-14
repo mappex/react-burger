@@ -1,6 +1,5 @@
 /* eslint-disable node/no-missing-import */
 import PropTypes from 'prop-types';
-import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styles from './index.module.css';
 import l from '../../../utils/lang';

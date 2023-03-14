@@ -20,7 +20,7 @@ const BurgerIngredient = ({
   ingredient: {
     _id, image, name: title, price, type,
   },
-  onClick = () => { },
+  onClick,
 }) => {
   const { idToActualIngredientsCountMap } = useAppSelector(getIngredients);
 
