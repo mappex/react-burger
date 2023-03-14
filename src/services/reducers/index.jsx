@@ -28,17 +28,6 @@ const initialState = {
   orderDetails: null,
   orderDetailsError: null,
   orderDetailsRequest: false,
-  totalAmount: 0,
-};
-
-const calcTotal = ({ actualIngredients, idToIngredientMap }) => {
-  const ingredientIds = actualIngredients.map(({ refId }) => refId);
-
-  return ingredientIds.reduce((result, refId) => {
-    const { price } = idToIngredientMap[refId] || 0;
-
-    return result + price;
-  }, 0);
 };
 
 const buildIdToActualIngredientsCountMap = ({ actualIngredients }) => actualIngredients
@@ -101,7 +90,6 @@ export const appSlice = createSlice({
         state.actualIngredients = newValue;
       }
 
-      state.totalAmount = calcTotal(state);
       state.idToActualIngredientsCountMap = buildIdToActualIngredientsCountMap(state);
     },
     moveIngredient(state, { payload: [fromIndex, toIndex] }) {
@@ -126,7 +114,6 @@ export const appSlice = createSlice({
           ...removableIngredients.filter(({ id }) => id !== idToRemove),
           actualIngredients[actualIngredients.length - 1],
         ];
-        state.totalAmount = calcTotal(state);
         state.idToActualIngredientsCountMap = buildIdToActualIngredientsCountMap(state);
       }
     },

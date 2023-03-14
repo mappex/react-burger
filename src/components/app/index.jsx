@@ -7,6 +7,7 @@ import {
   useAppDispatch,
   useAppSelector,
 } from '../../services/store';
+import { getMain } from '../../services/selectors';
 
 import { fetchIngredients } from '../../services/reducers';
 
@@ -15,9 +16,7 @@ import AppBody from '../app-body';
 
 
 const App = () => {
-  const { ingredientsError, ingredientsRequest } = useAppSelector(
-    state => state.main,
-  );
+  const { ingredientsError, ingredientsRequest } = useAppSelector(getMain);
   const dispatch = useAppDispatch();
 
   useEffect(() => {

@@ -1,5 +1,8 @@
 /* eslint-disable node/no-missing-import */
-import { useCallback } from 'react';
+import {
+  useMemo,
+  useCallback,
+} from 'react';
 import PropTypes from 'prop-types';
 import { useDrop } from 'react-dnd';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -25,6 +28,7 @@ import {
   removeIngredient,
   setDetailedIngredient,
 } from '../../../services/reducers';
+import { getMain } from '../../../services/selectors';
 
 const BurgerConstructor = ({ className }) => {
   const dispatch = useAppDispatch();
@@ -32,11 +36,20 @@ const BurgerConstructor = ({ className }) => {
     actualIngredients,
     idToIngredientMap,
     orderDetailsRequest,
-    totalAmount,
-  } = useAppSelector(state => state.main);
+  } = useAppSelector(getMain);
 
   const topBun = actualIngredients.slice(0, 1)[0];
   const bottomBun = actualIngredients.slice(-1)[0];
+
+  const totalAmount = useMemo(() => {
+    const ingredientIds = actualIngredients.map(({ refId }) => refId);
+
+    return ingredientIds.reduce((result, refId) => {
+      const { price } = idToIngredientMap[refId] || 0;
+
+      return result + price;
+    }, 0);
+  }, [actualIngredients, idToIngredientMap]);
 
   const createOrderClickHandler = useCallback(() => {
     if (!orderDetailsRequest) {

@@ -6,8 +6,11 @@ import styles from './index.module.css';
 import style from '../burger/constructor/index.module.css';
 import l from '../../utils/lang';
 
+import Modal from '../modal';
 import BurgerIngredients from '../burger/ingredients';
 import BurgerConstructor from '../burger/constructor';
+import IngredientDetails from '../ingredient-details';
+import ModalOrderDetails from '../modal/order-details';
 
 import {
   resetDetailedIngredient,
@@ -18,15 +21,10 @@ import {
   useAppDispatch,
   useAppSelector,
 } from '../../services/store';
-import IngredientDetails from '../ingredient-details';
-
-import Modal from '../modal';
-import ModalOrderDetails from '../modal/order-details';
+import { getMain } from '../../services/selectors';
 
 const AppBody = () => {
-  const { detailedIngredient, orderDetails } = useAppSelector(
-    state => state.main,
-  );
+  const { detailedIngredient, orderDetails } = useAppSelector(getMain);
   const dispatch = useAppDispatch();
 
   return (
