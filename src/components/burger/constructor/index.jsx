@@ -5,6 +5,7 @@ import {
 } from 'react';
 import PropTypes from 'prop-types';
 import { useDrop } from 'react-dnd';
+import { v4 as uuidV4 } from 'uuid';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styles from './index.module.css';
@@ -33,6 +34,8 @@ import {
   getIngredients,
   getOrderDetails,
 } from '../../../services/selectors';
+
+const generateIngredientId = () => uuidV4();
 
 const BurgerConstructor = ({ className }) => {
   const dispatch = useAppDispatch();
@@ -73,7 +76,10 @@ const BurgerConstructor = ({ className }) => {
     drop(item) {
       const { refId } = item;
 
-      dispatch(addIngredient(idToIngredientMap[refId]));
+      dispatch(addIngredient({
+        id: generateIngredientId(),
+        ingredient: idToIngredientMap[refId],
+      }));
     },
     collect(monitor) {
       return {

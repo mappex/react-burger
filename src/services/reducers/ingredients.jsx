@@ -3,7 +3,6 @@ import {
   createAsyncThunk,
   createSlice,
 } from '@reduxjs/toolkit';
-import { v4 as uuidV4 } from 'uuid';
 
 import {
   IngredientType,
@@ -13,8 +12,6 @@ import {
 import {
   fetchIngredients as apiFetchIngredients,
 } from '../api';
-
-const generateIngredientId = () => uuidV4();
 
 const initialState = {
   actualIngredients: [],
@@ -43,7 +40,7 @@ export const ingredientsSlice = createSlice({
   name: 'ingredients',
   initialState,
   reducers: {
-    addIngredient(state, { payload: ingredient }) {
+    addIngredient(state, { payload: { id, ingredient } }) {
       const { actualIngredients } = state;
       const { _id, type } = ingredient;
 
@@ -53,7 +50,7 @@ export const ingredientsSlice = createSlice({
           ActualIngredientType.BOTTOM,
         // eslint-disable-next-line @typescript-eslint/no-shadow
         ].map(type => ({
-          id: generateIngredientId(),
+          id,
           type,
           isLocked: true,
           refId: _id,
@@ -68,7 +65,7 @@ export const ingredientsSlice = createSlice({
         const newValue = [...actualIngredients];
 
         newValue.splice(-1, 0, {
-          id: generateIngredientId(),
+          id,
           refId: _id,
         });
 
