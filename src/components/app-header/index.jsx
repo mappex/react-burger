@@ -1,3 +1,4 @@
+/* eslint-disable node/no-missing-import */
 import {
   Logo,
   BurgerIcon,
@@ -8,45 +9,35 @@ import {
 import styles from './index.module.css';
 import l from '../../utils/lang';
 
-// eslint-disable-next-line node/no-missing-import
 import MenuItem from './menu-item';
 
-function AppHeader() {
+const AppHeader = () => {
   return (
-    <header>
-      <nav className = { styles.menu_container }>
-        <ul className = { styles.menu_list }>
-          <li className = { styles.menu_list_left }>
-            <ul className = { styles.menu_list_left_items }>
-              <li>
-                <MenuItem
-                  text = { l('constructor') }
-                  icon = { <BurgerIcon type = 'primary' /> }
-                  link = '#' active />
-              </li>
-              <li>
-                <MenuItem
-                  text = { l('order_feed') }
-                  icon = { <ListIcon type = 'secondary' /> }
-                  link = '#' />
-              </li>
-            </ul>
-          </li>
-          <li className = { styles.menu_list_center }>
+    <header
+      className = { `${styles['app-header']} text text_type_main-default pt-3 pb-3` }>
+      <nav>
+        <ul className = { `${styles['app-header__menu-list']} pt-4 pb-4` }>
+          <MenuItem
+            className = { styles['app-header__menu-item'] }
+            Icon = { BurgerIcon }
+            text = { l('constructor') } />
+          <MenuItem
+            className = { styles['app-header__menu-item'] }
+            Icon = { ListIcon }
+            isActive = { false }
+            text = { l('order_feed') } />
+          <li className = { styles['app-header__logo-wrapper'] }>
             <Logo />
           </li>
-          <li className = { styles.menu_list_right }>
-            <span>
-              <MenuItem
-                text = { l('personal_area') }
-                icon = { <ProfileIcon type = 'secondary' /> }
-                link = '#' />
-            </span>
-          </li>
+          <MenuItem
+            className = { styles['app-header__menu-item'] }
+            Icon = { ProfileIcon }
+            isActive = { false }
+            text = { l('personal_area') } />
         </ul>
       </nav>
     </header>
   );
-}
+};
 
 export default AppHeader;

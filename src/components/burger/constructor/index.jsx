@@ -1,105 +1,179 @@
-import {
-  useContext,
-  useReducer,
-  useEffect,
-} from 'react';
+/* eslint-disable node/no-missing-import */
+import { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import {
-  ConstructorElement,
-  DragIcon,
-  CurrencyIcon,
-  Button,
-} from '@ya.praktikum/react-developer-burger-ui-components';
+import { useDrop } from 'react-dnd';
+import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styles from './index.module.css';
 import l from '../../../utils/lang';
+
+import Amount from '../../amount';
+import BurgerConstructorItem from './item';
+
 import {
-  ingredientsType,
-} from '../../../utils/prop-types';
-import { BurgerContext } from '../../../utils/context/burger';
+  DraggableTypes,
+  IngredientType,
+} from '../../../utils/types';
 
-const initialTotalState = { total: 0 };
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../../services/store';
+import {
+  addIngredient,
+  createOrder,
+  removeIngredient,
+  setDetailedIngredient,
+} from '../../../services/reducers';
 
-function totalPriceReducer(totalPriceState, items) {
-  const newTotal = items.bunItem.price * 2 + items.middleItems.reduce((acc, p) => acc + p.price, 0);
+const BurgerConstructor = ({ className }) => {
+  const dispatch = useAppDispatch();
+  const {
+    actualIngredients,
+    idToIngredientMap,
+    orderDetailsRequest,
+    totalAmount,
+  } = useAppSelector(state => state.main);
 
-  return { total: newTotal };
-}
+  const topBun = actualIngredients.slice(0, 1)[0];
+  const bottomBun = actualIngredients.slice(-1)[0];
 
-function BurgerConstructor() {
-  const { orderedItems, onOrderButtonClick } = useContext(BurgerContext);
-  const [totalPriceState, totalPriceDispatch] = useReducer(totalPriceReducer, initialTotalState);
+  const createOrderClickHandler = useCallback(() => {
+    if (!orderDetailsRequest) {
+      dispatch(createOrder(actualIngredients.map(({ refId }) => refId)));
+    }
+  }, [actualIngredients, dispatch, orderDetailsRequest]);
 
-  useEffect(() => {
-    totalPriceDispatch(orderedItems);
-  }, [orderedItems]);
+  const [{ isCanDrop, isDragOver }, dropRef] = useDrop({
+    accept: DraggableTypes.INGREDIENT,
+    canDrop(item, monitor) {
+      return !(
+        actualIngredients.length === 0
+        && monitor.getItemType() === DraggableTypes.INGREDIENT
+        && item.type !== IngredientType.BUN
+      );
+    },
+    drop(item) {
+      const { refId } = item;
 
-  const { bunItem, middleItems } = orderedItems;
+      dispatch(addIngredient(idToIngredientMap[refId]));
+    },
+    collect(monitor) {
+      return {
+        isCanDrop: monitor.canDrop(),
+        isDragOver: monitor.isOver(),
+      };
+    },
+  });
+
+  let style = `${styles['burger-constructor']} pt-25 pb-5`;
+
+  if (actualIngredients.length === 0) {
+    style += ` ${styles['burger-constructor_is-empty']}`;
+  }
+
+  if (isCanDrop) {
+    style += ` ${styles['burger-constructor_is-can-drop']}`;
+  }
+
+  if (isDragOver) {
+    style += ` ${styles['burger-constructor_is-drag-over']}`;
+  }
 
   return (
-    <>
-      <ul className = { `${styles.burger_constructor_list} ml-4 mt-25 mb-10 pr-4` }>
-        <li className = 'pl-8' key = 'top_bun'>
-          <ConstructorElement
-            type = 'top'
-            isLocked = { true }
-            text = { `${bunItem.name} (${l('top')})` }
-            thumbnail = { bunItem.image }
-            price = { bunItem.price } />
-        </li>
-        <li>
-          { (middleItems.length > 0
-            ? <ul className = { `${styles.burger_constructor_draggable_list} pr-2` } key = 'middle_items'>
-              { middleItems.map(item => (
-                <li
-                  className = { styles.burger_constructor_draggable_list_item }
-                  key = { item._id }>
-                  <span className = { styles.burger_constructor_drag_icon }>
-                    <DragIcon type = 'primary' />
-                  </span>
-                  <ConstructorElement
-                    text = { item.name }
-                    thumbnail = { item.image }
-                    price = { item.price } />
-                </li>
-              )) }
-            </ul>
-            : <h3 className = { `${styles.warningText} text text_type_main-default text_color_inactive pt-6 pb-6` }>
-              { l('add_ingredients') }
-            </h3>
-          ) }
-        </li>
-        <li className = 'pl-8' key = 'bottom_bun'>
-          <ConstructorElement
-            isLocked = { true }
-            type = 'bottom'
-            text = { `${bunItem.name} (${l('bottom')})` }
-            thumbnail = { bunItem.image }
-            price = { bunItem.price } />
-        </li>
-      </ul>
-      <div className = { `${styles.burger_constructor_order} mr-4 mb-10` }>
-        <p className = 'text text_type_digits-medium'>
-          { totalPriceState.total }
-        </p>
-        <span className = 'ml-2 mr-10'>
-          <CurrencyIcon type = 'primary' />
-        </span>
+    <div
+      className = { `${style} ${className}` }>
+      <div ref = { dropRef } className = { styles['burger-constructor__list'] }>
+        {
+          topBun && (
+            <>
+              { (() => {
+                const { isLocked = false, refId, type } = topBun;
+                const ingredient = idToIngredientMap[refId];
+
+                return (
+                  ingredient && (
+                    <BurgerConstructorItem
+                      ingredient = { idToIngredientMap[refId] || null }
+                      isLocked = { isLocked }
+                      onShowIngredientInfo = { () => {
+                        dispatch(setDetailedIngredient(ingredient));
+                      } }
+                      type = { type } />
+                  )
+                );
+              })() }
+              <div className = { 'pt-4' } />
+            </>)
+        }
+        <div className = { styles['burger-constructor__filling'] }>
+          {
+            actualIngredients
+              .slice(1, -1)
+              .map(({
+                id, isLocked = false, refId, type,
+              }, ix) => {
+                const ingredient = idToIngredientMap[refId];
+
+                return (
+                  ingredient && (
+                    <BurgerConstructorItem
+                      key = { id }
+                      id = { id }
+                      index = { ix + 1 }
+                      ingredient = { idToIngredientMap[refId] || null }
+                      isLocked = { isLocked }
+                      onShowIngredientInfo = { () => {
+                        dispatch(setDetailedIngredient(ingredient));
+                      } }
+                      onDelete = { () => { dispatch(removeIngredient(id)); } }
+                      type = { type } />
+                  )
+                );
+              })
+          }
+        </div>
+        {
+          bottomBun && (
+            <>
+              <div className = { 'pt-4' } />
+              { (() => {
+                const { isLocked = false, refId, type } = bottomBun;
+                const ingredient = idToIngredientMap[refId];
+
+                return (
+                  ingredient && (
+                    <BurgerConstructorItem
+                      ingredient = { idToIngredientMap[refId] || null }
+                      isLocked = { isLocked }
+                      onShowIngredientInfo = { () => {
+                        dispatch(setDetailedIngredient(ingredient));
+                      } }
+                      type = { type } />
+                  )
+                );
+              })() }
+            </>)
+        }
+      </div>
+      <div className = { `${styles['burger-constructor__total-wrapper']} pt-10` }>
+        <Amount
+          amount = { totalAmount }
+          className = { styles['burger-constructor__total'] }
+          isTotal = { true } />
+        <div className = { 'pl-10' } />
         <Button
           htmlType = 'button'
-          type = 'primary'
-          size = 'medium'
-          onClick = { onOrderButtonClick }>
+          onClick = { createOrderClickHandler }
+          size = { 'large' }
+          type = { 'primary' }>
           { l('checkout') }
         </Button>
       </div>
-    </>
+    </div>
   );
-}
-
-BurgerConstructor.propTypes = {
-  bunItem: ingredientsType,
-  middleItems: PropTypes.arrayOf(ingredientsType),
 };
 
-export { BurgerConstructor };
+BurgerConstructor.propTypes = { className: PropTypes.string };
+
+export default BurgerConstructor;
