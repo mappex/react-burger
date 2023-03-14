@@ -24,19 +24,23 @@ import {
 } from '../../../services/store';
 import {
   addIngredient,
-  createOrder,
   removeIngredient,
   setDetailedIngredient,
-} from '../../../services/reducers';
-import { getMain } from '../../../services/selectors';
+} from '../../../services/reducers/ingredients';
+import { createOrder } from '../../../services/reducers/order-details';
+
+import {
+  getIngredients,
+  getOrderDetails,
+} from '../../../services/selectors';
 
 const BurgerConstructor = ({ className }) => {
   const dispatch = useAppDispatch();
   const {
     actualIngredients,
     idToIngredientMap,
-    orderDetailsRequest,
-  } = useAppSelector(getMain);
+  } = useAppSelector(getIngredients);
+  const { orderDetailsRequest } = useAppSelector(getOrderDetails);
 
   const topBun = actualIngredients.slice(0, 1)[0];
   const bottomBun = actualIngredients.slice(-1)[0];

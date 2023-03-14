@@ -5,16 +5,12 @@ import {
   useSelector,
 } from 'react-redux';
 
-import mainReducer from './reducers';
-
-const store = configureStore({
-  devTools: process.env.NODE_ENV === 'development',
-  reducer: {
-    main: mainReducer,
-  },
-});
+import reducers from './reducers';
 
 export const useAppDispatch = () => useDispatch();
 export const useAppSelector = action => useSelector(action);
 
-export default store;
+export default configureStore({
+  devTools: process.env.NODE_ENV === 'development',
+  reducer: reducers,
+});

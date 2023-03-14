@@ -7,7 +7,7 @@ import styles from './index.module.css';
 import BurgerIngredient from '../ingredient';
 
 import { useAppDispatch } from '../../../../services/store';
-import { setDetailedIngredient } from '../../../../services/reducers';
+import { setDetailedIngredient } from '../../../../services/reducers/ingredients';
 
 const BurgerIngredientType = ({
   className, ingredients, title, type,

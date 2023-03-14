@@ -12,19 +12,21 @@ import BurgerConstructor from '../burger/constructor';
 import IngredientDetails from '../ingredient-details';
 import ModalOrderDetails from '../modal/order-details';
 
-import {
-  resetDetailedIngredient,
-  resetOrderDetails,
-} from '../../services/reducers';
+import { resetOrderDetails } from '../../services/reducers/order-details';
+import { resetDetailedIngredient } from '../../services/reducers/ingredients';
 
 import {
   useAppDispatch,
   useAppSelector,
 } from '../../services/store';
-import { getMain } from '../../services/selectors';
+import {
+  getIngredients,
+  getOrderDetails,
+} from '../../services/selectors';
 
 const AppBody = () => {
-  const { detailedIngredient, orderDetails } = useAppSelector(getMain);
+  const { detailedIngredient } = useAppSelector(getIngredients);
+  const { orderDetails } = useAppSelector(getOrderDetails);
   const dispatch = useAppDispatch();
 
   return (

@@ -19,7 +19,7 @@ import {
 } from '../../../../utils/types';
 
 import { useAppDispatch } from '../../../../services/store';
-import { moveIngredient } from '../../../../services/reducers';
+import { moveIngredient } from '../../../../services/reducers/ingredients';
 
 const BurgerConstructorItem = ({
   className, index, ingredient: {

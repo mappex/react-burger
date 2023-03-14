@@ -14,7 +14,7 @@ import {
   DraggableTypes,
 } from '../../../../utils/types';
 import { useAppSelector } from '../../../../services/store';
-import { getMain } from '../../../../services/selectors';
+import { getIngredients } from '../../../../services/selectors';
 
 const BurgerIngredient = ({
   ingredient: {
@@ -22,7 +22,7 @@ const BurgerIngredient = ({
   },
   onClick = () => { },
 }) => {
-  const { idToActualIngredientsCountMap } = useAppSelector(getMain);
+  const { idToActualIngredientsCountMap } = useAppSelector(getIngredients);
 
   const [{ isItPicked }, dragRef, preview] = useDrag({
     type: DraggableTypes.INGREDIENT,

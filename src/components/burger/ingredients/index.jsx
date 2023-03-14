@@ -14,7 +14,7 @@ import l from '../../../utils/lang';
 import BurgerIngredientType from './ingredient-type';
 
 import { useAppSelector } from '../../../services/store';
-import { getMain } from '../../../services/selectors';
+import { getIngredients } from '../../../services/selectors';
 
 const ingredientTypeTitles = {
   bun: l('rolls'),
@@ -32,7 +32,7 @@ const thresholds = [
 ];
 
 const BurgerIngredients = ({ className = '' }) => {
-  const { ingredients } = useAppSelector(getMain);
+  const { ingredients } = useAppSelector(getIngredients);
   const [selectedIngredientType, setSelectedIngredientType] = useState(
     ingredientTypes[0],
   );
