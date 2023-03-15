@@ -63,7 +63,7 @@ const BurgerConstructorItem = ({
       if (index !== null) {
         // eslint-disable-next-line no-param-reassign
         item.index = index;
-        setImmediate(() => dispatch(moveIngredient([draggableIndex, index])));
+        dispatch(moveIngredient([draggableIndex, index]));
       }
     },
   });
