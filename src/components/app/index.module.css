@@ -1,14 +1,5 @@
-.container {
-  composes: flex_row from global;
-  align-items: flex-start;
-}
-
-.container_left, .container_right {
-  flex-basis: 600px;
-}
-
-.fullscreen_message {
-  position: relative;
-  top: 40vh;
-  text-align: center;
+.app {
+  font-family: 'Jet Brains Mono', sans-serif;
+  margin: 0 auto;
+  max-width: 1240px;
 }
