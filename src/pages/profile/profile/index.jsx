@@ -17,6 +17,11 @@ import {
   useAppSelector,
 } from '../../../services/store';
 import {
+  updateUserData,
+  UpdateUserDataPhase,
+  interruptUpdateUserData,
+} from '../../../services/reducers/user';
+import {
   getUser,
 } from '../../../services/selectors';
 
@@ -25,30 +30,33 @@ import l from '../../../utils/lang';
 
 const Profile = () => {
   const dispatch = useAppDispatch();
-
-  // const { name, email } = useSelector(store => store.user.user);
+  const { user: { name, email }, updateUserDataPhase } = useAppSelector(getUser);
 
   const [state, setState] = useState({
-    name: 'name',
-    email: 'email',
+    name: name,
+    email: email,
     password: '',
   });
+
+  useEffect(() => {
+    return () => {
+      dispatch(interruptUpdateUserData());
+    };
+  }, [dispatch]);
 
   const handleChange = (e) => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
 
-  useEffect(() => {
-    // dispatch(getProfile());
-  }, [dispatch]);
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    // dispatch(patchProfile(state.name, state.email, state.password));
+    if (updateUserDataPhase === UpdateUserDataPhase.initial) {
+      dispatch(updateUserData(state));
+    }
   };
 
   const handleClearForm = () => {
-    // setState({ ...state, name: name, email: email });
+    setState({ ...state, name: name, email: email });
   };
 
   return (

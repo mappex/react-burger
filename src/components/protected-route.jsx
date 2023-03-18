@@ -1,7 +1,5 @@
 /* eslint-disable node/no-missing-import */
 import {
-  Route,
-  Routes,
   Navigate,
 } from 'react-router-dom';
 
@@ -11,19 +9,11 @@ import { getUser } from '../services/selectors';
 
 import PropTypes from 'prop-types';
 
-const ProtectedRouteElement = ({ element, ...rest }) => {
+const ProtectedRouteElement = ({ element }) => {
   const { userLoginPhase } = useAppSelector(getUser);
 
-  return (
-    <Routes>
-      <Route
-        { ...rest }
-        render = { () => {
-          return userLoginPhase === UserLoginPhase.fulfilled ? element : (
-            <Navigate to = '/login' replace = { true } />
-          );
-        } } />
-    </Routes>
+  return userLoginPhase === UserLoginPhase.fulfilled ? element : (
+    <Navigate to = '/login' replace = { true } />
   );
 };
 

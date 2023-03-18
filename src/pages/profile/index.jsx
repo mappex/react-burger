@@ -1,19 +1,15 @@
 /* eslint-disable id-blacklist */
 /* eslint-disable node/no-missing-import */
 import {
-  useEffect,
-  useState,
-} from 'react';
-import {
   Link,
-  Route,
-  Routes,
   useLocation,
 } from 'react-router-dom';
 
 import { Orders } from './orders';
 import { Profile } from './profile';
-import { NotFoundPage } from '../404';
+import {
+  logout,
+} from '../../services/reducers/user';
 import {
   useAppDispatch,
   useAppSelector,
