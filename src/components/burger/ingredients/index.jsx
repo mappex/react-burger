@@ -156,4 +156,4 @@ const BurgerIngredients = ({ className = '' }) => {
 
 BurgerIngredients.propTypes = { className: PropTypes.string };
 
-export default BurgerIngredients;
+export { BurgerIngredients };

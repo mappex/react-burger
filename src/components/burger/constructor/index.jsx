@@ -6,12 +6,16 @@ import {
 import PropTypes from 'prop-types';
 import { useDrop } from 'react-dnd';
 import { v4 as uuidV4 } from 'uuid';
+import {
+  useNavigate,
+  useLocation,
+} from 'react-router-dom';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styles from './index.module.css';
 import l from '../../../utils/lang';
 
-import Amount from '../../amount';
+import { Amount } from '../../amount';
 import BurgerConstructorItem from './item';
 
 import {
@@ -26,11 +30,11 @@ import {
 import {
   addIngredient,
   removeIngredient,
-  setDetailedIngredient,
 } from '../../../services/reducers/ingredients';
 import { createOrder } from '../../../services/reducers/order-details';
 
 import {
+  getUser,
   getIngredients,
   getOrderDetails,
 } from '../../../services/selectors';
@@ -44,6 +48,10 @@ const BurgerConstructor = ({ className }) => {
     idToIngredientMap,
   } = useAppSelector(getIngredients);
   const { orderDetailsRequest } = useAppSelector(getOrderDetails);
+  const { user } = useAppSelector(getUser);
+  const { state, pathname } = useLocation();
+  const url = window.location.href;
+  const navigate = useNavigate();
 
   const topBun = actualIngredients.slice(0, 1)[0];
   const bottomBun = actualIngredients.slice(-1)[0];
@@ -59,10 +67,12 @@ const BurgerConstructor = ({ className }) => {
   }, [actualIngredients, idToIngredientMap]);
 
   const createOrderClickHandler = useCallback(() => {
-    if (!orderDetailsRequest) {
+    if (!user) {
+      navigate('/login');
+    } else if (!orderDetailsRequest) {
       dispatch(createOrder(actualIngredients.map(({ refId }) => refId)));
     }
-  }, [actualIngredients, dispatch, orderDetailsRequest]);
+  }, [actualIngredients, dispatch, orderDetailsRequest, user, state, pathname, url]);
 
   const [{ isCanDrop, isDragOver }, dropRef] = useDrop({
     accept: DraggableTypes.INGREDIENT,
@@ -120,7 +130,11 @@ const BurgerConstructor = ({ className }) => {
                       ingredient = { idToIngredientMap[refId] || null }
                       isLocked = { isLocked }
                       onShowIngredientInfo = { () => {
-                        dispatch(setDetailedIngredient(ingredient));
+                        navigate(`/ingredients/${ingredient._id}`, {
+                          state: {
+                            background: true,
+                          },
+                        });
                       } }
                       type = { type } />
                   )
@@ -147,7 +161,11 @@ const BurgerConstructor = ({ className }) => {
                       ingredient = { idToIngredientMap[refId] || null }
                       isLocked = { isLocked }
                       onShowIngredientInfo = { () => {
-                        dispatch(setDetailedIngredient(ingredient));
+                        navigate(`/ingredients/${ingredient._id}`, {
+                          state: {
+                            background: true,
+                          },
+                        });
                       } }
                       onDelete = { () => { dispatch(removeIngredient(id)); } }
                       type = { type } />
@@ -170,7 +188,11 @@ const BurgerConstructor = ({ className }) => {
                       ingredient = { idToIngredientMap[refId] || null }
                       isLocked = { isLocked }
                       onShowIngredientInfo = { () => {
-                        dispatch(setDetailedIngredient(ingredient));
+                        navigate(`/ingredients/${ingredient._id}`, {
+                          state: {
+                            background: true,
+                          },
+                        });
                       } }
                       type = { type } />
                   )
@@ -199,4 +221,4 @@ const BurgerConstructor = ({ className }) => {
 
 BurgerConstructor.propTypes = { className: PropTypes.string };
 
-export default BurgerConstructor;
+export { BurgerConstructor };

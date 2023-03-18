@@ -42,4 +42,4 @@ OrderDetails.propTypes = {
   orderDetails: PropTypes.object.isRequired,
 };
 
-export default OrderDetails;
+export { OrderDetails };

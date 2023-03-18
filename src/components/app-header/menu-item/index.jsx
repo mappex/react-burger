@@ -4,7 +4,11 @@ import PropTypes from 'prop-types';
 import styles from './index.module.css';
 
 const MenuItem = ({
-  className, Icon, isActive, text,
+  className,
+  Icon,
+  isActive,
+  text,
+  onClick,
 }) => {
   let style = `${styles['menu-item']} ${className} p-5 text`;
 
@@ -16,7 +20,9 @@ const MenuItem = ({
 
   return (
     <li
-      className = { style }>
+      className = { style }
+      onClick = { onClick }
+      role = 'button'>
       <Icon type = { isActive ? 'primary' : 'secondary' } />
       <span className = 'ml-2'>{ text }</span>
     </li>
@@ -28,6 +34,7 @@ MenuItem.propTypes = {
   Icon: PropTypes.elementType.isRequired,
   isActive: PropTypes.bool,
   text: PropTypes.string.isRequired,
+  onClick: PropTypes.func,
 };
 
 MenuItem.defaultProps = {

@@ -34,7 +34,7 @@ const buildIdToActualIngredientsCountMap = ({ actualIngredients }) => actualIngr
     return map;
   }, {});
 
-export const fetchIngredients = createAsyncThunk('main/fetchIngredients', apiFetchIngredients);
+export const fetchIngredients = createAsyncThunk('ingredients/fetchIngredients', apiFetchIngredients);
 
 export const ingredientsSlice = createSlice({
   name: 'ingredients',
@@ -101,15 +101,6 @@ export const ingredientsSlice = createSlice({
     },
     resetDetailedIngredient(state) {
       state.detailedIngredient = null;
-    },
-    resetOrderDetails(state) {
-      if (!state.orderDetailsRequest) {
-        Object.assign(state, {
-          orderDetails: null,
-          orderDetailsError: null,
-          orderDetailsRequest: false,
-        });
-      }
     },
     setDetailedIngredient(state, action) {
       state.detailedIngredient = action.payload;

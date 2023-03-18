@@ -1,59 +1,67 @@
 /* eslint-disable node/no-missing-import */
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend as Html5Backend } from 'react-dnd-html5-backend';
+import {
+  Route,
+  Routes,
+  useNavigate,
+  useLocation,
+} from 'react-router-dom';
+
+import {
+  FeedPage,
+  ForgotPasswordPage,
+  IngredientsPage,
+  SignInPage,
+  SignOutPage,
+  MainPage,
+  NotFoundPage,
+  ProfilePage,
+  RegistrationPage,
+  ResetPasswordPage,
+} from '../../pages';
+import { Modal } from '../modal';
+import { IngredientDetails } from '../ingredient-details';
+import { ProtectedRouteElement } from '../protected-route';
 
 import styles from './index.module.css';
-import style from '../burger/constructor/index.module.css';
+import burgerConstructorStyles from '../burger/constructor/index.module.css';
 import l from '../../utils/lang';
 
-import Modal from '../modal';
-import BurgerIngredients from '../burger/ingredients';
-import BurgerConstructor from '../burger/constructor';
-import IngredientDetails from '../ingredient-details';
-import ModalOrderDetails from '../modal/order-details';
-
-import { resetOrderDetails } from '../../services/reducers/order-details';
-import { resetDetailedIngredient } from '../../services/reducers/ingredients';
-
-import {
-  useAppDispatch,
-  useAppSelector,
-} from '../../services/store';
-import {
-  getIngredients,
-  getOrderDetails,
-} from '../../services/selectors';
-
 const AppBody = () => {
-  const { detailedIngredient } = useAppSelector(getIngredients);
-  const { orderDetails } = useAppSelector(getOrderDetails);
-  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const background = location.state && location.state.background;
 
   return (
-    <main
-      className = { `${styles['app-body']} pl-5 pr-5 text text_type_main-default` }>
-      <DndProvider backend = { Html5Backend }>
-        <BurgerIngredients className = { styles['app-body__ingredients'] } />
-        <div className = { `${styles['app-body__space']} pl-10` } />
-        <BurgerConstructor className = { styles['app-body__constructor'] } />
-      </DndProvider>
+    <main className = { `${styles['app-body']} pl-5 pr-5 text text_type_main-default` }>
+      <Routes location = { background || location }>
+        <Route path = '/' element = { <MainPage /> } />
+        <Route path = '/login' element = { <SignInPage /> } />
+        <Route path = '/logout' element = { <SignOutPage /> } />
+        <Route path = '/register' element = { <RegistrationPage /> } />
+        <Route path = '/forgot-password' element = { <ForgotPasswordPage /> } />
+        <Route path = '/reset-password' element = { <ResetPasswordPage /> } />
+        <Route path = '/ingredients/:id' element = { <IngredientsPage /> } />
+        <Route
+          path = '/profile'
+          element = { <ProtectedRouteElement element = { <ProfilePage /> } /> } >
+        </Route>
+        <Route path = '/feed' element = { <FeedPage /> } />
+        <Route path = '*' element = { <NotFoundPage /> } />
+      </Routes>
       {
-        detailedIngredient && (
-          <Modal
-            title = { l('ingredient_details') }
-            onClose = { () => dispatch(resetDetailedIngredient()) }>
-            <IngredientDetails
-              className = { style['burger-constructor__ingredient-details'] }
-              ingredient = { detailedIngredient } />
-          </Modal>)
-      }
-      {
-        orderDetails && (
-          <Modal onClose = { () => dispatch(resetOrderDetails()) }>
-            <ModalOrderDetails
-              className = { `${style['burger-constructor__order-details']} mt-4 mb-20` }
-              orderDetails = { orderDetails } />
-          </Modal>)
+        background && (
+          <Routes>
+            <Route
+              path = '/ingredients/:id'
+              element = {
+                <Modal
+                  title = { l('ingredient_details') }
+                  onClose = { () => navigate('/') }>
+                  <IngredientDetails className = { burgerConstructorStyles['burger-constructor__ingredient-details'] } />
+                </Modal> } >
+            </Route>
+          </Routes>
+        )
       }
     </main>
   );
