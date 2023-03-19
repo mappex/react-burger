@@ -23,7 +23,7 @@ const getAccessSchemaAndTokenAndRefreshToken = (response) => {
 
 const checkReponse = (response) => {
   return response.ok ? response.json() : response.json().then((error) => {
-    throw new Error(error);
+    return error;
   });
 };
 
@@ -171,7 +171,7 @@ export const fetchAuthUserData = async ({ auth: { accessSchema, accessToken } })
   }).then(checkReponse);
 
   if (response.success !== true) {
-    throw new Error('Can\'t get data from server');
+    throw new Error(response.message || 'Can\'t get data from server');
   }
 
   return response.user;
@@ -192,7 +192,7 @@ export const fetchAuthUserDataUpdate = async ({
   }).then(checkReponse);
 
   if (response.success !== true) {
-    throw new Error('Can\'t get data from server');
+    throw new Error(response.message || 'Can\'t get data from server');
   }
 
   return {

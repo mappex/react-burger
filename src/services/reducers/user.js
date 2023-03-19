@@ -130,52 +130,49 @@ export const requestPasswordResettingForEmail = createAsyncThunk(
   apiPasswordResetForEmail,
 );
 
-export const updateUserData = createAsyncThunk(
-  'user/updateUserData',
-  async ({ email, name, password }) => {
+export const updateUserData = createAsyncThunk('user/updateUserData', async ({ email, name, password }) => {
+  const { accessSchema, accessToken } = getAccessSchemaAndToken();
+
+  if (!accessSchema || !accessToken) {
+    throw new Error('Action cannot be handled');
+  }
+
+  try {
+    return await apiUpdateUserData({
+      auth: {
+        accessSchema,
+        accessToken,
+      },
+      data: {
+        email,
+        name,
+        password,
+      },
+    });
+  } catch (error) {
+    if (error.message !== 'jwt expired') {
+      throw error;
+    }
+
+    const refreshToken = getRefreshToken();
+
+    if (!refreshToken) {
+      throw error;
+    }
+
+    const payload = await apiAuthTokens({ refreshToken });
+
+    authenticationSideEffect(payload);
+
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     const { accessSchema, accessToken } = getAccessSchemaAndToken();
 
-    if (!accessSchema || !accessToken) {
-      throw new Error('Action cannot be handled');
-    }
-
-    try {
-      return await apiUpdateUserData({
-        auth: {
-          accessSchema,
-          accessToken,
-        },
-        data: {
-          email,
-          name,
-          password,
-        },
-      });
-    } catch (error) {
-      if (error.message !== 'jwt expired') {
-        throw error;
-      }
-
-      const refreshToken = getRefreshToken();
-
-      if (!refreshToken) {
-        throw error;
-      }
-
-      const payload = await apiAuthTokens({ refreshToken });
-
-      authenticationSideEffect(payload);
-
-      // eslint-disable-next-line @typescript-eslint/no-shadow
-      const { accessSchema, accessToken } = getAccessSchemaAndToken();
-
-      return apiUpdateUserData({
-        auth: { accessSchema, accessToken },
-        data: { email, name, password },
-      });
-    }
-  },
-);
+    return apiUpdateUserData({
+      auth: { accessSchema, accessToken },
+      data: { email, name, password },
+    });
+  }
+});
 
 const userSlice = createSlice({
   name: 'user',
