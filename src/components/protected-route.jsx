@@ -1,6 +1,7 @@
 /* eslint-disable node/no-missing-import */
 import {
   Navigate,
+  useLocation,
 } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -12,9 +13,13 @@ import r from '../utils/routes';
 
 const ProtectedRoute = ({ element }) => {
   const { userLoginPhase } = useAppSelector(getUser);
+  const { pathname } = useLocation();
 
   return userLoginPhase === UserLoginPhase.fulfilled ? element : (
-    <Navigate to = { r.login } replace />
+    <Navigate
+      to = { r.login }
+      state = { { redirectedFrom: pathname } }
+      replace />
   );
 };
 

@@ -7,6 +7,7 @@ import {
 import {
   Link,
   Navigate,
+  useLocation,
 } from 'react-router-dom';
 import {
   Button,
@@ -35,6 +36,7 @@ import r from '../../utils/routes';
 const SignInPage = () => {
   const dispatch = useAppDispatch();
   const { userLoginPhase } = useAppSelector(getUser);
+  const { state } = useLocation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -46,6 +48,12 @@ const SignInPage = () => {
       }
     };
   }, [dispatch, userLoginPhase]);
+
+  if ([UserLoginPhase.fulfilled].includes(userLoginPhase)) {
+    const { redirectedFrom = r.home } = state || {};
+
+    return <Navigate to = { redirectedFrom } replace />;
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
