@@ -30,6 +30,7 @@ import {
 
 import styles from './index.module.css';
 import l from '../../utils/lang';
+import r from '../../utils/routes';
 
 const SignInPage = () => {
   const dispatch = useAppDispatch();
@@ -47,7 +48,7 @@ const SignInPage = () => {
   }, [dispatch, userLoginPhase]);
 
   if ([UserLoginPhase.fulfilled].includes(userLoginPhase)) {
-    return <Navigate to = '/' replace = { true } />;
+    return <Navigate to = { r.home } replace = { true } />;
   }
 
   const handleSubmit = (e) => {
@@ -80,10 +81,10 @@ const SignInPage = () => {
         </Button>
       </form>
       <p className = { 'text text_type_main-default text_color_inactive pb-4' }>{ l('are_you_a_new_user') }
-        <Link className = { styles.link } to = '/register'>{ l('register') }</Link>
+        <Link className = { styles.link } to = { r.registration }>{ l('register') }</Link>
       </p>
       <p className = { 'text text_type_main-default text_color_inactive pb-4' }>{ l('forgot_your_password') }
-        <Link className = { styles.link } to = '/forgot-password'>{ l('restore_password') }</Link>
+        <Link className = { styles.link } to = { r.forgot_password }>{ l('restore_password') }</Link>
       </p>
     </div>
   );

@@ -11,6 +11,7 @@ import {
 } from '../../services/selectors';
 
 import styles from './index.module.css';
+import r from '../../utils/routes';
 
 const IngredientsPage = () => {
   const { id } = useParams();
@@ -23,7 +24,7 @@ const IngredientsPage = () => {
   const { [id]: ingredient } = idToIngredientMap;
 
   if (!ingredient) {
-    return <Navigate to = { '/' } />;
+    return <Navigate to = { r.home } />;
   }
 
   return (

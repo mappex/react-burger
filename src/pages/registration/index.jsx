@@ -32,6 +32,7 @@ import {
 
 import styles from './index.module.css';
 import l from '../../utils/lang';
+import r from '../../utils/routes';
 
 const RegistrationPage = () => {
   const dispatch = useAppDispatch();
@@ -51,11 +52,11 @@ const RegistrationPage = () => {
   }, [dispatch]);
 
   if ([UserLoginPhase.fulfilled].includes(userLoginPhase)) {
-    return <Navigate to = { '/login' } />;
+    return <Navigate to = { r.login } />;
   }
 
   if ([UserRegistrationPhase.fulfilled, UserRegistrationPhase.rejected].includes(userRegistrationPhase)) {
-    return <Navigate to = { '/login' } />;
+    return <Navigate to = { r.login } />;
   }
 
   const handleSubmit = (e) => {
@@ -95,7 +96,7 @@ const RegistrationPage = () => {
       </form>
       <p className = { 'text text_type_main-default text_color_inactive pb-4' }>
         { l('already_registered') }
-        <Link to = '/login' className = { styles.link }>{ l('to_come_in') }</Link>
+        <Link to = { r.login } className = { styles.link }>{ l('to_come_in') }</Link>
       </p>
     </div>
   );

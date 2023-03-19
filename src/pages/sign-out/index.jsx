@@ -14,6 +14,8 @@ import {
   getUser,
 } from '../../services/selectors';
 
+import r from '../../utils/routes';
+
 const SignOutPage = () => {
   const { userLoginPhase } = useAppSelector(getUser);
   const dispatch = useAppDispatch();
@@ -31,7 +33,7 @@ const SignOutPage = () => {
       UserLoginPhase.rejected,
     ].includes(userLoginPhase)
   ) {
-    return <Navigate to = { '/login' } />;
+    return <Navigate to = { r.login } />;
   }
 
   return null;

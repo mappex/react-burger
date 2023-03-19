@@ -27,6 +27,7 @@ import {
 
 import styles from './index.module.css';
 import l from '../../utils/lang';
+import r from '../../utils/routes';
 
 const ForgotPasswordPage = () => {
   const dispatch = useAppDispatch();
@@ -35,7 +36,7 @@ const ForgotPasswordPage = () => {
   const [email, setEmail] = useState('');
 
   if ([UserLoginPhase.fulfilled].includes(userLoginPhase)) {
-    return <Navigate to = { '/' } />;
+    return <Navigate to = { r.home } />;
   }
 
   if (
@@ -45,7 +46,7 @@ const ForgotPasswordPage = () => {
       PasswordResettingPhase.fulfilled,
     ].includes(passwordResettingPhase)
   ) {
-    return <Navigate to = { '/reset-password' } />;
+    return <Navigate to = { r.reset_password } />;
   }
 
   const handleSubmit = (e) => {
@@ -77,7 +78,7 @@ const ForgotPasswordPage = () => {
       <p className = 'text text_type_main-default text_color_inactive pb-4'>
         { l('remembered_the_password') }
         <Link
-          to = '/login'
+          to = { r.login }
           className = { styles.link }>
           { l('to_come_in') }
         </Link>

@@ -20,6 +20,7 @@ import {
 
 import styles from './index.module.css';
 import l from '../../utils/lang';
+import r from '../../utils/routes';
 
 const ProfilePage = () => {
   const dispatch = useAppDispatch();
@@ -30,8 +31,8 @@ const ProfilePage = () => {
     <div className = { `${styles.container} pt-30` }>
       <div className = { `${styles.links}` }>
         <Link
-          className = { `${styles.link} text_color_inactive text text_type_main-medium ${pathname === '/profile' && styles.active}` }
-          to = '/profile'>
+          className = { `${styles.link} text_color_inactive text text_type_main-medium ${pathname === r.profile && styles.active}` }
+          to = { r.profile }>
           { l('profile') }
         </Link>
         <Link
@@ -42,14 +43,14 @@ const ProfilePage = () => {
         <Link
           className = { `${styles.link} text_color_inactive text text_type_main-medium` }
           onClick = { () => dispatch(logout()) }
-          to = '/login' >
+          to = { r.login } >
           { l('exit') }
         </Link>
         <p className = { 'text text_type_main-default text_color_inactive mt-20' }>{ l('in_this_section_you_can_change_your_personal_data') }</p>
       </div>
       <div className = { `${styles.forms}` }>
         {
-          pathname === '/profile' && <Profile key = { userTimeStamp } />
+          pathname === r.profile && <Profile key = { userTimeStamp } />
         }
         {
           pathname === '/history-orders' && <Orders />

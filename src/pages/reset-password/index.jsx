@@ -30,6 +30,7 @@ import {
 
 import styles from './index.module.css';
 import l from '../../utils/lang';
+import r from '../../utils/routes';
 
 const ResetPasswordPage = () => {
   const dispatch = useAppDispatch();
@@ -45,7 +46,7 @@ const ResetPasswordPage = () => {
   }, [dispatch]);
 
   if ([UserLoginPhase.fulfilled].includes(userLoginPhase)) {
-    return <Navigate to = { '/' } />;
+    return <Navigate to = { r.home } />;
   }
 
   if (
@@ -55,7 +56,7 @@ const ResetPasswordPage = () => {
       PasswordResettingPhase.rejected,
     ].includes(passwordResettingPhase)
   ) {
-    return <Navigate to = { '/login' } />;
+    return <Navigate to = { r.login } />;
   }
 
   const handleSubmit = (e) => {
@@ -91,7 +92,7 @@ const ResetPasswordPage = () => {
       </form>
       <p className = 'text text_type_main-default text_color_inactive pb-4'>
         { l('remembered_the_password') }
-        <Link to = '/login' className = { styles.link }>{ l('to_come_in') }</Link>
+        <Link to = { r.login } className = { styles.link }>{ l('to_come_in') }</Link>
       </p>
     </div>
   );

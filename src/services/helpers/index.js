@@ -1,4 +1,7 @@
+/* eslint-disable node/no-missing-import */
 import Cookies from 'universal-cookie';
+
+import r from '../../utils/routes';
 
 const cookiesCtrl = new Cookies();
 const authRefreshTokenKey = 'authRefreshToken';
@@ -10,7 +13,7 @@ export const authenticationSideEffect = ({ accessSchema, accessToken, refreshTok
   };
 
   Object.entries(cookies).forEach(([cookieName, cookieValue]) =>
-    cookiesCtrl.set(cookieName, cookieValue, { path: '/' }),
+    cookiesCtrl.set(cookieName, cookieValue, { path: r.home }),
   );
 
   localStorage.setItem(authRefreshTokenKey, refreshToken);

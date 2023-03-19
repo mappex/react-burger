@@ -14,6 +14,7 @@ import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styles from './index.module.css';
 import l from '../../../utils/lang';
+import r from '../../../utils/routes';
 
 import { Amount } from '../../amount';
 import BurgerConstructorItem from './item';
@@ -68,7 +69,7 @@ const BurgerConstructor = ({ className }) => {
 
   const createOrderClickHandler = useCallback(() => {
     if (!user) {
-      navigate('/login');
+      navigate(r.login);
     } else if (!orderDetailsRequest) {
       dispatch(createOrder(actualIngredients.map(({ refId }) => refId)));
     }

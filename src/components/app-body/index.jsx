@@ -25,6 +25,7 @@ import { ProtectedRouteElement } from '../protected-route';
 import styles from './index.module.css';
 import burgerConstructorStyles from '../burger/constructor/index.module.css';
 import l from '../../utils/lang';
+import r from '../../utils/routes';
 
 const AppBody = () => {
   const navigate = useNavigate();
@@ -34,29 +35,29 @@ const AppBody = () => {
   return (
     <main className = { `${styles['app-body']} pl-5 pr-5 text text_type_main-default` }>
       <Routes location = { background || location }>
-        <Route path = '/' element = { <MainPage /> } />
-        <Route path = '/login' element = { <SignInPage /> } />
-        <Route path = '/logout' element = { <SignOutPage /> } />
-        <Route path = '/register' element = { <RegistrationPage /> } />
-        <Route path = '/forgot-password' element = { <ForgotPasswordPage /> } />
-        <Route path = '/reset-password' element = { <ResetPasswordPage /> } />
-        <Route path = '/ingredients/:id' element = { <IngredientsPage /> } />
+        <Route path = { r.home } element = { <MainPage /> } />
+        <Route path = { r.login } element = { <SignInPage /> } />
+        <Route path = { r.logout } element = { <SignOutPage /> } />
+        <Route path = { r.registration } element = { <RegistrationPage /> } />
+        <Route path = { r.forgot_password } element = { <ForgotPasswordPage /> } />
+        <Route path = { r.reset_password } element = { <ResetPasswordPage /> } />
+        <Route path = { r.ingredientsById } element = { <IngredientsPage /> } />
         <Route
-          path = '/profile'
+          path = { r.profile }
           element = { <ProtectedRouteElement element = { <ProfilePage /> } /> } >
         </Route>
-        <Route path = '/feed' element = { <FeedPage /> } />
-        <Route path = '*' element = { <NotFoundPage /> } />
+        <Route path = { r.feed } element = { <FeedPage /> } />
+        <Route path = { r.notfound } element = { <NotFoundPage /> } />
       </Routes>
       {
         background && (
           <Routes>
             <Route
-              path = '/ingredients/:id'
+              path = { r.ingredientsById }
               element = {
                 <Modal
                   title = { l('ingredient_details') }
-                  onClose = { () => navigate('/') }>
+                  onClose = { () => navigate(r.home) }>
                   <IngredientDetails className = { burgerConstructorStyles['burger-constructor__ingredient-details'] } />
                 </Modal> } >
             </Route>
