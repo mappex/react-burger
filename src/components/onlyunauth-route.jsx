@@ -8,21 +8,20 @@ import { UserLoginPhase } from '../services/reducers/user';
 import { useAppSelector } from '../services/store';
 import { getUser } from '../services/selectors';
 
-import r from '../utils/routes';
-
-const ProtectedRoute = ({ element }) => {
+const OnlyUnAuthRoute = ({ element, path }) => {
   const { userLoginPhase } = useAppSelector(getUser);
 
-  return userLoginPhase === UserLoginPhase.fulfilled ? element : (
-    <Navigate to = { r.login } replace />
+  return ![UserLoginPhase.fulfilled].includes(userLoginPhase) ? element : (
+    <Navigate to = { path } replace />
   );
 };
 
-ProtectedRoute.propTypes = {
+OnlyUnAuthRoute.propTypes = {
   element: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]).isRequired,
+  path: PropTypes.string.isRequired,
 };
 
-export { ProtectedRoute };
+export { OnlyUnAuthRoute };

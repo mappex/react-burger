@@ -36,11 +36,7 @@ const App = () => {
     dispatch(doAutoLogin());
   }, [dispatch]);
 
-  if (
-    ![AutoLoginPhase.fulfilled, AutoLoginPhase.rejected].includes(
-      autoLoginPhase,
-    )
-  ) {
+  if (![AutoLoginPhase.fulfilled, AutoLoginPhase.rejected].includes(autoLoginPhase)) {
     return null;
   }
 

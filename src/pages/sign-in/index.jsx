@@ -47,10 +47,6 @@ const SignInPage = () => {
     };
   }, [dispatch, userLoginPhase]);
 
-  if ([UserLoginPhase.fulfilled].includes(userLoginPhase)) {
-    return <Navigate to = { r.home } replace = { true } />;
-  }
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if ([UserLoginPhase.initial, UserLoginPhase.rejected].includes(userLoginPhase)) {

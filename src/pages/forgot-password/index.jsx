@@ -15,7 +15,6 @@ import {
 import {
   PasswordResettingPhase,
   requestPasswordResettingForEmail,
-  UserLoginPhase,
 } from '../../services/reducers/user';
 import {
   useAppDispatch,
@@ -31,13 +30,9 @@ import r from '../../utils/routes';
 
 const ForgotPasswordPage = () => {
   const dispatch = useAppDispatch();
-  const { userLoginPhase, passwordResettingPhase } = useAppSelector(getUser);
+  const { passwordResettingPhase } = useAppSelector(getUser);
 
   const [email, setEmail] = useState('');
-
-  if ([UserLoginPhase.fulfilled].includes(userLoginPhase)) {
-    return <Navigate to = { r.home } />;
-  }
 
   if (
     [

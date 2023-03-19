@@ -18,7 +18,6 @@ import {
   interruptPasswordResettingWorkflow,
   PasswordResettingPhase,
   requestNewPasswordSetting,
-  UserLoginPhase,
 } from '../../services/reducers/user';
 import {
   useAppDispatch,
@@ -34,7 +33,7 @@ import r from '../../utils/routes';
 
 const ResetPasswordPage = () => {
   const dispatch = useAppDispatch();
-  const { userLoginPhase, passwordResettingPhase } = useAppSelector(getUser);
+  const {  passwordResettingPhase } = useAppSelector(getUser);
 
   const [password, setPassword] = useState('');
   const [token, setToken] = useState('');
@@ -44,10 +43,6 @@ const ResetPasswordPage = () => {
       dispatch(interruptPasswordResettingWorkflow());
     };
   }, [dispatch]);
-
-  if ([UserLoginPhase.fulfilled].includes(userLoginPhase)) {
-    return <Navigate to = { r.home } />;
-  }
 
   if (
     [

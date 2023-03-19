@@ -18,7 +18,6 @@ import {
 import {
   interruptUserRegistration,
   registerUser,
-  UserLoginPhase,
   UserRegistrationPhase,
 } from '../../services/reducers/user';
 
@@ -37,7 +36,6 @@ import r from '../../utils/routes';
 const RegistrationPage = () => {
   const dispatch = useAppDispatch();
   const {
-    userLoginPhase,
     userRegistrationPhase,
   } = useAppSelector(getUser);
 
@@ -50,10 +48,6 @@ const RegistrationPage = () => {
       dispatch(interruptUserRegistration());
     };
   }, [dispatch]);
-
-  if ([UserLoginPhase.fulfilled].includes(userLoginPhase)) {
-    return <Navigate to = { r.login } />;
-  }
 
   if ([UserRegistrationPhase.fulfilled, UserRegistrationPhase.rejected].includes(userRegistrationPhase)) {
     return <Navigate to = { r.login } />;
