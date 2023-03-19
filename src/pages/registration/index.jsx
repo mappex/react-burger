@@ -50,7 +50,7 @@ const RegistrationPage = () => {
   }, [dispatch]);
 
   if ([UserRegistrationPhase.fulfilled, UserRegistrationPhase.rejected].includes(userRegistrationPhase)) {
-    return <Navigate to = { r.login } />;
+    return <Navigate to = { r.home } />;
   }
 
   const handleSubmit = (e) => {

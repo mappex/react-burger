@@ -115,10 +115,7 @@ export const logout = createAsyncThunk('user/logout', () => {
   }
 });
 
-export const registerUser = createAsyncThunk(
-  'user/registerUser',
-  apiAuthRegister,
-);
+export const registerUser = createAsyncThunk('user/registerUser', apiAuthRegister);
 
 export const requestNewPasswordSetting = createAsyncThunk(
   'user/requestNewPasswordSetting',
@@ -221,6 +218,7 @@ const userSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, { payload }) => {
         authenticationSideEffect(payload);
         state.userRegistrationPhase = UserRegistrationPhase.fulfilled;
+        state.userLoginPhase = UserLoginPhase.fulfilled;
         setUser(state, payload.user);
       })
       .addCase(registerUser.rejected, (state) => {

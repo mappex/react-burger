@@ -46,7 +46,7 @@ const AppBody = () => {
         </Route>
         <Route
           path = { r.registration }
-          element = { <OnlyUnAuthRoute path = { r.login } element = { <RegistrationPage /> } /> } >
+          element = { <OnlyUnAuthRoute path = { r.home } element = { <RegistrationPage /> } /> } >
         </Route>
         <Route
           path = { r.forgot_password }
