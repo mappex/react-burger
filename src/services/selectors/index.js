@@ -5,3 +5,7 @@ export const getIngredients = (state) => {
 export const getOrderDetails = (state) => {
   return state.orderDetails;
 };
+
+export const getUser = (state) => {
+  return state.user;
+};

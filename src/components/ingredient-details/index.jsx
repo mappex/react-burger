@@ -1,16 +1,30 @@
 /* eslint-disable node/no-missing-import */
-import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
+import React, { useMemo } from 'react';
+import {
+  useParams,
+} from 'react-router-dom';
 
 import styles from './index.module.css';
 import l from '../../utils/lang';
 
-const IngredientDetails = ({
-  className,
-  ingredient: {
-    calories, carbohydrates, fat, image, name: title, proteins,
-  },
-}) => {
+import { useAppSelector } from '../../services/store';
+import {
+  getIngredients,
+} from '../../services/selectors';
+
+const IngredientDetails = ({ className }) => {
+  const { id } = useParams();
+
+  const { idToIngredientMap } = useAppSelector(getIngredients);
+  const {
+    calories,
+    carbohydrates,
+    fat,
+    proteins,
+    image,
+    name: title,
+  } = idToIngredientMap[id];
   const nutritionalValues = useMemo(() => {
     return {
       calories,
@@ -58,7 +72,6 @@ const IngredientDetails = ({
 
 IngredientDetails.propTypes = {
   className: PropTypes.string,
-  ingredient: PropTypes.object.isRequired,
 };
 
-export default IngredientDetails;
+export { IngredientDetails };

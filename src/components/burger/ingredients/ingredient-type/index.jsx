@@ -1,18 +1,18 @@
 /* eslint-disable node/no-missing-import */
 import React from 'react';
 import PropTypes from 'prop-types';
+import {
+  useNavigate,
+} from 'react-router-dom';
 
 import styles from './index.module.css';
 
 import BurgerIngredient from '../ingredient';
 
-import { useAppDispatch } from '../../../../services/store';
-import { setDetailedIngredient } from '../../../../services/reducers/ingredients';
-
 const BurgerIngredientType = ({
   className, ingredients, title, type,
 }) => {
-  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   return (
     <li className = { `pt-10 ${className}` } data-type = { type }>
@@ -25,7 +25,11 @@ const BurgerIngredientType = ({
               <BurgerIngredient
                 ingredient = { ingredient }
                 onClick = { () => {
-                  dispatch(setDetailedIngredient(ingredients[ix]));
+                  navigate(`/ingredients/${ingredient._id}`, {
+                    state: {
+                      background: true,
+                    },
+                  });
                 } } />
               <li className = { (ix % 2 === 0 && ' pl-6 ') + (ix % 2 === 1 && ' pt-8 ') } />
             </React.Fragment>

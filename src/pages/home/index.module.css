@@ -1,0 +1,10 @@
+.home-body {
+  display: grid;
+  grid-template-columns: 1fr min-content 1fr;
+}
+
+.home-body__ingredients,
+.home-body__constructor,
+.home-body__space {
+  max-height: calc(100vh - 88px);
+}

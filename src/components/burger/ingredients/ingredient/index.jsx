@@ -8,7 +8,7 @@ import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styles from './index.module.css';
 
-import Amount from '../../../amount';
+import { Amount } from '../../../amount';
 
 import {
   DraggableTypes,

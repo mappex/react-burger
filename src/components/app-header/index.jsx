@@ -5,13 +5,21 @@ import {
   ListIcon,
   ProfileIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
+import {
+  useNavigate,
+  useLocation,
+} from 'react-router-dom';
 
 import styles from './index.module.css';
 import l from '../../utils/lang';
+import r from '../../utils/routes';
 
 import MenuItem from './menu-item';
 
 const AppHeader = () => {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+
   return (
     <header
       className = { `${styles['app-header']} text text_type_main-default pt-3 pb-3` }>
@@ -20,20 +28,24 @@ const AppHeader = () => {
           <MenuItem
             className = { styles['app-header__menu-item'] }
             Icon = { BurgerIcon }
-            text = { l('constructor') } />
+            text = { l('constructor') }
+            isActive = { pathname === r.home }
+            onClick = { () => navigate(r.home) } />
           <MenuItem
             className = { styles['app-header__menu-item'] }
             Icon = { ListIcon }
-            isActive = { false }
-            text = { l('order_feed') } />
+            text = { l('order_feed') }
+            isActive = {  pathname === r.feed }
+            onClick = { () => navigate(r.feed) } />
           <li className = { styles['app-header__logo-wrapper'] }>
             <Logo />
           </li>
           <MenuItem
             className = { styles['app-header__menu-item'] }
             Icon = { ProfileIcon }
-            isActive = { false }
-            text = { l('personal_area') } />
+            text = { l('personal_area') }
+            isActive = {  pathname === r.profile }
+            onClick = { () => navigate(r.profile) } />
         </ul>
       </nav>
     </header>

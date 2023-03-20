@@ -67,4 +67,4 @@ Modal.propTypes = {
   title: PropTypes.string,
 };
 
-export default Modal;
+export { Modal };

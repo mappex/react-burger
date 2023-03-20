@@ -30,4 +30,4 @@ Amount.propTypes = {
   isTotal: PropTypes.bool,
 };
 
-export default Amount;
+export { Amount };

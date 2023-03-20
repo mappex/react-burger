@@ -13,7 +13,7 @@ const initialState = {
   orderDetailsRequest: false,
 };
 
-export const createOrder = createAsyncThunk('main/createOrder', (ingredients) => {
+export const createOrder = createAsyncThunk('order/createOrder', (ingredients) => {
   if (ingredients.length === 0) {
     throw new Error(
       'Unable to place an order for the empty ingredients list',
