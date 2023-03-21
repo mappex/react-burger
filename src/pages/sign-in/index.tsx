@@ -1,8 +1,8 @@
 /* eslint-disable id-blacklist */
-/* eslint-disable node/no-missing-import */
 import {
-  useEffect,
   useState,
+  useEffect,
+  MouseEvent,
 } from 'react';
 import {
   Link,
@@ -36,7 +36,9 @@ import r from '../../utils/routes';
 const SignInPage = () => {
   const dispatch = useAppDispatch();
   const { userLoginPhase } = useAppSelector(getUser);
-  const { state } = useLocation();
+  const { state } = useLocation() as {
+    state: { redirectedFrom?: string };
+  };
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -50,12 +52,12 @@ const SignInPage = () => {
   }, [dispatch, userLoginPhase]);
 
   if ([UserLoginPhase.fulfilled].includes(userLoginPhase)) {
-    const { redirectedFrom = r.home } = state || {};
+    const { redirectedFrom = r.home } = state;
 
     return <Navigate to = { redirectedFrom } replace />;
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: MouseEvent<HTMLFormElement>): void => {
     e.preventDefault();
     if ([UserLoginPhase.initial, UserLoginPhase.rejected].includes(userLoginPhase)) {
       dispatch(login({ email, password }));

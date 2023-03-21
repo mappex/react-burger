@@ -1,4 +1,3 @@
-/* eslint-disable node/no-missing-import */
 import {
   Navigate,
   useParams,
@@ -14,7 +13,7 @@ import styles from './index.module.css';
 import r from '../../utils/routes';
 
 const IngredientsPage = () => {
-  const { id } = useParams();
+  const { id } = useParams() as { id: string };
   const { idToIngredientMap, ingredientsRequest } = useAppSelector(getIngredients);
 
   if (ingredientsRequest) {

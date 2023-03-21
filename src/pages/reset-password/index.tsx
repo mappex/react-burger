@@ -1,8 +1,8 @@
 /* eslint-disable id-blacklist */
-/* eslint-disable node/no-missing-import */
 import {
-  useEffect,
   useState,
+  useEffect,
+  MouseEvent,
 } from 'react';
 import {
   Link,
@@ -54,7 +54,7 @@ const ResetPasswordPage = () => {
     return <Navigate to = { r.login } />;
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: MouseEvent<HTMLFormElement>): void => {
     e.preventDefault();
     if (passwordResettingPhase === PasswordResettingPhase.requestingCredentialsFromUser) {
       dispatch(requestNewPasswordSetting({ password, token }));

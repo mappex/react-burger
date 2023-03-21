@@ -1,4 +1,4 @@
-/* eslint-disable node/no-missing-import */
+import cs from 'classnames';
 import {
   Route,
   Routes,
@@ -30,11 +30,17 @@ import r from '../../utils/routes';
 
 const AppBody = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const background = location.state && location.state.background;
+  const { state: locationState } = useLocation() as {
+    state: { background?: typeof location } | null;
+  };
+  const { background } = locationState ?? {};
 
   return (
-    <main className = { `${styles['app-body']} pl-5 pr-5 text text_type_main-default` }>
+    <main
+      className = { cs(
+        styles['app-body'],
+        'pl-5 pr-5 text text_type_main-default',
+      ) }>
       <Routes location = { background || location }>
         <Route path = { r.home } element = { <MainPage /> } />
         <Route path = { r.feed } element = { <FeedPage /> } />

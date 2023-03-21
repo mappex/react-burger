@@ -1,9 +1,8 @@
-/* eslint-disable node/no-missing-import */
+import { FC } from 'react';
 import {
   Navigate,
   useLocation,
 } from 'react-router-dom';
-import PropTypes from 'prop-types';
 
 import { UserLoginPhase } from '../services/reducers/user';
 import { useAppSelector } from '../services/store';
@@ -11,7 +10,11 @@ import { getUser } from '../services/selectors';
 
 import r from '../utils/routes';
 
-const ProtectedRoute = ({ element }) => {
+interface IProps {
+  element: React.ReactElement;
+}
+
+const ProtectedRoute: FC<IProps> = ({ element }) => {
   const { userLoginPhase } = useAppSelector(getUser);
   const { pathname } = useLocation();
 
@@ -21,13 +24,6 @@ const ProtectedRoute = ({ element }) => {
       state = { { redirectedFrom: pathname } }
       replace />
   );
-};
-
-ProtectedRoute.propTypes = {
-  element: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]).isRequired,
 };
 
 export { ProtectedRoute };

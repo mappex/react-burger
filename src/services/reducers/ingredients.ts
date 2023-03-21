@@ -1,29 +1,41 @@
-/* eslint-disable no-param-reassign */
 import {
-  createAsyncThunk,
   createSlice,
+  createAsyncThunk,
 } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
 
 import {
   IngredientType,
   ActualIngredientType,
+  Ingredient_t,
+  ActualIngredient_t,
 } from '../../utils/types';
 
 import {
   fetchIngredients as apiFetchIngredients,
 } from '../api';
 
-const initialState = {
+const initialState: Readonly<{
+  actualIngredients: ActualIngredient_t[];
+  idToIngredientMap: { [key: string]: Ingredient_t };
+  idToActualIngredientsCountMap: { [key: string]: number };
+  ingredients: Ingredient_t[];
+  ingredientsError: unknown | null;
+  ingredientsRequest: boolean;
+}> = {
   actualIngredients: [],
-  detailedIngredient: null,
   idToActualIngredientsCountMap: {},
   idToIngredientMap: {},
   ingredients: [],
   ingredientsError: null,
-  ingredientsRequest: false,
+  ingredientsRequest: true,
 };
 
-const buildIdToActualIngredientsCountMap = ({ actualIngredients }) => actualIngredients
+type InitialState_t = typeof initialState;
+
+const buildIdToActualIngredientsCountMap =  ({
+  actualIngredients,
+}: InitialState_t): InitialState_t['idToActualIngredientsCountMap'] => actualIngredients
   .reduce((map, actualIngredient) => {
     if (Object.prototype.hasOwnProperty.call(map, actualIngredient.refId)) {
       map[actualIngredient.refId] += 1;
@@ -32,7 +44,7 @@ const buildIdToActualIngredientsCountMap = ({ actualIngredients }) => actualIngr
     }
 
     return map;
-  }, {});
+  }, {} as InitialState_t['idToActualIngredientsCountMap']);
 
 export const fetchIngredients = createAsyncThunk('ingredients/fetchIngredients', apiFetchIngredients);
 
@@ -48,10 +60,9 @@ export const ingredientsSlice = createSlice({
         const [topBun, bottomBun] = [
           ActualIngredientType.TOP,
           ActualIngredientType.BOTTOM,
-        // eslint-disable-next-line @typescript-eslint/no-shadow
-        ].map(type => ({
+        ].map(item => ({
           id,
-          type,
+          type: item,
           isLocked: true,
           refId: _id,
         }));
@@ -74,7 +85,7 @@ export const ingredientsSlice = createSlice({
 
       state.idToActualIngredientsCountMap = buildIdToActualIngredientsCountMap(state);
     },
-    moveIngredient(state, { payload: [fromIndex, toIndex] }) {
+    moveIngredient(state, { payload: [fromIndex, toIndex] }: PayloadAction<[number, number]>) {
       const { actualIngredients: actualIngredientsFromState } = state;
       const actualIngredients = [...actualIngredientsFromState];
 
@@ -86,7 +97,7 @@ export const ingredientsSlice = createSlice({
 
       state.actualIngredients = actualIngredients;
     },
-    removeIngredient(state, { payload: idToRemove }) {
+    removeIngredient(state, { payload: idToRemove }: PayloadAction<ActualIngredient_t['id']>) {
       const { actualIngredients } = state;
       const removableIngredients = state.actualIngredients.slice(1, -1);
 
@@ -99,12 +110,6 @@ export const ingredientsSlice = createSlice({
         state.idToActualIngredientsCountMap = buildIdToActualIngredientsCountMap(state);
       }
     },
-    resetDetailedIngredient(state) {
-      state.detailedIngredient = null;
-    },
-    setDetailedIngredient(state, action) {
-      state.detailedIngredient = action.payload;
-    },
   },
   extraReducers: (builder) => {
     builder
@@ -114,8 +119,8 @@ export const ingredientsSlice = createSlice({
           ingredientsRequest: true,
         });
       })
-      .addCase(fetchIngredients.fulfilled, (state, { payload: ingredients }) => {
-        const idToIngredientMap = {};
+      .addCase(fetchIngredients.fulfilled, (state, { payload: ingredients }: PayloadAction<Ingredient_t[]>) => {
+        const idToIngredientMap: InitialState_t['idToIngredientMap'] = {};
 
         ingredients.forEach((ingredient) => {
           idToIngredientMap[ingredient._id] = ingredient;
@@ -140,8 +145,6 @@ export const {
   addIngredient,
   moveIngredient,
   removeIngredient,
-  resetDetailedIngredient,
-  setDetailedIngredient,
 } = ingredientsSlice.actions;
 
 export default ingredientsSlice.reducer;

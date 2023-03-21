@@ -1,26 +1,37 @@
-/* eslint-disable node/no-missing-import */
+import cs from 'classnames';
 import PropTypes from 'prop-types';
+import { TIconProps } from '@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/utils';
 
 import styles from './index.module.css';
+
+type TIcon = ({ type }: TIconProps) => JSX.Element;
 
 const MenuItem = ({
   className,
   Icon,
   isActive,
-  text,
   onClick,
+  text,
+}: {
+  className?: string;
+  Icon: TIcon;
+  isActive?: boolean;
+  onClick?: () => void;
+  text: string;
 }) => {
-  let style = `${styles['menu-item']} ${className} p-5 text`;
-
-  if (isActive) {
-    style += ` ${styles['menu-item_active']}`;
-  } else {
-    style += ' text_color_inactive';
-  }
-
   return (
     <li
-      className = { style }
+      className = { cs(
+        styles['menu-item'],
+        {
+          [styles['menu-item_active']]: isActive,
+        },
+        className,
+        'p-5 text',
+        {
+          text_color_inactive: !isActive,
+        },
+      ) }
       onClick = { onClick }
       role = 'button'>
       <Icon type = { isActive ? 'primary' : 'secondary' } />

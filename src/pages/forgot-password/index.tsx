@@ -1,7 +1,7 @@
 /* eslint-disable id-blacklist */
-/* eslint-disable node/no-missing-import */
 import {
   useState,
+  MouseEvent,
 } from 'react';
 import {
   Link,
@@ -44,7 +44,7 @@ const ForgotPasswordPage = () => {
     return <Navigate to = { r.reset_password } />;
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: MouseEvent<HTMLFormElement>): void => {
     e.preventDefault();
     if (passwordResettingPhase === PasswordResettingPhase.initial) {
       dispatch(requestPasswordResettingForEmail({ email }));

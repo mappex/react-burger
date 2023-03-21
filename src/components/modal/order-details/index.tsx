@@ -1,15 +1,21 @@
-/* eslint-disable node/no-missing-import */
 import PropTypes from 'prop-types';
 
 import styles from './index.module.css';
 import l from '../../../utils/lang';
-import orderAcceptedImage from '../../../images/order_is_accepted.gif';
 
 import {
   orderStatusToStatusTitleMap,
 } from '../../../utils/consts';
+import { OrderDetails_t } from '../../../utils/types';
+import orderAcceptedImage from '../../../images/order_is_accepted.gif';
 
-const OrderDetails = ({ className, orderDetails: { id, status, message } }) => (
+const OrderDetails = ({
+  className,
+  orderDetails: { id, status, message },
+}: {
+  className?: string;
+  orderDetails: OrderDetails_t;
+}) => (
   <div className = { `${styles['order-details']} ${className}` }>
     <div
       className = { `${styles['order-details__id']} text text_type_digits-large` }>

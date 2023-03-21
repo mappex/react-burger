@@ -1,4 +1,3 @@
-/* eslint-disable node/no-missing-import */
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend as Html5Backend } from 'react-dnd-html5-backend';
 
@@ -25,6 +24,7 @@ const MainPage = () => {
 
   return (
     <div className = { `${styles['home-body']} pl-5 pr-5 text text_type_main-default` }>
+      { /* @ts-ignore */ }
       <DndProvider backend = { Html5Backend }>
         <BurgerIngredients className = { styles['home-body__ingredients'] } />
         <div className = { `${styles['home-body__space']} pl-10` } />

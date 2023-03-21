@@ -4,10 +4,16 @@ import {
 
 import l from '../../utils/lang';
 import {
-  OrderStatus,
+  AuthUserResponse,
+  Ingredient_t,
+  OrderDetails_t,
+  OrderStatus_t,
+  RefreshTokensResponse,
+  UserResponse,
+  User,
 } from '../../utils/types';
 
-const getAccessSchemaAndTokenAndRefreshToken = (response) => {
+const getAccessSchemaAndTokenAndRefreshToken = (response: any): RefreshTokensResponse => {
   const {
     accessToken: accessTokenWithSchema,
     refreshToken,
@@ -21,15 +27,15 @@ const getAccessSchemaAndTokenAndRefreshToken = (response) => {
   };
 };
 
-const checkReponse = (response) => {
-  return response.ok ? response.json() : response.json().then((error) => {
+const checkReponse = (response: any) => {
+  return response.ok ? response.json() : response.json().then((error: any) => {
     return error;
   });
 };
 
 /* INGREDIENTS ********************************************************************************************************/
 // GET
-export const fetchIngredients = async () => {
+export const fetchIngredients = async (): Promise<Ingredient_t[]> => {
   const response = await fetch(`${API_HOST}/api/ingredients`).then(checkReponse);
 
   if (response.success !== true) {
@@ -41,7 +47,9 @@ export const fetchIngredients = async () => {
 
 /* ORDERS *************************************************************************************************************/
 // POST
-export const fetchCreateOrder = async (ingredients = []) => {
+export const fetchCreateOrder = async (
+  ingredients: Ingredient_t['_id'][],
+): Promise<OrderDetails_t> => {
   const response = await fetch(`${API_HOST}/api/orders`, {
     body: JSON.stringify({ ingredients }),
     headers: {
@@ -57,13 +65,20 @@ export const fetchCreateOrder = async (ingredients = []) => {
   return {
     id: response.order.number,
     message: l('order_details_wait_readiness'),
-    status: OrderStatus.BEING_COOKED,
+    status: OrderStatus_t.BEING_COOKED,
   };
 };
 
 /* AUTH ***************************************************************************************************************/
 // Login
-export const fetchAuthLogin = async ({ email, password }) => {
+interface IAuthLoginRequestParams {
+  email: string;
+  password: string;
+}
+export const fetchAuthLogin = async ({
+  email,
+  password,
+}: IAuthLoginRequestParams): Promise<AuthUserResponse> => {
   const response = await fetch(`${API_HOST}/api/auth/login`, {
     body: JSON.stringify({ email, password }),
     headers: {
@@ -93,7 +108,9 @@ export const fetchAuthLogin = async ({ email, password }) => {
 };
 
 // Logout
-export const fetchAuthLogout = async ({ refreshToken: token }) => {
+export const fetchAuthLogout = async ({
+  refreshToken: token,
+}: Pick<RefreshTokensResponse, 'refreshToken'>): Promise<void> => {
   const response = await fetch(`${API_HOST}/api/auth/logout`, {
     body: JSON.stringify({ token }),
     headers: {
@@ -108,7 +125,9 @@ export const fetchAuthLogout = async ({ refreshToken: token }) => {
 };
 
 // Token
-export const fetchAuthTokens = async ({ refreshToken: token }) => {
+export const fetchAuthTokens = async ({
+  refreshToken: token,
+}: Pick<RefreshTokensResponse, 'refreshToken' >): Promise<RefreshTokensResponse> => {
   const response = await fetch(`${API_HOST}/api/auth/token`, {
     body: JSON.stringify({ token }),
     headers: {
@@ -125,7 +144,16 @@ export const fetchAuthTokens = async ({ refreshToken: token }) => {
 };
 
 // Register
-export const fetchAuthRegister = async ({ email, name, password }) => {
+interface IAuthRegisterRequestParams {
+  email: string;
+  name: string;
+  password: string;
+}
+export const fetchAuthRegister = async ({
+  email,
+  name,
+  password,
+}: IAuthRegisterRequestParams): Promise<AuthUserResponse> => {
   const response = await fetch(`${API_HOST}/api/auth/register`, {
     body: JSON.stringify({ email, name, password }),
     headers: {
@@ -161,7 +189,13 @@ export const fetchAuthRegister = async ({ email, name, password }) => {
 };
 
 // Get User info
-export const fetchAuthUserData = async ({ auth: { accessSchema, accessToken } }) => {
+type TAccessSchemaWithToken = Pick<RefreshTokensResponse, 'accessSchema' | 'accessToken'>;
+type TAuthUserDataParams = {
+  auth: TAccessSchemaWithToken;
+};
+export const fetchAuthUserData = async ({
+  auth: { accessSchema, accessToken },
+}: TAuthUserDataParams): Promise<User> => {
   const response = await fetch(`${API_HOST}/api/auth/user`, {
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
@@ -178,10 +212,18 @@ export const fetchAuthUserData = async ({ auth: { accessSchema, accessToken } })
 };
 
 // Set User info
+type TAuthUserDataUpdateParams = {
+  auth: TAccessSchemaWithToken;
+  data: {
+    email: string;
+    name: string;
+    password: string;
+  };
+};
 export const fetchAuthUserDataUpdate = async ({
   auth: { accessSchema, accessToken },
   data: { email, name, password },
-}) => {
+}: TAuthUserDataUpdateParams): Promise<UserResponse> => {
   const response = await fetch(`${API_HOST}/api/auth/user`, {
     body: JSON.stringify({ name, email, password }),
     headers: {
@@ -202,7 +244,12 @@ export const fetchAuthUserDataUpdate = async ({
 
 /* PASSWORD ***********************************************************************************************************/
 // Reset for Email
-export const fetchPasswordResetForEmail = async ({ email }) => {
+interface IPasswordResetForEmailRequestParams {
+  email: string;
+}
+export const fetchPasswordResetForEmail = async ({
+  email,
+}: IPasswordResetForEmailRequestParams): Promise<void> => {
   const response = await fetch(`${API_HOST}/api/password-reset`, {
     body: JSON.stringify({ email }),
     headers: {
@@ -215,8 +262,16 @@ export const fetchPasswordResetForEmail = async ({ email }) => {
     throw new Error('Can\'t get data from server');
   }
 };
+
 // Reset password
-export const fetchPasswordNew = async ({ password, token }) => {
+interface IPasswordNewRequestParams {
+  password: string;
+  token: string;
+}
+export const fetchPasswordNew = async ({
+  password,
+  token,
+}: IPasswordNewRequestParams): Promise<void> => {
   const response = await fetch(`${API_HOST}/api/password-reset/reset`, {
     body: JSON.stringify({ password, token }),
     headers: {

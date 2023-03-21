@@ -1,8 +1,8 @@
 /* eslint-disable id-blacklist */
-/* eslint-disable node/no-missing-import */
 import {
-  useEffect,
   useState,
+  useEffect,
+  MouseEvent,
 } from 'react';
 import {
   Link,
@@ -53,7 +53,7 @@ const RegistrationPage = () => {
     return <Navigate to = { r.home } />;
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: MouseEvent<HTMLFormElement>): void => {
     e.preventDefault();
     if (userRegistrationPhase === UserRegistrationPhase.initial) {
       dispatch(registerUser({ email, name, password }));

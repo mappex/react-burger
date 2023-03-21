@@ -1,4 +1,3 @@
-/* eslint-disable node/no-missing-import */
 import {
   useEffect,
   useMemo,
@@ -10,6 +9,10 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styles from './index.module.css';
 import l from '../../../utils/lang';
+import {
+  IngredientType,
+  Ingredient_t,
+} from '../../../utils/types';
 
 import BurgerIngredientType from './ingredient-type';
 
@@ -21,7 +24,7 @@ const ingredientTypeTitles = {
   sauce: l('sauces'),
   main: l('toppings'),
 };
-const ingredientTypes = Object.keys(ingredientTypeTitles);
+const ingredientTypes = Object.keys(ingredientTypeTitles) as Array<keyof typeof ingredientTypeTitles>;
 
 const thresholdsStepsCount = 50;
 const thresholds = [
@@ -31,7 +34,7 @@ const thresholds = [
   1,
 ];
 
-const BurgerIngredients = ({ className = '' }) => {
+const BurgerIngredients = ({ className }: { className?: string }) => {
   const { ingredients } = useAppSelector(getIngredients);
   const [selectedIngredientType, setSelectedIngredientType] = useState(
     ingredientTypes[0],
@@ -39,7 +42,7 @@ const BurgerIngredients = ({ className = '' }) => {
   const ingredientTypeToIngredientsMap = useMemo(() => {
     const axillaryMap = new Map();
 
-    ingredients.forEach((ingredient) => {
+    ingredients.forEach((ingredient: Ingredient_t) => {
       const { type } = ingredient;
 
       if (!axillaryMap.has(type)) {
@@ -63,36 +66,43 @@ const BurgerIngredients = ({ className = '' }) => {
 
     return result;
   }, [ingredients]);
-  const typeListElementRef = useRef(null);
+  const typeListElementRef = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
     const { current: typeListElement } = typeListElementRef;
-
-    const items = typeListElement.querySelectorAll(`.${styles['burger-ingredients__type-item']}`);
+    const items = typeListElement!.querySelectorAll(
+      `.${styles['burger-ingredients__type-item']}`,
+    ) as NodeListOf<HTMLLIElement>;
 
     if (items.length > 0) {
       const ingredientToIntersectionRatioMap = new Map();
 
-      const intersectionObserver = new IntersectionObserver((intersectionObserverEntries) => {
-        intersectionObserverEntries.forEach(({ target, intersectionRatio }) => {
-          const {
-            dataset: { type },
-          } = target;
+      const intersectionObserver = new IntersectionObserver(
+        (intersectionObserverEntries) => {
+          intersectionObserverEntries.forEach(
+            ({ target, intersectionRatio }) => {
+              const {
+                dataset: { type },
+              } = target as HTMLLIElement;
 
-          if (type) {
-            ingredientToIntersectionRatioMap.set(type, intersectionRatio);
-          }
-        });
+              if (type) {
+                ingredientToIntersectionRatioMap.set(type, intersectionRatio);
+              }
+            },
+          );
 
-        // eslint-disable-next-line max-len
-        const mostVisibleType = [...ingredientToIntersectionRatioMap.entries()].sort(([, irA], [, irB]) => irB - irA)[0][0];
+          const mostVisibleType = [
+            // @ts-ignore
+            ...ingredientToIntersectionRatioMap.entries(),
+          ].sort(([, irA], [, irB]) => irB - irA)[0][0];
 
-        setSelectedIngredientType(mostVisibleType);
-      },
-      {
-        root: typeListElement,
-        threshold: thresholds,
-      });
+          setSelectedIngredientType(mostVisibleType);
+        },
+        {
+          root: typeListElement,
+          threshold: thresholds,
+        },
+      );
 
       items.forEach((item) => {
         ingredientToIntersectionRatioMap.set(item.dataset.type, 0);
@@ -118,16 +128,17 @@ const BurgerIngredients = ({ className = '' }) => {
               key = { type }
               active = { selectedIngredientType === type }
               value = { type }
-              // eslint-disable-next-line @typescript-eslint/no-shadow
-              onClick = { (type) => {
+              onClick = { (value: string) => {
                 const { current: typeListElement } = typeListElementRef;
 
-                const currentListItemElement = typeListElement.querySelector(
-                  `.${styles['burger-ingredients__type-item']}[data-type="${type}"]`,
-                );
+                if (typeListElement) {
+                  const currentListItemElement = typeListElement.querySelector(
+                    `.${styles['burger-ingredients__type-item']}[data-type="${value}"]`,
+                  );
 
-                if (currentListItemElement) {
-                  currentListItemElement.scrollIntoView({ behavior: 'smooth' });
+                  if (currentListItemElement) {
+                    currentListItemElement.scrollIntoView({ behavior: 'smooth' });
+                  }
                 }
               } }>
               { ingredientTypeTitles[type] }
@@ -139,13 +150,12 @@ const BurgerIngredients = ({ className = '' }) => {
         ref = { typeListElementRef }
         className = { styles['burger-ingredients__type-list'] }>
         {
-          // eslint-disable-next-line @typescript-eslint/no-shadow
-          Array.from(ingredientTypeToIngredientsMap.entries()).map(([type, ingredients]) => (
+          Array.from(ingredientTypeToIngredientsMap.entries()).map(([type, items]) => (
             <BurgerIngredientType
               key = { type }
               className = { styles['burger-ingredients__type-item'] }
-              ingredients = { ingredients }
-              title = { ingredientTypeTitles[type] }
+              ingredients = { items }
+              title = { ingredientTypeTitles[type as IngredientType] }
               type = { type } />
           ))
         }

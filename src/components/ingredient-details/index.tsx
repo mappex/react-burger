@@ -1,4 +1,3 @@
-/* eslint-disable node/no-missing-import */
 import PropTypes from 'prop-types';
 import React, { useMemo } from 'react';
 import {
@@ -13,8 +12,8 @@ import {
   getIngredients,
 } from '../../services/selectors';
 
-const IngredientDetails = ({ className }) => {
-  const { id } = useParams();
+const IngredientDetails = ({ className }: { className?: string }) => {
+  const { id } = useParams() as { id: string };
 
   const { idToIngredientMap } = useAppSelector(getIngredients);
   const {

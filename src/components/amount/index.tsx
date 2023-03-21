@@ -1,21 +1,30 @@
 import PropTypes from 'prop-types';
+import cs from 'classnames';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styles from './index.module.css';
 
-const Amount = ({ amount, className, isTotal }) => {
-  let style = `${styles.amount} text`;
-
-  if (isTotal) {
-    style += ' text_type_digits-medium';
-  } else {
-    style += ' text_type_digits-default';
-  }
-  style += ` ${className}`;
-
+const Amount = ({
+  amount,
+  className,
+  isTotal,
+}: {
+  amount: number;
+  className?: string;
+  isTotal?: boolean;
+}) => {
   return (
     <div
-      className = { style }>
+      className = { cs(
+        styles.amount,
+        'text',
+        {
+          [styles.amount_type_total]: isTotal,
+          'text_type_digits-default': !isTotal,
+          'text_type_digits-medium': isTotal,
+        },
+        className,
+      ) }>
       <div className = { styles.amount__amount }>{ amount }</div>
       <div className = { styles['amount__currency-wrapper'] }>
         <CurrencyIcon type = { 'primary' } />

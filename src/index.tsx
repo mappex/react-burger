@@ -1,4 +1,3 @@
-/* eslint-disable node/no-missing-import */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -6,7 +5,7 @@ import { Provider } from 'react-redux';
 import './index.module.css';
 
 import App from './components/app';
-import store from './services/store';
+import { store } from './services/store';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -15,5 +14,5 @@ ReactDOM.render(
     </Provider>
     <div id = 'modal-container' />
   </React.StrictMode>,
-  document.getElementById('root'),
+  document.getElementById('root') as HTMLElement,
 );

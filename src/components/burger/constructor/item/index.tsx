@@ -1,5 +1,5 @@
-/* eslint-disable node/no-missing-import */
 import PropTypes from 'prop-types';
+import cs from 'classnames';
 import {
   DragPreviewImage,
   useDrag,
@@ -14,39 +14,49 @@ import styles from './index.module.css';
 import l from '../../../../utils/lang';
 
 import {
+  Ingredient_t,
   DraggableTypes,
   ActualIngredientType,
+  ActualIngredientDragItem,
 } from '../../../../utils/types';
 
 import { useAppDispatch } from '../../../../services/store';
 import { moveIngredient } from '../../../../services/reducers/ingredients';
 
 const BurgerConstructorItem = ({
-  className, index, ingredient: {
-    image, name, price,
-  }, isLocked, onShowIngredientInfo, onDelete, type,
+  className,
+  index,
+  ingredient: { _id, image, name, price },
+  isLocked,
+  onShowIngredientInfo,
+  onDelete,
+  type,
+}: {
+  className?: string;
+  index?: number;
+  ingredient: Ingredient_t;
+  isLocked: boolean;
+  onShowIngredientInfo?: () => void;
+  onDelete?: () => void;
+  type?: ActualIngredientType;
 }) => {
   const dispatch = useAppDispatch();
-
   const [{ isItPicked }, dragRef, preview] = useDrag({
     type: DraggableTypes.ACTUALINGREDIENT,
     canDrag: !isLocked,
     item: {
       index,
-    },
+    } as ActualIngredientDragItem,
     collect(monitor) {
       return {
         isItPicked: monitor.isDragging(),
       };
     },
   });
-
   const [{ isCanDrop, isDragOver }, dropRef] = useDrop({
     accept: DraggableTypes.ACTUALINGREDIENT,
-    canDrop(item) {
-      const { index: draggableIndex } = item;
-
-      return !isLocked && index !== draggableIndex;
+    canDrop() {
+      return !isLocked;
     },
     collect(monitor) {
       return {
@@ -54,49 +64,37 @@ const BurgerConstructorItem = ({
         isDragOver: monitor.isOver(),
       };
     },
-    hover(item) {
-      const { index: draggableIndex } = item;
+    hover(item: ActualIngredientDragItem) {
+      const { index: draggableIndex } = item as ActualIngredientDragItem;
+
       if (index === draggableIndex) {
         return;
       }
 
-      if (index !== null) {
-        // eslint-disable-next-line no-param-reassign
+      if (index) {
         item.index = index;
         dispatch(moveIngredient([draggableIndex, index]));
       }
     },
   });
 
-
-  let style = styles['burger-constructor-item'];
-
-  if (onShowIngredientInfo) {
-    style += ` ${styles['burger-constructor-item_interactive']}`;
-  }
-
-  if (isItPicked) {
-    style += ` ${styles['burger-constructor-item_is-picked']}`;
-  }
-
-  if (isCanDrop) {
-    style += ` ${styles['burger-constructor-item_is-can-drop']}`;
-  }
-
-  if (isDragOver) {
-    style += ` ${styles['burger-constructor-item_is-drag-over']}`;
-  }
-
-  if (!isLocked) {
-    style += ' pt-4';
-  }
-
   return (
     <div
       ref = { dropRef }
-      className = { `${style} ${className}` }
+      className = { cs(
+        styles['burger-constructor-item'],
+        {
+          [styles['burger-constructor-item_interactive']]: onShowIngredientInfo,
+          [styles['burger-constructor-item_is-picked']]: isItPicked,
+          [styles['burger-constructor-item_is-can-drop']]: isCanDrop,
+          [styles['burger-constructor-item_is-drag-over']]: isDragOver,
+          'pt-4': !isLocked,
+        },
+        className,
+      ) }
       onClick = { (event) => {
-        const { target } = event;
+        const target = event.target as HTMLElement;
+
         if (
           onShowIngredientInfo
           && target.closest(`.${styles['burger-constructor-item__constructor-element-wrapper']}`)

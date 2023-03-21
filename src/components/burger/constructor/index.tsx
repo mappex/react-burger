@@ -1,4 +1,3 @@
-/* eslint-disable node/no-missing-import */
 import {
   useMemo,
   useCallback,
@@ -6,6 +5,7 @@ import {
 import PropTypes from 'prop-types';
 import { useDrop } from 'react-dnd';
 import { v4 as uuidV4 } from 'uuid';
+import cs from 'classnames';
 import {
   useNavigate,
   useLocation,
@@ -22,6 +22,8 @@ import BurgerConstructorItem from './item';
 import {
   DraggableTypes,
   IngredientType,
+  ActualIngredient_t,
+  IngredientDragItem,
 } from '../../../utils/types';
 
 import {
@@ -42,7 +44,7 @@ import {
 
 const generateIngredientId = () => uuidV4();
 
-const BurgerConstructor = ({ className }) => {
+const BurgerConstructor = ({ className }: { className?: string }) => {
   const dispatch = useAppDispatch();
   const {
     actualIngredients,
@@ -58,9 +60,9 @@ const BurgerConstructor = ({ className }) => {
   const bottomBun = actualIngredients.slice(-1)[0];
 
   const totalAmount = useMemo(() => {
-    const ingredientIds = actualIngredients.map(({ refId }) => refId);
+    const ingredientIds = actualIngredients.map(({ refId }: IngredientDragItem) => refId);
 
-    return ingredientIds.reduce((result, refId) => {
+    return ingredientIds.reduce((result: number, refId: string) => {
       const { price } = idToIngredientMap[refId] || 0;
 
       return result + price;
@@ -71,21 +73,20 @@ const BurgerConstructor = ({ className }) => {
     if (!user) {
       navigate(r.login);
     } else if (!orderDetailsRequest) {
-      dispatch(createOrder(actualIngredients.map(({ refId }) => refId)));
+      dispatch(createOrder(actualIngredients.map(({ refId }: IngredientDragItem) => refId)));
     }
   }, [actualIngredients, dispatch, orderDetailsRequest, user, state, pathname, url]);
 
   const [{ isCanDrop, isDragOver }, dropRef] = useDrop({
     accept: DraggableTypes.INGREDIENT,
-    canDrop(item, monitor) {
+    canDrop(item: IngredientDragItem, monitor) {
       return !(
         actualIngredients.length === 0
         && monitor.getItemType() === DraggableTypes.INGREDIENT
-        && item.type !== IngredientType.BUN
-      );
+        && item.type !== IngredientType.BUN);
     },
     drop(item) {
-      const { refId } = item;
+      const { refId } = item as IngredientDragItem;
 
       dispatch(addIngredient({
         id: generateIngredientId(),
@@ -100,23 +101,19 @@ const BurgerConstructor = ({ className }) => {
     },
   });
 
-  let style = `${styles['burger-constructor']} pt-25 pb-5`;
-
-  if (actualIngredients.length === 0) {
-    style += ` ${styles['burger-constructor_is-empty']}`;
-  }
-
-  if (isCanDrop) {
-    style += ` ${styles['burger-constructor_is-can-drop']}`;
-  }
-
-  if (isDragOver) {
-    style += ` ${styles['burger-constructor_is-drag-over']}`;
-  }
-
   return (
     <div
-      className = { `${style} ${className}` }>
+      className = { cs(
+        styles['burger-constructor'],
+        'pt-25 pb-5',
+        {
+          [styles['burger-constructor_is-empty']]:
+          actualIngredients.length === 0,
+          [styles['burger-constructor_is-can-drop']]: isCanDrop,
+          [styles['burger-constructor_is-drag-over']]: isDragOver,
+        },
+        className,
+      ) }>
       <div ref = { dropRef } className = { styles['burger-constructor__list'] }>
         {
           topBun && (
@@ -150,7 +147,7 @@ const BurgerConstructor = ({ className }) => {
               .slice(1, -1)
               .map(({
                 id, isLocked = false, refId, type,
-              }, ix) => {
+              }: ActualIngredient_t, ix: number) => {
                 const ingredient = idToIngredientMap[refId];
 
                 return (

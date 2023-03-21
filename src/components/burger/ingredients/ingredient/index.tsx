@@ -1,4 +1,4 @@
-/* eslint-disable node/no-missing-import */
+import cs from 'classnames';
 import PropTypes from 'prop-types';
 import {
   DragPreviewImage,
@@ -11,16 +11,19 @@ import styles from './index.module.css';
 import { Amount } from '../../../amount';
 
 import {
+  Ingredient_t,
   DraggableTypes,
+  IngredientDragItem,
 } from '../../../../utils/types';
 import { useAppSelector } from '../../../../services/store';
 import { getIngredients } from '../../../../services/selectors';
 
 const BurgerIngredient = ({
-  ingredient: {
-    _id, image, name: title, price, type,
-  },
+  ingredient: { _id, image, name: title, price, type },
   onClick,
+}: {
+  ingredient: Ingredient_t;
+  onClick?: () => void;
 }) => {
   const { idToActualIngredientsCountMap } = useAppSelector(getIngredients);
 
@@ -32,7 +35,7 @@ const BurgerIngredient = ({
     item: {
       refId: _id,
       type,
-    },
+    } as IngredientDragItem,
     collect(monitoring) {
       return {
         isItPicked: monitoring.isDragging(),
@@ -40,20 +43,13 @@ const BurgerIngredient = ({
     },
   });
 
-  let style = styles['burger-ingredient'];
-
-  if (onClick) {
-    style += ` ${styles['burger-ingredient_interactive']}`;
-  }
-
-  if (isItPicked) {
-    style += ` ${styles['burger-ingredient_is-picked']}`;
-  }
-
   return (
     <li
       ref = { dragRef }
-      className = { style }
+      className = { cs(styles['burger-ingredient'], {
+        [styles['burger-ingredient_interactive']]: onClick,
+        [styles['burger-ingredient_is-picked']]: isItPicked,
+      }) }
       onClick = { onClick }>
       <DragPreviewImage connect = { preview } src = { image } />
       {

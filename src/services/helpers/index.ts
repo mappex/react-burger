@@ -1,12 +1,15 @@
-/* eslint-disable node/no-missing-import */
 import Cookies from 'universal-cookie';
 
+import {
+  AuthUserResponse,
+  RefreshTokensResponse,
+} from '../../utils/types';
 import r from '../../utils/routes';
 
 const cookiesCtrl = new Cookies();
 const authRefreshTokenKey = 'authRefreshToken';
 
-export const authenticationSideEffect = ({ accessSchema, accessToken, refreshToken }) => {
+export const authenticationSideEffect = ({ accessSchema, accessToken, refreshToken }: RefreshTokensResponse) => {
   const cookies = {
     accessSchema,
     accessToken,
@@ -27,17 +30,17 @@ export const cleanUpAuthenticationSideEffect = () => {
   );
 };
 
-export const getAccessSchemaAndToken = () => {
+export const getAccessSchemaAndToken = (): Partial<Pick<RefreshTokensResponse, 'accessSchema' | 'accessToken'>> => {
   return ['accessSchema', 'accessToken'].reduce((result, cookieName) => Object.assign(result, {
     [cookieName]: cookiesCtrl.get(cookieName),
   }), {});
 };
 
-export const getRefreshToken = () => {
+export const getRefreshToken = (): | AuthUserResponse['refreshToken'] | undefined => {
   return localStorage.authRefreshToken;
 };
 
-export const getAuthHeaderValue = () => {
+export const getAuthHeaderValue = (): string | undefined => {
   const { accessSchema, accessToken } = getAccessSchemaAndToken();
 
   if (accessSchema && accessToken) {
@@ -45,12 +48,12 @@ export const getAuthHeaderValue = () => {
   }
 };
 
-export const setUser = (state, user) => {
+export const setUser = (state: any, user: any) => {
   state.user = user;
   state.userTimeStamp = new Date().getTime();
 };
 
-export const resetUser = (state) => {
+export const resetUser = (state: any) => {
   delete state.user;
   delete state.userTimeStamp;
 };

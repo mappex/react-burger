@@ -1,5 +1,3 @@
-/* eslint-disable id-blacklist */
-/* eslint-disable node/no-missing-import */
 import {
   Link,
   useLocation,

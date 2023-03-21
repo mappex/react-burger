@@ -1,4 +1,3 @@
-/* eslint-disable node/no-missing-import */
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -7,10 +6,19 @@ import {
 
 import styles from './index.module.css';
 
+import { Ingredient_t } from '../../../../utils/types';
 import BurgerIngredient from '../ingredient';
 
 const BurgerIngredientType = ({
-  className, ingredients, title, type,
+  className,
+  ingredients,
+  title,
+  type,
+}: {
+  className?: string;
+  ingredients: Ingredient_t[];
+  title: string;
+  type: string;
 }) => {
   const navigate = useNavigate();
 
@@ -31,7 +39,7 @@ const BurgerIngredientType = ({
                     },
                   });
                 } } />
-              <li className = { (ix % 2 === 0 && ' pl-6 ') + (ix % 2 === 1 && ' pt-8 ') } />
+              <li className = { (ix % 2 === 0 ? ' pl-6 ' : '') + (ix % 2 === 1 ? ' pt-8 ' : '') } />
             </React.Fragment>
           ))
         }

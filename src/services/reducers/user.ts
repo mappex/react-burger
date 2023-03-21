@@ -1,9 +1,15 @@
-/* eslint-disable no-param-reassign */
 import {
-  createAsyncThunk,
   createSlice,
+  createAsyncThunk,
 } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
 
+import {
+  User,
+  UserResponse,
+  AuthUserResponse,
+  RefreshTokensResponse,
+} from '../../utils/types';
 import {
   fetchAuthLogin as apiAuthLogin,
   fetchAuthLogout as apiAuthLogout,
@@ -24,44 +30,54 @@ import {
   cleanUpAuthenticationSideEffect,
 } from '../helpers';
 
-export const PasswordResettingPhase = {
-  initial: 'initial',
-  requestingApprovalCode: 'requesting-approval-code',
-  requestingCredentialsFromUser: 'requesting-credentials-from-user',
-  pendingResetting: 'pending-resetting',
-  fulfilled: 'fulfilled',
-  rejected: 'rejected',
-};
+export enum PasswordResettingPhase {
+  initial = 'initial',
+  requestingApprovalCode = 'requesting-approval-code',
+  requestingCredentialsFromUser = 'requesting-credentials-from-user',
+  pendingResetting = 'pending-resetting',
+  fulfilled = 'fulfilled',
+  rejected = 'rejected',
+}
 
-export const UserRegistrationPhase = {
-  initial: 'initial',
-  pending: 'pending',
-  fulfilled: 'fulfilled',
-  rejected: 'rejected',
-};
+export enum UserRegistrationPhase {
+  initial = 'initial',
+  pending = 'pending',
+  fulfilled = 'fulfilled',
+  rejected = 'rejected',
+}
 
-export const UserLoginPhase = {
-  initial: 'initial',
-  pending: 'pending',
-  fulfilled: 'fulfilled',
-  rejected: 'rejected',
-};
+export enum UserLoginPhase {
+  initial = 'initial',
+  pending = 'pending',
+  fulfilled = 'fulfilled',
+  rejected = 'rejected',
+}
 
-export const UpdateUserDataPhase = {
-  initial: 'initial',
-  pending: 'pending',
-  fulfilled: 'fulfilled',
-  rejected: 'rejected',
-};
+export enum UpdateUserDataPhase {
+  initial = 'initial',
+  pending = 'pending',
+  fulfilled = 'fulfilled',
+  rejected = 'rejected',
+}
 
-export const AutoLoginPhase = {
-  initial: 'initial',
-  pending: 'pending',
-  fulfilled: 'fulfilled',
-  rejected: 'rejected',
-};
+export enum AutoLoginPhase {
+  initial = 'initial',
+  pending = 'pending',
+  fulfilled = 'fulfilled',
+  rejected = 'rejected',
+}
 
-const initialState = {
+const initialState: Readonly<{
+  accessToken?: string;
+  autoLoginPhase: AutoLoginPhase;
+  passwordResettingPhase: PasswordResettingPhase;
+  refreshToken?: string;
+  user?: User;
+  userLoginPhase: UserLoginPhase;
+  userRegistrationPhase: UserRegistrationPhase;
+  userTimeStamp?: number;
+  updateUserDataPhase: UpdateUserDataPhase;
+}> = {
   autoLoginPhase: AutoLoginPhase.initial,
   passwordResettingPhase: PasswordResettingPhase.initial,
   userLoginPhase: UserLoginPhase.initial,
@@ -78,7 +94,7 @@ export const doAutoLogin = createAsyncThunk('user/doAutoLogin', async () => {
 
   try {
     return await apiAuthUserDataUpdate({ auth: { accessSchema, accessToken } });
-  } catch (error) {
+  } catch (error: any) {
     if (error.message !== 'jwt expired') {
       throw error;
     }
@@ -93,13 +109,15 @@ export const doAutoLogin = createAsyncThunk('user/doAutoLogin', async () => {
 
     authenticationSideEffect(payload);
 
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    const { accessSchema, accessToken } = getAccessSchemaAndToken();
+    const {
+      accessSchema: accessSchemaRepeat,
+      accessToken: accessTokenRepeat,
+    } = getAccessSchemaAndToken() as Pick<RefreshTokensResponse, 'accessSchema' | 'accessToken'>;
 
     return apiAuthUserDataUpdate({
       auth: {
-        accessSchema,
-        accessToken,
+        accessSchema: accessSchemaRepeat,
+        accessToken: accessTokenRepeat,
       },
     });
   }
@@ -127,7 +145,15 @@ export const requestPasswordResettingForEmail = createAsyncThunk(
   apiPasswordResetForEmail,
 );
 
-export const updateUserData = createAsyncThunk('user/updateUserData', async ({ email, name, password }) => {
+export const updateUserData = createAsyncThunk('user/updateUserData', async ({
+  email,
+  name,
+  password,
+}: {
+  email: string;
+  name: string;
+  password: string;
+}) => {
   const { accessSchema, accessToken } = getAccessSchemaAndToken();
 
   if (!accessSchema || !accessToken) {
@@ -146,7 +172,7 @@ export const updateUserData = createAsyncThunk('user/updateUserData', async ({ e
         password,
       },
     });
-  } catch (error) {
+  } catch (error: any) {
     if (error.message !== 'jwt expired') {
       throw error;
     }
@@ -161,11 +187,16 @@ export const updateUserData = createAsyncThunk('user/updateUserData', async ({ e
 
     authenticationSideEffect(payload);
 
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    const { accessSchema, accessToken } = getAccessSchemaAndToken();
+    const {
+      accessSchema: accessSchemaRepeat,
+      accessToken: accessTokenRepeat,
+    } = getAccessSchemaAndToken() as Pick<RefreshTokensResponse, 'accessSchema' | 'accessToken'>;
 
     return apiUpdateUserData({
-      auth: { accessSchema, accessToken },
+      auth: {
+        accessSchema: accessSchemaRepeat,
+        accessToken: accessTokenRepeat,
+      },
       data: { email, name, password },
     });
   }
@@ -215,7 +246,7 @@ const userSlice = createSlice({
       .addCase(registerUser.pending, (state) => {
         state.userRegistrationPhase = UserRegistrationPhase.pending;
       })
-      .addCase(registerUser.fulfilled, (state, { payload }) => {
+      .addCase(registerUser.fulfilled, (state, { payload }: PayloadAction<AuthUserResponse>) => {
         authenticationSideEffect(payload);
         state.userRegistrationPhase = UserRegistrationPhase.fulfilled;
         state.userLoginPhase = UserLoginPhase.fulfilled;
@@ -229,7 +260,7 @@ const userSlice = createSlice({
       .addCase(login.pending, (state) => {
         state.userLoginPhase = UserLoginPhase.pending;
       })
-      .addCase(login.fulfilled, (state, { payload }) => {
+      .addCase(login.fulfilled, (state, { payload }: PayloadAction<AuthUserResponse>) => {
         authenticationSideEffect(payload);
         state.userLoginPhase = UserLoginPhase.fulfilled;
         setUser(state, payload.user);
@@ -251,7 +282,7 @@ const userSlice = createSlice({
       .addCase(updateUserData.pending, (state) => {
         state.updateUserDataPhase = UpdateUserDataPhase.pending;
       })
-      .addCase(updateUserData.fulfilled, (state, { payload }) => {
+      .addCase(updateUserData.fulfilled, (state, { payload }: PayloadAction<UserResponse>) => {
         setUser(state, payload.user);
         state.updateUserDataPhase = UpdateUserDataPhase.fulfilled;
       })
@@ -263,7 +294,7 @@ const userSlice = createSlice({
       .addCase(doAutoLogin.pending, (state) => {
         state.autoLoginPhase = AutoLoginPhase.pending;
       })
-      .addCase(doAutoLogin.fulfilled, (state, { payload }) => {
+      .addCase(doAutoLogin.fulfilled, (state, { payload }: PayloadAction<User>) => {
         state.autoLoginPhase = AutoLoginPhase.fulfilled;
         state.userLoginPhase = UserLoginPhase.fulfilled;
         setUser(state, payload);

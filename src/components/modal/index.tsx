@@ -1,8 +1,12 @@
-/* eslint-disable node/no-missing-import */
+/* eslint-disable id-blacklist */
 import {
-  useCallback,
-  useEffect,
   useRef,
+  useEffect,
+  ReactNode,
+  useCallback,
+  ReactPortal,
+  KeyboardEvent,
+  MutableRefObject,
 } from 'react';
 import PropTypes from 'prop-types';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -12,22 +16,30 @@ import styles from './index.module.css';
 import ModalOverlay from './overlay';
 
 const Modal = ({
-  children, className, onClose, title,
+  children,
+  className,
+  onClose,
+  title,
+}: {
+  children?: ReactNode | ReactPortal;
+  className?: string;
+  onClose: () => void;
+  title?: string;
 }) => {
   const modalElementRef = useRef(null);
 
   useEffect(() => {
     const {
       current: modalElement,
-    } = modalElementRef;
+    } = modalElementRef as MutableRefObject<HTMLElement | null>;
 
     if (modalElement) {
       modalElement.focus();
     }
   }, []);
 
-  const keyDownHandler = useCallback(({ key }) => {
-    if (key === 'Escape' && onClose) {
+  const keyDownHandler = useCallback((e: KeyboardEvent<HTMLElement>): void => {
+    if (e.key === 'Escape' && onClose) {
       onClose();
     }
   }, [onClose]);

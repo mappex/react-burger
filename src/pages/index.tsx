@@ -1,4 +1,3 @@
-/* eslint-disable node/no-missing-import */
 export * from './feed';
 export * from './forgot-password';
 export * from './ingredients';

@@ -1,19 +1,28 @@
-/* eslint-disable no-param-reassign */
 import {
-  createAsyncThunk,
   createSlice,
+  createAsyncThunk,
 } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
+
+import {
+  Ingredient_t,
+  OrderDetails_t,
+} from '../../utils/types';
 import {
   fetchCreateOrder as apiCreateOrder,
 } from '../api';
 
-const initialState = {
+const initialState: Readonly<{
+  orderDetails: OrderDetails_t | null;
+  orderDetailsError: unknown | null;
+  orderDetailsRequest: boolean;
+}> = {
   orderDetails: null,
   orderDetailsError: null,
   orderDetailsRequest: false,
 };
 
-export const createOrder = createAsyncThunk('order/createOrder', (ingredients) => {
+export const createOrder = createAsyncThunk('order/createOrder', (ingredients: Ingredient_t['_id'][]) => {
   if (ingredients.length === 0) {
     throw new Error(
       'Unable to place an order for the empty ingredients list',
@@ -46,7 +55,7 @@ export const orderDetailsSlice = createSlice({
           orderDetailsRequest: true,
         });
       })
-      .addCase(createOrder.fulfilled, (state, { payload: orderDetails }) => {
+      .addCase(createOrder.fulfilled, (state, { payload: orderDetails }: PayloadAction<OrderDetails_t>) => {
         Object.assign(state, {
           orderDetails,
           orderDetailsRequest: false,

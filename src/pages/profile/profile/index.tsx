@@ -1,10 +1,10 @@
 /* eslint-disable id-blacklist */
-/* eslint-disable node/no-missing-import */
 import {
   useEffect,
   useState,
+  MouseEvent,
+  ChangeEvent,
 } from 'react';
-
 import {
   Input,
   Button,
@@ -44,11 +44,11 @@ const Profile = () => {
     };
   }, [dispatch]);
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: MouseEvent<HTMLFormElement>): void => {
     e.preventDefault();
     if (updateUserDataPhase === UpdateUserDataPhase.initial) {
       dispatch(updateUserData(state));
@@ -74,7 +74,7 @@ const Profile = () => {
         name = 'email'
         extraClass = 'mb-6'
         placeholder = { l('login') }
-        icon = { 'EditIcon' } />
+        isIcon = { true } />
       <PasswordInput
         onChange = { handleChange }
         value = { state.password }
