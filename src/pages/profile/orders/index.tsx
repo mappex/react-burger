@@ -12,7 +12,7 @@ import {
 } from '../../../services/store';
 import { getOrders } from '../../../services/selectors';
 
-const Orders = () => {
+const OrdersProfile = () => {
   const dispatch = useAppDispatch();
   const { orders } = useAppSelector(getOrders);
 
@@ -27,4 +27,4 @@ const Orders = () => {
   return <Feed orders = { orders } renderStatus = { true } />;
 };
 
-export { Orders };
+export { OrdersProfile };

@@ -1,5 +1,4 @@
 import cs from 'classnames';
-import PropTypes from 'prop-types';
 import { TIconProps } from '@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/utils';
 
 import styles from './index.module.css';
@@ -38,18 +37,6 @@ const MenuItem = ({
       <span className = 'ml-2'>{ text }</span>
     </li>
   );
-};
-
-MenuItem.propTypes = {
-  className: PropTypes.string,
-  Icon: PropTypes.elementType.isRequired,
-  isActive: PropTypes.bool,
-  text: PropTypes.string.isRequired,
-  onClick: PropTypes.func,
-};
-
-MenuItem.defaultProps = {
-  isActive: true,
 };
 
 export default MenuItem;

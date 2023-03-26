@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import cs from 'classnames';
 import {
   DragPreviewImage,
@@ -134,20 +133,6 @@ const BurgerConstructorItem = ({
       </div>
     </div>
   );
-};
-
-BurgerConstructorItem.propTypes = {
-  className: PropTypes.string,
-  id: PropTypes.string,
-  index: PropTypes.number,
-  ingredient: PropTypes.object.isRequired,
-  isLocked: PropTypes.bool.isRequired,
-  onShowIngredientInfo: PropTypes.func,
-  onDelete: PropTypes.func,
-  type: PropTypes.oneOf([
-    ActualIngredientType.TOP,
-    ActualIngredientType.BOTTOM,
-  ]),
 };
 
 export default BurgerConstructorItem;

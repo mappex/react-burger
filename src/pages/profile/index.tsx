@@ -1,20 +1,15 @@
 import {
   Link,
+  Outlet,
   useLocation,
 } from 'react-router-dom';
 
-import { Orders } from './orders';
-import { Profile } from './profile';
 import {
   logout,
 } from '../../services/reducers/user';
 import {
   useAppDispatch,
-  useAppSelector,
 } from '../../services/store';
-import {
-  getUser,
-} from '../../services/selectors';
 
 import styles from './index.module.css';
 import l from '../../utils/lang';
@@ -22,7 +17,6 @@ import r from '../../utils/routes';
 
 const ProfilePage = () => {
   const dispatch = useAppDispatch();
-  const { userTimeStamp } = useAppSelector(getUser);
   const { pathname } = useLocation();
 
   return (
@@ -47,12 +41,7 @@ const ProfilePage = () => {
         <p className = { 'text text_type_main-default text_color_inactive mt-20' }>{ l('in_this_section_you_can_change_your_personal_data') }</p>
       </div>
       <div className = { `${styles.forms}` }>
-        {
-          pathname === r.profile && <Profile key = { userTimeStamp } />
-        }
-        {
-          pathname === `${r.profile}${r.orders}` && <Orders />
-        }
+        <Outlet />
       </div>
     </div>
   );

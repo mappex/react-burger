@@ -1,5 +1,4 @@
 import cs from 'classnames';
-import PropTypes from 'prop-types';
 import {
   DragPreviewImage,
   useDrag,
@@ -72,11 +71,6 @@ const BurgerIngredient = ({
       </div>
     </li>
   );
-};
-
-BurgerIngredient.propTypes = {
-  ingredient: PropTypes.object.isRequired,
-  onClick: PropTypes.func,
 };
 
 export default BurgerIngredient;

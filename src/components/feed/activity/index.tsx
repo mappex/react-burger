@@ -3,7 +3,6 @@ import React, {
   useMemo,
 } from 'react';
 import cs from 'classnames';
-import PropTypes from 'prop-types';
 
 import {
   Order,
@@ -148,13 +147,6 @@ const FeedActivity = ({
       ) : null }
     </div>
   );
-};
-
-FeedActivity.propTypes = {
-  className: PropTypes.string,
-  orders: PropTypes.array,
-  total: PropTypes.number,
-  totalToday: PropTypes.number,
 };
 
 export { FeedActivity };

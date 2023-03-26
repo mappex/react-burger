@@ -2,7 +2,6 @@ import {
   useMemo,
   useCallback,
 } from 'react';
-import PropTypes from 'prop-types';
 import { useDrop } from 'react-dnd';
 import { v4 as uuidV4 } from 'uuid';
 import cs from 'classnames';
@@ -156,7 +155,6 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
                   ingredient && (
                     <BurgerConstructorItem
                       key = { id }
-                      id = { id }
                       index = { ix + 1 }
                       ingredient = { idToIngredientMap[refId] || null }
                       isLocked = { isLocked }
@@ -218,7 +216,5 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
     </div>
   );
 };
-
-BurgerConstructor.propTypes = { className: PropTypes.string };
 
 export { BurgerConstructor };

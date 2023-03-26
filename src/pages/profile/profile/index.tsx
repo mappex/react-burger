@@ -30,7 +30,7 @@ import l from '../../../utils/lang';
 
 const emptyUser = { email: '', name: '' };
 
-const Profile = () => {
+const UserProfile = () => {
   const dispatch = useAppDispatch();
   const { user, updateUserDataPhase } = useAppSelector(getUser);
   const { name, email } =  user  || emptyUser;
@@ -105,4 +105,4 @@ const Profile = () => {
   );
 };
 
-export { Profile };
+export { UserProfile };

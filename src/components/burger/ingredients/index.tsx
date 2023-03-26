@@ -4,7 +4,6 @@ import {
   useRef,
   useState,
 } from 'react';
-import PropTypes from 'prop-types';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styles from './index.module.css';
@@ -161,7 +160,5 @@ const BurgerIngredients = ({ className }: { className?: string }) => {
     </div>
   );
 };
-
-BurgerIngredients.propTypes = { className: PropTypes.string };
 
 export { BurgerIngredients };

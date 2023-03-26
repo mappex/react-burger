@@ -40,17 +40,22 @@ type ChunkCodeToChunkWsDataMap = {
   };
 };
 
+enum OperationType {
+  ORDERS = 'orders',
+  USERORDERS = 'userOrders',
+}
+
 const chunkCodeToChunkWsDataMap: ChunkCodeToChunkWsDataMap = Object.entries(chunkCodeToUrlMap)
   .reduce((result, [key, url]) => {
     const wsActionTypes = generateActionTypes();
 
     result[key as keyof typeof chunkCodeToUrlMap] = {
       subscribe: createAsyncThunk(`orders/${key}/subscribe`, (self, { dispatch }) => {
-        if (key === 'orders') {
+        if (key === OperationType.ORDERS) {
           dispatch({ type: wsActionTypes.wsOpenConnection });
         }
 
-        if (key === 'userOrders') {
+        if (key === OperationType.USERORDERS) {
           const { accessSchema, accessToken } = getAccessSchemaAndToken();
 
           if (!accessSchema || !accessToken) {

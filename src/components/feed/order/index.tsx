@@ -1,5 +1,4 @@
 import cs from 'classnames';
-import PropTypes from 'prop-types';
 import {
   useNavigate,
   useLocation,
@@ -69,15 +68,6 @@ const Order = ({
       <IngredientsAndPrice order = { order } />
     </li>
   );
-};
-
-Order.propTypes = {
-  order: PropTypes.object.isRequired,
-  renderStatus: PropTypes.bool,
-};
-
-Order.defaultProps = {
-  renderStatus: false,
 };
 
 export { Order };

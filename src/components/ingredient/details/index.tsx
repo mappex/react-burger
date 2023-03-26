@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React, { useMemo } from 'react';
 import {
   useParams,
@@ -68,10 +67,6 @@ const IngredientDetails = ({ className }: { className?: string }) => {
       </div>
     </div>
   );
-};
-
-IngredientDetails.propTypes = {
-  className: PropTypes.string,
 };
 
 export { IngredientDetails };

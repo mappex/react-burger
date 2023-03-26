@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {
   useNavigate,
 } from 'react-router-dom';
@@ -46,13 +45,6 @@ const BurgerIngredientType = ({
       </ul>
     </li>
   );
-};
-
-BurgerIngredientType.propTypes = {
-  className: PropTypes.string,
-  ingredients: PropTypes.arrayOf(PropTypes.object).isRequired,
-  title: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
 };
 
 export default BurgerIngredientType;

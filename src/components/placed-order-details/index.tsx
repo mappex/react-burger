@@ -1,5 +1,4 @@
 import cs from 'classnames';
-import PropTypes from 'prop-types';
 
 import { TOrderDetails } from '../../utils/types';
 import { orderStatusToStatusTitleMap } from '../../utils/consts';
@@ -59,10 +58,5 @@ const PlacedOrderDetails = ({
     </div>
   </div>
 );
-
-PlacedOrderDetails.propTypes = {
-  className: PropTypes.string,
-  orderDetails: PropTypes.object.isRequired,
-};
 
 export { PlacedOrderDetails };

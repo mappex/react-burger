@@ -18,6 +18,8 @@ import {
   RegistrationPage,
   ResetPasswordPage,
 } from '../../pages';
+import { OrdersProfile } from '../../pages/profile/orders';
+import { UserProfile } from '../../pages/profile/profile';
 import { Modal } from '../modal';
 import { OrderDetails } from '../order/details';
 import { IngredientDetails } from '../ingredient/details';
@@ -29,8 +31,16 @@ import burgerConstructorStyles from '../burger/constructor/index.module.css';
 import l from '../../utils/lang';
 import r from '../../utils/routes';
 
+import {
+  useAppSelector,
+} from '../../services/store';
+import {
+  getUser,
+} from '../../services/selectors';
+
 const AppBody = () => {
   const navigate = useNavigate();
+  const { userTimeStamp } = useAppSelector(getUser);
   const { state: locationState } = useLocation() as {
     state: { background?: typeof location } | null;
   };
@@ -64,13 +74,9 @@ const AppBody = () => {
           path = { r.reset_password }
           element = { <OnlyUnAuthRoute path = { r.home } element = { <ResetPasswordPage /> } /> } >
         </Route>
-        <Route
-          path = { r.profile }
-          element = { <ProtectedRoute element = { <ProfilePage /> } /> } >
-        </Route>
-        <Route
-          path = { `${r.profile}${r.orders}` }
-          element = { <ProtectedRoute element = { <ProfilePage /> } /> } >
+        <Route path = { r.profile } element = { <ProtectedRoute element = { <ProfilePage /> } /> }>
+          <Route index element = { <UserProfile key = { userTimeStamp } /> } />
+          <Route path = { r.profile_orders } element = { <OrdersProfile /> } />
         </Route>
         <Route path = { r.notfound } element = { <NotFoundPage /> } />
       </Routes>

@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types';
-
 import {
   IngredientIcon,
   IngredientIconRenderType,
@@ -69,10 +67,6 @@ const IngredientsAndPrice = ({ order }: { order: Order }) => {
       ) }
     </div>
   );
-};
-
-IngredientsAndPrice.propTypes = {
-  order: PropTypes.object.isRequired,
 };
 
 export { IngredientsAndPrice };

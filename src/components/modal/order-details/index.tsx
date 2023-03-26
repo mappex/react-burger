@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types';
-
 import styles from './index.module.css';
 import l from '../../../utils/lang';
 
@@ -42,10 +40,5 @@ const OrderDetails = ({
     <div className = { styles['order-details__message'] }>{ message }</div>
   </div>
 );
-
-OrderDetails.propTypes = {
-  className: PropTypes.string,
-  orderDetails: PropTypes.object.isRequired,
-};
 
 export { OrderDetails };

@@ -1,5 +1,4 @@
 import cs from 'classnames';
-import PropTypes from 'prop-types';
 
 import { TIngredient } from '../../../utils/types';
 
@@ -45,19 +44,6 @@ const IngredientIcon = ({
       ) : null }
     </Tag>
   );
-};
-
-IngredientIcon.propTypes = {
-  ingredient: PropTypes.object.isRequired,
-  moreIngredientsCount: PropTypes.number,
-  tag: PropTypes.oneOf([
-    IngredientIconRenderType.div,
-    IngredientIconRenderType.li,
-  ]),
-};
-
-IngredientIcon.defaultProps = {
-  tag: IngredientIconRenderType.div,
 };
 
 export { IngredientIcon };
