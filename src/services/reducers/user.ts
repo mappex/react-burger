@@ -6,9 +6,9 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 
 import {
   User,
-  UserResponse,
-  AuthUserResponse,
-  RefreshTokensResponse,
+  IUserResponse,
+  TAuthUserResponse,
+  IRefreshTokensResponse,
 } from '../../utils/types';
 import {
   fetchAuthLogin as apiAuthLogin,
@@ -112,7 +112,7 @@ export const doAutoLogin = createAsyncThunk('user/doAutoLogin', async () => {
     const {
       accessSchema: accessSchemaRepeat,
       accessToken: accessTokenRepeat,
-    } = getAccessSchemaAndToken() as Pick<RefreshTokensResponse, 'accessSchema' | 'accessToken'>;
+    } = getAccessSchemaAndToken() as Pick<IRefreshTokensResponse, 'accessSchema' | 'accessToken'>;
 
     return apiAuthUserDataUpdate({
       auth: {
@@ -135,10 +135,7 @@ export const logout = createAsyncThunk('user/logout', () => {
 
 export const registerUser = createAsyncThunk('user/registerUser', apiAuthRegister);
 
-export const requestNewPasswordSetting = createAsyncThunk(
-  'user/requestNewPasswordSetting',
-  apiPasswordNew,
-);
+export const requestNewPasswordSetting = createAsyncThunk('user/requestNewPasswordSetting', apiPasswordNew);
 
 export const requestPasswordResettingForEmail = createAsyncThunk(
   'user/requestPasswordResettingForEmail',
@@ -190,7 +187,7 @@ export const updateUserData = createAsyncThunk('user/updateUserData', async ({
     const {
       accessSchema: accessSchemaRepeat,
       accessToken: accessTokenRepeat,
-    } = getAccessSchemaAndToken() as Pick<RefreshTokensResponse, 'accessSchema' | 'accessToken'>;
+    } = getAccessSchemaAndToken() as Pick<IRefreshTokensResponse, 'accessSchema' | 'accessToken'>;
 
     return apiUpdateUserData({
       auth: {
@@ -246,7 +243,7 @@ const userSlice = createSlice({
       .addCase(registerUser.pending, (state) => {
         state.userRegistrationPhase = UserRegistrationPhase.pending;
       })
-      .addCase(registerUser.fulfilled, (state, { payload }: PayloadAction<AuthUserResponse>) => {
+      .addCase(registerUser.fulfilled, (state, { payload }: PayloadAction<TAuthUserResponse>) => {
         authenticationSideEffect(payload);
         state.userRegistrationPhase = UserRegistrationPhase.fulfilled;
         state.userLoginPhase = UserLoginPhase.fulfilled;
@@ -260,7 +257,7 @@ const userSlice = createSlice({
       .addCase(login.pending, (state) => {
         state.userLoginPhase = UserLoginPhase.pending;
       })
-      .addCase(login.fulfilled, (state, { payload }: PayloadAction<AuthUserResponse>) => {
+      .addCase(login.fulfilled, (state, { payload }: PayloadAction<TAuthUserResponse>) => {
         authenticationSideEffect(payload);
         state.userLoginPhase = UserLoginPhase.fulfilled;
         setUser(state, payload.user);
@@ -282,7 +279,7 @@ const userSlice = createSlice({
       .addCase(updateUserData.pending, (state) => {
         state.updateUserDataPhase = UpdateUserDataPhase.pending;
       })
-      .addCase(updateUserData.fulfilled, (state, { payload }: PayloadAction<UserResponse>) => {
+      .addCase(updateUserData.fulfilled, (state, { payload }: PayloadAction<IUserResponse>) => {
         setUser(state, payload.user);
         state.updateUserDataPhase = UpdateUserDataPhase.fulfilled;
       })

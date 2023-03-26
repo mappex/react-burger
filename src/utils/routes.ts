@@ -8,6 +8,8 @@ export const routes = {
   ingredientsById: '/ingredients/:id',
   profile: '/profile',
   feed: '/feed',
+  feedById: '/feed/:id',
+  orders: '/orders',
   notfound: '*',
 };
 

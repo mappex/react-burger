@@ -6,7 +6,7 @@ import l from '../../../utils/lang';
 import {
   orderStatusToStatusTitleMap,
 } from '../../../utils/consts';
-import { OrderDetails_t } from '../../../utils/types';
+import { TOrderDetails } from '../../../utils/types';
 import orderAcceptedImage from '../../../images/order_is_accepted.gif';
 
 const OrderDetails = ({
@@ -14,7 +14,7 @@ const OrderDetails = ({
   orderDetails: { id, status, message },
 }: {
   className?: string;
-  orderDetails: OrderDetails_t;
+  orderDetails: TOrderDetails;
 }) => (
   <div className = { `${styles['order-details']} ${className}` }>
     <div

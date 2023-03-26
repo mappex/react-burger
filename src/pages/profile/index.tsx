@@ -26,7 +26,7 @@ const ProfilePage = () => {
   const { pathname } = useLocation();
 
   return (
-    <div className = { `${styles.container} pt-30` }>
+    <div className = { `${styles.container} pt-25` }>
       <div className = { `${styles.links}` }>
         <Link
           className = { `${styles.link} text_color_inactive text text_type_main-medium ${pathname === r.profile && styles.active}` }
@@ -34,8 +34,8 @@ const ProfilePage = () => {
           { l('profile') }
         </Link>
         <Link
-          className = { `${styles.link} text_color_inactive text text_type_main-medium ${pathname === '/history-orders' && styles.active}` }
-          to = '/history-orders'>
+          className = { `${styles.link} text_color_inactive text text_type_main-medium ${pathname === `${r.profile}${r.orders}` && styles.active}` }
+          to = { `${r.profile}${r.orders}` }>
           { l('history_of_orders') }
         </Link>
         <Link
@@ -51,7 +51,7 @@ const ProfilePage = () => {
           pathname === r.profile && <Profile key = { userTimeStamp } />
         }
         {
-          pathname === '/history-orders' && <Orders />
+          pathname === `${r.profile}${r.orders}` && <Orders />
         }
       </div>
     </div>

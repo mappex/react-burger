@@ -1,10 +1,30 @@
-import styles from '../index.module.css';
-import l from '../../../utils/lang';
+import { useEffect } from 'react';
 
-const Orders = () => (
-  <div className = { `${styles.page} 404` }>
-    { l('history_of_orders') }
-  </div>
-);
+import { Feed } from '../../../components/feed';
+
+import {
+  subscribeForUserOrders,
+  unsubscribeForUserOrders,
+} from '../../../services/reducers/orders';
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../../services/store';
+import { getOrders } from '../../../services/selectors';
+
+const Orders = () => {
+  const dispatch = useAppDispatch();
+  const { orders } = useAppSelector(getOrders);
+
+  useEffect(() => {
+    dispatch(subscribeForUserOrders());
+
+    return () => {
+      dispatch(unsubscribeForUserOrders());
+    };
+  }, [dispatch]);
+
+  return <Feed orders = { orders } renderStatus = { true } />;
+};
 
 export { Orders };

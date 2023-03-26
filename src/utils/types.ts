@@ -14,11 +14,10 @@ export enum IngredientType {
   MAIN = 'main',
 }
 
-export enum OrderStatus_t {
-  BEING_COOKED,
-  COOKED,
-  BEING_DELIVERED,
-  DELIVERED,
+export enum TOrderStatus {
+  CREATED = 'created',
+  PENDING = 'pending',
+  DONE = 'done',
 }
 
 export interface User {
@@ -26,24 +25,34 @@ export interface User {
   name: string;
 }
 
-export interface RefreshTokensResponse {
+export interface IRefreshTokensResponse {
   accessSchema: string;
   accessToken: string;
   refreshToken: string;
 }
 
-export interface UserResponse {
+export interface IUserResponse {
   user: User;
 }
 
-export type ActualIngredient_t = {
+export interface Order {
+  _id: string;
+  ingredients: string[];
+  status: TOrderStatus;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  number: number;
+}
+
+export type TActualIngredient = {
   id: string;
   refId: string;
   isLocked?: boolean;
   type?: ActualIngredientType;
 };
 
-export type Ingredient_t = {
+export type TIngredient = {
   _id: string;
   name: string;
   type: IngredientType;
@@ -58,19 +67,19 @@ export type Ingredient_t = {
   __v: number;
 };
 
-export type IngredientDragItem = {
-  refId: Ingredient_t['_id'];
+export type TIngredientDragItem = {
+  refId: TIngredient['_id'];
   type: IngredientType;
 };
 
-export type ActualIngredientDragItem = {
+export type TActualIngredientDragItem = {
   index: number;
 };
 
-export type OrderDetails_t = {
+export type TOrderDetails = {
   id: number;
-  status: OrderStatus_t;
+  status: TOrderStatus;
   message: string;
 };
 
-export type AuthUserResponse = RefreshTokensResponse & UserResponse;
+export type TAuthUserResponse = IRefreshTokensResponse & IUserResponse;

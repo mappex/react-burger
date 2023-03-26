@@ -11,7 +11,7 @@ import styles from './index.module.css';
 import l from '../../../utils/lang';
 import {
   IngredientType,
-  Ingredient_t,
+  TIngredient,
 } from '../../../utils/types';
 
 import BurgerIngredientType from './ingredient-type';
@@ -42,7 +42,7 @@ const BurgerIngredients = ({ className }: { className?: string }) => {
   const ingredientTypeToIngredientsMap = useMemo(() => {
     const axillaryMap = new Map();
 
-    ingredients.forEach((ingredient: Ingredient_t) => {
+    ingredients.forEach((ingredient: TIngredient) => {
       const { type } = ingredient;
 
       if (!axillaryMap.has(type)) {
@@ -91,10 +91,8 @@ const BurgerIngredients = ({ className }: { className?: string }) => {
             },
           );
 
-          const mostVisibleType = [
-            // @ts-ignore
-            ...ingredientToIntersectionRatioMap.entries(),
-          ].sort(([, irA], [, irB]) => irB - irA)[0][0];
+          const mostVisibleType = [...ingredientToIntersectionRatioMap.entries()]
+            .sort(([, irA], [, irB]) => irB - irA)[0][0];
 
           setSelectedIngredientType(mostVisibleType);
         },

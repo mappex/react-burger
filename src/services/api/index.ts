@@ -4,16 +4,22 @@ import {
 
 import l from '../../utils/lang';
 import {
-  AuthUserResponse,
-  Ingredient_t,
-  OrderDetails_t,
-  OrderStatus_t,
-  RefreshTokensResponse,
-  UserResponse,
+  TAuthUserResponse,
+  TIngredient,
+  TOrderDetails,
+  TOrderStatus,
+  IRefreshTokensResponse,
+  IUserResponse,
   User,
 } from '../../utils/types';
 
-const getAccessSchemaAndTokenAndRefreshToken = (response: any): RefreshTokensResponse => {
+interface ITokenRefreshResponse {
+  accessSchema: string;
+  accessToken: string;
+  refreshToken: string;
+}
+
+const getAccessSchemaAndTokenAndRefreshToken = (response: ITokenRefreshResponse): IRefreshTokensResponse => {
   const {
     accessToken: accessTokenWithSchema,
     refreshToken,
@@ -27,7 +33,7 @@ const getAccessSchemaAndTokenAndRefreshToken = (response: any): RefreshTokensRes
   };
 };
 
-const checkReponse = (response: any) => {
+const checkReponse = (response: Response) => {
   return response.ok ? response.json() : response.json().then((error: any) => {
     return error;
   });
@@ -35,7 +41,7 @@ const checkReponse = (response: any) => {
 
 /* INGREDIENTS ********************************************************************************************************/
 // GET
-export const fetchIngredients = async (): Promise<Ingredient_t[]> => {
+export const fetchIngredients = async (): Promise<TIngredient[]> => {
   const response = await fetch(`${API_HOST}/api/ingredients`).then(checkReponse);
 
   if (response.success !== true) {
@@ -47,13 +53,20 @@ export const fetchIngredients = async (): Promise<Ingredient_t[]> => {
 
 /* ORDERS *************************************************************************************************************/
 // POST
-export const fetchCreateOrder = async (
-  ingredients: Ingredient_t['_id'][],
-): Promise<OrderDetails_t> => {
+type TCreateOrderParams = {
+  ingredients: TIngredient['_id'][];
+  auth: TAccessSchemaWithToken;
+};
+export const fetchCreateOrder = async ({
+  ingredients,
+  auth: { accessSchema, accessToken },
+}: TCreateOrderParams): Promise<TOrderDetails> => {
   const response = await fetch(`${API_HOST}/api/orders`, {
     body: JSON.stringify({ ingredients }),
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
+      Authorization: `${accessSchema} ${accessToken}`,
+
     },
     method: 'POST',
   }).then(checkReponse);
@@ -65,7 +78,7 @@ export const fetchCreateOrder = async (
   return {
     id: response.order.number,
     message: l('order_details_wait_readiness'),
-    status: OrderStatus_t.BEING_COOKED,
+    status: TOrderStatus.PENDING,
   };
 };
 
@@ -78,7 +91,7 @@ interface IAuthLoginRequestParams {
 export const fetchAuthLogin = async ({
   email,
   password,
-}: IAuthLoginRequestParams): Promise<AuthUserResponse> => {
+}: IAuthLoginRequestParams): Promise<TAuthUserResponse> => {
   const response = await fetch(`${API_HOST}/api/auth/login`, {
     body: JSON.stringify({ email, password }),
     headers: {
@@ -110,7 +123,7 @@ export const fetchAuthLogin = async ({
 // Logout
 export const fetchAuthLogout = async ({
   refreshToken: token,
-}: Pick<RefreshTokensResponse, 'refreshToken'>): Promise<void> => {
+}: Pick<IRefreshTokensResponse, 'refreshToken'>): Promise<void> => {
   const response = await fetch(`${API_HOST}/api/auth/logout`, {
     body: JSON.stringify({ token }),
     headers: {
@@ -127,7 +140,7 @@ export const fetchAuthLogout = async ({
 // Token
 export const fetchAuthTokens = async ({
   refreshToken: token,
-}: Pick<RefreshTokensResponse, 'refreshToken' >): Promise<RefreshTokensResponse> => {
+}: Pick<IRefreshTokensResponse, 'refreshToken' >): Promise<IRefreshTokensResponse> => {
   const response = await fetch(`${API_HOST}/api/auth/token`, {
     body: JSON.stringify({ token }),
     headers: {
@@ -153,7 +166,7 @@ export const fetchAuthRegister = async ({
   email,
   name,
   password,
-}: IAuthRegisterRequestParams): Promise<AuthUserResponse> => {
+}: IAuthRegisterRequestParams): Promise<TAuthUserResponse> => {
   const response = await fetch(`${API_HOST}/api/auth/register`, {
     body: JSON.stringify({ email, name, password }),
     headers: {
@@ -189,7 +202,7 @@ export const fetchAuthRegister = async ({
 };
 
 // Get User info
-type TAccessSchemaWithToken = Pick<RefreshTokensResponse, 'accessSchema' | 'accessToken'>;
+export type TAccessSchemaWithToken = Pick<IRefreshTokensResponse, 'accessSchema' | 'accessToken'>;
 type TAuthUserDataParams = {
   auth: TAccessSchemaWithToken;
 };
@@ -223,7 +236,7 @@ type TAuthUserDataUpdateParams = {
 export const fetchAuthUserDataUpdate = async ({
   auth: { accessSchema, accessToken },
   data: { email, name, password },
-}: TAuthUserDataUpdateParams): Promise<UserResponse> => {
+}: TAuthUserDataUpdateParams): Promise<IUserResponse> => {
   const response = await fetch(`${API_HOST}/api/auth/user`, {
     body: JSON.stringify({ name, email, password }),
     headers: {

@@ -6,7 +6,7 @@ import {
 
 import styles from './index.module.css';
 
-import { Ingredient_t } from '../../../../utils/types';
+import { TIngredient } from '../../../../utils/types';
 import BurgerIngredient from '../ingredient';
 
 const BurgerIngredientType = ({
@@ -16,7 +16,7 @@ const BurgerIngredientType = ({
   type,
 }: {
   className?: string;
-  ingredients: Ingredient_t[];
+  ingredients: TIngredient[];
   title: string;
   type: string;
 }) => {

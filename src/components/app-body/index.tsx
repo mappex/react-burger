@@ -19,7 +19,8 @@ import {
   ResetPasswordPage,
 } from '../../pages';
 import { Modal } from '../modal';
-import { IngredientDetails } from '../ingredient-details';
+import { OrderDetails } from '../order/details';
+import { IngredientDetails } from '../ingredient/details';
 import { ProtectedRoute } from '../protected-route';
 import { OnlyUnAuthRoute } from '../onlyunauth-route';
 
@@ -43,9 +44,10 @@ const AppBody = () => {
       ) }>
       <Routes location = { background || location }>
         <Route path = { r.home } element = { <MainPage /> } />
-        <Route path = { r.feed } element = { <FeedPage /> } />
         <Route path = { r.logout } element = { <SignOutPage /> } />
         <Route path = { r.ingredientsById } element = { <IngredientsPage /> } />
+        <Route path = { r.feed } element = { <FeedPage /> } />
+        <Route path = { r.feedById } element = { <OrderDetails /> } />
         <Route
           path = { r.login }
           element = { <OnlyUnAuthRoute path = { r.home } element = { <SignInPage /> } /> } >
@@ -66,6 +68,10 @@ const AppBody = () => {
           path = { r.profile }
           element = { <ProtectedRoute element = { <ProfilePage /> } /> } >
         </Route>
+        <Route
+          path = { `${r.profile}${r.orders}` }
+          element = { <ProtectedRoute element = { <ProfilePage /> } /> } >
+        </Route>
         <Route path = { r.notfound } element = { <NotFoundPage /> } />
       </Routes>
       {
@@ -78,7 +84,18 @@ const AppBody = () => {
                   title = { l('ingredient_details') }
                   onClose = { () => navigate(r.home) }>
                   <IngredientDetails className = { burgerConstructorStyles['burger-constructor__ingredient-details'] } />
-                </Modal> } >
+                </Modal>
+              } >
+            </Route>
+            <Route
+              path = { r.feedById }
+              element = {
+                <Modal
+                  title = { l('order_details') }
+                  onClose = { () => navigate(-1) }>
+                  <OrderDetails />
+                </Modal>
+              }>
             </Route>
           </Routes>
         )

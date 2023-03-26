@@ -1,11 +1,9 @@
-export const getIngredients = (state: any) => {
-  return state.ingredients;
-};
+import { TRootState } from '../store';
 
-export const getOrderDetails = (state: any) => {
-  return state.orderDetails;
-};
+export const getIngredients = (state: TRootState) => state.ingredients;
 
-export const getUser = (state: any) => {
-  return state.user;
-};
+export const getOrderDetails = (state: TRootState) => state.orderDetails;
+
+export const getUser = (state: TRootState) => state.user;
+
+export const getOrders = (state: TRootState) => state.orders;
