@@ -1,16 +1,15 @@
-import PropTypes from 'prop-types';
 import React, { useMemo } from 'react';
 import {
   useParams,
 } from 'react-router-dom';
 
 import styles from './index.module.css';
-import l from '../../utils/lang';
+import l from '../../../utils/lang';
 
-import { useAppSelector } from '../../services/store';
+import { useAppSelector } from '../../../services/store';
 import {
   getIngredients,
-} from '../../services/selectors';
+} from '../../../services/selectors';
 
 const IngredientDetails = ({ className }: { className?: string }) => {
   const { id } = useParams() as { id: string };
@@ -54,6 +53,7 @@ const IngredientDetails = ({ className }: { className?: string }) => {
             <div className = { styles['ingredient-details__nutritional-value'] }>
               <div
                 className = { styles['ingredient-details__nutritional-value-title'] }>
+                { /* @ts-ignore */ }
                 { l(key) }
               </div>
               <div
@@ -67,10 +67,6 @@ const IngredientDetails = ({ className }: { className?: string }) => {
       </div>
     </div>
   );
-};
-
-IngredientDetails.propTypes = {
-  className: PropTypes.string,
 };
 
 export { IngredientDetails };

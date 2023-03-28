@@ -1,12 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {
   useNavigate,
 } from 'react-router-dom';
 
 import styles from './index.module.css';
 
-import { Ingredient_t } from '../../../../utils/types';
+import { TIngredient } from '../../../../utils/types';
 import BurgerIngredient from '../ingredient';
 
 const BurgerIngredientType = ({
@@ -16,7 +15,7 @@ const BurgerIngredientType = ({
   type,
 }: {
   className?: string;
-  ingredients: Ingredient_t[];
+  ingredients: TIngredient[];
   title: string;
   type: string;
 }) => {
@@ -46,13 +45,6 @@ const BurgerIngredientType = ({
       </ul>
     </li>
   );
-};
-
-BurgerIngredientType.propTypes = {
-  className: PropTypes.string,
-  ingredients: PropTypes.arrayOf(PropTypes.object).isRequired,
-  title: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
 };
 
 export default BurgerIngredientType;

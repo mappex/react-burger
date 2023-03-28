@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import cs from 'classnames';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
@@ -31,12 +30,6 @@ const Amount = ({
       </div>
     </div>
   );
-};
-
-Amount.propTypes = {
-  amount: PropTypes.number.isRequired,
-  className: PropTypes.string,
-  isTotal: PropTypes.bool,
 };
 
 export { Amount };

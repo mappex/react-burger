@@ -9,6 +9,9 @@ import {
   fetchIngredients,
 } from '../../services/reducers/ingredients';
 import {
+  subscribeForOrders,
+} from '../../services/reducers/orders';
+import {
   useAppDispatch,
   useAppSelector,
 } from '../../services/store';
@@ -28,11 +31,15 @@ const App = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    dispatch(doAutoLogin());
+  }, [dispatch]);
+
+  useEffect(() => {
     dispatch(fetchIngredients());
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(doAutoLogin());
+    dispatch(subscribeForOrders());
   }, [dispatch]);
 
   if (![AutoLoginPhase.fulfilled, AutoLoginPhase.rejected].includes(autoLoginPhase)) {

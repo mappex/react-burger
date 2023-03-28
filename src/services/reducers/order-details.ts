@@ -5,15 +5,17 @@ import {
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 import {
-  Ingredient_t,
-  OrderDetails_t,
+  TIngredient,
+  TOrderDetails,
 } from '../../utils/types';
+import { getAccessSchemaAndToken } from '../helpers';
+
 import {
   fetchCreateOrder as apiCreateOrder,
 } from '../api';
 
 const initialState: Readonly<{
-  orderDetails: OrderDetails_t | null;
+  orderDetails: TOrderDetails | null;
   orderDetailsError: unknown | null;
   orderDetailsRequest: boolean;
 }> = {
@@ -22,14 +24,23 @@ const initialState: Readonly<{
   orderDetailsRequest: false,
 };
 
-export const createOrder = createAsyncThunk('order/createOrder', (ingredients: Ingredient_t['_id'][]) => {
+export const createOrder = createAsyncThunk('order/createOrder', (ingredients: TIngredient['_id'][]) => {
+  const { accessSchema, accessToken } = getAccessSchemaAndToken();
+
   if (ingredients.length === 0) {
     throw new Error(
       'Unable to place an order for the empty ingredients list',
     );
   }
 
-  return apiCreateOrder(ingredients);
+  if (!accessSchema || !accessToken) {
+    throw new Error('Action cannot be handled');
+  }
+
+  return apiCreateOrder({
+    ingredients,
+    auth: { accessSchema, accessToken },
+  });
 });
 
 export const orderDetailsSlice = createSlice({
@@ -55,7 +66,7 @@ export const orderDetailsSlice = createSlice({
           orderDetailsRequest: true,
         });
       })
-      .addCase(createOrder.fulfilled, (state, { payload: orderDetails }: PayloadAction<OrderDetails_t>) => {
+      .addCase(createOrder.fulfilled, (state, { payload: orderDetails }: PayloadAction<TOrderDetails>) => {
         Object.assign(state, {
           orderDetails,
           orderDetailsRequest: false,

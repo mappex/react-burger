@@ -28,9 +28,12 @@ import {
 import styles from '../index.module.css';
 import l from '../../../utils/lang';
 
-const Profile = () => {
+const emptyUser = { email: '', name: '' };
+
+const UserProfile = () => {
   const dispatch = useAppDispatch();
-  const { user: { name, email }, updateUserDataPhase } = useAppSelector(getUser);
+  const { user, updateUserDataPhase } = useAppSelector(getUser);
+  const { name, email } =  user  || emptyUser;
 
   const [state, setState] = useState({
     name: name,
@@ -102,4 +105,4 @@ const Profile = () => {
   );
 };
 
-export { Profile };
+export { UserProfile };

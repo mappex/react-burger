@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import cs from 'classnames';
 import {
   DragPreviewImage,
@@ -14,14 +13,20 @@ import styles from './index.module.css';
 import l from '../../../../utils/lang';
 
 import {
-  Ingredient_t,
+  TIngredient,
   DraggableTypes,
   ActualIngredientType,
-  ActualIngredientDragItem,
+  TActualIngredientDragItem,
 } from '../../../../utils/types';
 
-import { useAppDispatch } from '../../../../services/store';
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../../../services/store';
 import { moveIngredient } from '../../../../services/reducers/ingredients';
+import {
+  getOrderDetails,
+} from '../../../../services/selectors';
 
 const BurgerConstructorItem = ({
   className,
@@ -34,29 +39,32 @@ const BurgerConstructorItem = ({
 }: {
   className?: string;
   index?: number;
-  ingredient: Ingredient_t;
+  ingredient: TIngredient;
   isLocked: boolean;
   onShowIngredientInfo?: () => void;
   onDelete?: () => void;
   type?: ActualIngredientType;
 }) => {
   const dispatch = useAppDispatch();
+  const orderDetailsRequest = useAppSelector(getOrderDetails);
+
   const [{ isItPicked }, dragRef, preview] = useDrag({
     type: DraggableTypes.ACTUALINGREDIENT,
-    canDrag: !isLocked,
+    canDrag: !isLocked && !orderDetailsRequest,
     item: {
       index,
-    } as ActualIngredientDragItem,
+    } as TActualIngredientDragItem,
     collect(monitor) {
       return {
         isItPicked: monitor.isDragging(),
       };
     },
   });
+
   const [{ isCanDrop, isDragOver }, dropRef] = useDrop({
     accept: DraggableTypes.ACTUALINGREDIENT,
     canDrop() {
-      return !isLocked;
+      return !isLocked && !orderDetailsRequest;
     },
     collect(monitor) {
       return {
@@ -64,8 +72,8 @@ const BurgerConstructorItem = ({
         isDragOver: monitor.isOver(),
       };
     },
-    hover(item: ActualIngredientDragItem) {
-      const { index: draggableIndex } = item as ActualIngredientDragItem;
+    hover(item: TActualIngredientDragItem) {
+      const { index: draggableIndex } = item as TActualIngredientDragItem;
 
       if (index === draggableIndex) {
         return;
@@ -125,20 +133,6 @@ const BurgerConstructorItem = ({
       </div>
     </div>
   );
-};
-
-BurgerConstructorItem.propTypes = {
-  className: PropTypes.string,
-  id: PropTypes.string,
-  index: PropTypes.number,
-  ingredient: PropTypes.object.isRequired,
-  isLocked: PropTypes.bool.isRequired,
-  onShowIngredientInfo: PropTypes.func,
-  onDelete: PropTypes.func,
-  type: PropTypes.oneOf([
-    ActualIngredientType.TOP,
-    ActualIngredientType.BOTTOM,
-  ]),
 };
 
 export default BurgerConstructorItem;

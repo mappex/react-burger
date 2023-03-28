@@ -1,5 +1,4 @@
 import cs from 'classnames';
-import PropTypes from 'prop-types';
 import {
   DragPreviewImage,
   useDrag,
@@ -11,9 +10,9 @@ import styles from './index.module.css';
 import { Amount } from '../../../amount';
 
 import {
-  Ingredient_t,
+  TIngredient,
   DraggableTypes,
-  IngredientDragItem,
+  TIngredientDragItem,
 } from '../../../../utils/types';
 import { useAppSelector } from '../../../../services/store';
 import { getIngredients } from '../../../../services/selectors';
@@ -22,7 +21,7 @@ const BurgerIngredient = ({
   ingredient: { _id, image, name: title, price, type },
   onClick,
 }: {
-  ingredient: Ingredient_t;
+  ingredient: TIngredient;
   onClick?: () => void;
 }) => {
   const { idToActualIngredientsCountMap } = useAppSelector(getIngredients);
@@ -35,7 +34,7 @@ const BurgerIngredient = ({
     item: {
       refId: _id,
       type,
-    } as IngredientDragItem,
+    } as TIngredientDragItem,
     collect(monitoring) {
       return {
         isItPicked: monitoring.isDragging(),
@@ -72,11 +71,6 @@ const BurgerIngredient = ({
       </div>
     </li>
   );
-};
-
-BurgerIngredient.propTypes = {
-  ingredient: PropTypes.object.isRequired,
-  onClick: PropTypes.func,
 };
 
 export default BurgerIngredient;

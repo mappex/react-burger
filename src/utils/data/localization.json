@@ -47,6 +47,13 @@
   "cancel": {"ru":"Отмена","en":"Cancel"},
   "exit": {"ru":"Выход","en":"Exit"},
   "restore": {"ru":"Восстановить","en":"Restore"},
-  "enter_email": {"ru":"Укажите e-mail","en":"Enter e-mail"}
+  "enter_email": {"ru":"Укажите e-mail","en":"Enter e-mail"},
+  "order_created": {"ru":"Создан","en":"Created"},
+  "order_pending": {"ru":"В работе","en":"Pending"},
+  "order_done": {"ru":"Готов","en":"Done"},
+  "order_details": {"ru":"Информация о заказе","en":"information about order"},
+  "order_ingredients": {"ru":"Состав","en":"Compound"},
+  "order_total_count": {"ru":"Выполнено за все время","en":"Completed for all time"},
+  "order_today_total_count": {"ru":"Выполнено за сегодня","en":"Completed today"},
+  "order_no_information": {"ru":"Нет информации","en":"No information"}
 }
-

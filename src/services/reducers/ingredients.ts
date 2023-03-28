@@ -7,8 +7,8 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import {
   IngredientType,
   ActualIngredientType,
-  Ingredient_t,
-  ActualIngredient_t,
+  TIngredient,
+  TActualIngredient,
 } from '../../utils/types';
 
 import {
@@ -16,10 +16,10 @@ import {
 } from '../api';
 
 const initialState: Readonly<{
-  actualIngredients: ActualIngredient_t[];
-  idToIngredientMap: { [key: string]: Ingredient_t };
+  actualIngredients: TActualIngredient[];
+  idToIngredientMap: { [key: string]: TIngredient };
   idToActualIngredientsCountMap: { [key: string]: number };
-  ingredients: Ingredient_t[];
+  ingredients: TIngredient[];
   ingredientsError: unknown | null;
   ingredientsRequest: boolean;
 }> = {
@@ -97,7 +97,7 @@ export const ingredientsSlice = createSlice({
 
       state.actualIngredients = actualIngredients;
     },
-    removeIngredient(state, { payload: idToRemove }: PayloadAction<ActualIngredient_t['id']>) {
+    removeIngredient(state, { payload: idToRemove }: PayloadAction<TActualIngredient['id']>) {
       const { actualIngredients } = state;
       const removableIngredients = state.actualIngredients.slice(1, -1);
 
@@ -119,7 +119,7 @@ export const ingredientsSlice = createSlice({
           ingredientsRequest: true,
         });
       })
-      .addCase(fetchIngredients.fulfilled, (state, { payload: ingredients }: PayloadAction<Ingredient_t[]>) => {
+      .addCase(fetchIngredients.fulfilled, (state, { payload: ingredients }: PayloadAction<TIngredient[]>) => {
         const idToIngredientMap: InitialState_t['idToIngredientMap'] = {};
 
         ingredients.forEach((ingredient) => {

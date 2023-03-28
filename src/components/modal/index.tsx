@@ -8,7 +8,6 @@ import {
   KeyboardEvent,
   MutableRefObject,
 } from 'react';
-import PropTypes from 'prop-types';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styles from './index.module.css';
@@ -67,16 +66,6 @@ const Modal = ({
       </div>
     </>
   );
-};
-
-Modal.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]),
-  className: PropTypes.string,
-  onClose: PropTypes.func.isRequired,
-  title: PropTypes.string,
 };
 
 export { Modal };
