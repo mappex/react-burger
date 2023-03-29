@@ -1,4 +1,7 @@
-import { FC, useEffect } from 'react';
+import {
+  FC,
+  useEffect,
+} from 'react';
 import { Navigate } from 'react-router-dom';
 
 import {

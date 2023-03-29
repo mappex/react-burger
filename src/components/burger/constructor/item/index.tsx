@@ -40,7 +40,7 @@ const BurgerConstructorItem: FC<{
 }> = ({
   className,
   index,
-  ingredient: { _id, image, name, price },
+  ingredient: { image, name, price },
   isLocked,
   onShowIngredientInfo,
   onDelete,

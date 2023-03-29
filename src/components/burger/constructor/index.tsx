@@ -3,7 +3,6 @@ import { FC,
   useCallback,
 } from 'react';
 import { useDrop } from 'react-dnd';
-import { v4 as uuidV4 } from 'uuid';
 import cs from 'classnames';
 import {
   useNavigate,
@@ -40,8 +39,6 @@ import {
   getIngredients,
   getOrderDetails,
 } from '../../../services/selectors';
-
-const generateIngredientId = () => uuidV4();
 
 const BurgerConstructor: FC<{ className?: string }> = ({ className }) => {
   const dispatch = useAppDispatch();

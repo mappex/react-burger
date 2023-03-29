@@ -70,7 +70,10 @@ export const useOrderIngredients = ({
       ingredientQuantityPairs: ingredientQuantityPairs.slice(0, limit),
       isItValid: true,
       moreIngredientsCount: limit < ingredientQuantityPairs.length ? ingredientQuantityPairs.length - limit : 0,
-      totalPrice: ingredientQuantityPairs.reduce((result, [{ price }, quantity]) => result + price * quantity, 0),
+      totalPrice: ingredientQuantityPairs.reduce(
+        (result, [{ price }, quantity]) => result + (price * quantity),
+        0,
+      ),
     };
   }, [idToIngredientMap, limit, order]);
 };

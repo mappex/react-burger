@@ -98,6 +98,7 @@ export const doAutoLogin = createAsyncThunk('user/doAutoLogin', async () => {
 
   try {
     return await apiAuthUserDataUpdate({ auth: { accessSchema, accessToken } });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     if (error.message !== 'jwt expired') {
       throw error;
@@ -187,6 +188,7 @@ export const updateUserData = createAsyncThunk('user/updateUserData', async ({
         password,
       },
     });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     if (error.message !== 'jwt expired') {
       throw error;

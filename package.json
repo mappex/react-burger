@@ -2,6 +2,7 @@
   "name": "react-burger",
   "version": "0.1.0",
   "private": true,
+  "homepage": "./",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -10,7 +11,9 @@
     "format": "prettier-eslint --list-different $PWD/'src/**/*.{js,jsx}'; prettier-eslint --write $PWD/'src/**/*.{js,jsx}'",
     "lint": "eslint ./src/** --ext .{js,jsx} -c .eslintrc --no-error-on-unmatched-pattern",
     "lint:fix": "eslint ./src/** --ext .{js,jsx} -c .eslintrc --no-error-on-unmatched-pattern --fix",
-    "cypress:open": "./node_modules/.bin/cypress open"
+    "cypress:open": "./node_modules/.bin/cypress open",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.3",
@@ -69,6 +72,7 @@
     "eslint-plugin-promise": "6.1.1",
     "eslint-plugin-react": "7.32.2",
     "fetch-mock": "^9.11.0",
+    "gh-pages": "^5.0.0",
     "jest": "^29.5.0",
     "react-hook-form": "^7.43.7",
     "react-test-renderer": "^18.2.0",
