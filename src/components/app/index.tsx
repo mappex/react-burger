@@ -1,4 +1,7 @@
-import { useEffect } from 'react';
+import {
+  FC,
+  useEffect,
+} from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
 import {
@@ -25,7 +28,7 @@ import AppHeader from '../app-header';
 
 import style from './index.module.css';
 
-const App = () => {
+const App: FC = () => {
   const { ingredientsError, ingredientsRequest } = useAppSelector(getIngredients);
   const { autoLoginPhase } = useAppSelector(getUser);
   const dispatch = useAppDispatch();

@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import cs from 'classnames';
 
 import { Amount } from '../../../amount';
@@ -8,13 +9,10 @@ import styles from './index.module.css';
 
 const ingredientAndPriceCls = 'ingredient-and-price';
 
-const IngredientAndPrice = ({
-  ingredient,
-  quantity,
-}: {
+const IngredientAndPrice: FC<{
   ingredient: TIngredient;
   quantity: number;
-}) => (
+}> = ({ ingredient, quantity }) => (
   <li
     className = { cs(
       styles[ingredientAndPriceCls],

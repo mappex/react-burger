@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import {
   Logo,
   BurgerIcon,
@@ -15,7 +16,7 @@ import r from '../../utils/routes';
 
 import MenuItem from './menu-item';
 
-const AppHeader = () => {
+const AppHeader: FC = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 

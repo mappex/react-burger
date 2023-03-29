@@ -1,4 +1,4 @@
-import {
+import { FC,
   useMemo,
   useCallback,
 } from 'react';
@@ -43,7 +43,7 @@ import {
 
 const generateIngredientId = () => uuidV4();
 
-const BurgerConstructor = ({ className }: { className?: string }) => {
+const BurgerConstructor: FC<{ className?: string }> = ({ className }) => {
   const dispatch = useAppDispatch();
   const {
     actualIngredients,
@@ -88,10 +88,7 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
       const { refId } = item as TIngredientDragItem;
 
       if (!orderDetailsRequest) {
-        dispatch(addIngredient({
-          id: generateIngredientId(),
-          ingredient: idToIngredientMap[refId],
-        }));
+        dispatch(addIngredient(idToIngredientMap[refId]));
       }
     },
     collect(monitor) {
@@ -104,6 +101,7 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
 
   return (
     <div
+      data-test-id = 'burger-constructor'
       className = { cs(
         styles['burger-constructor'],
         'pt-25 pb-5',
@@ -142,7 +140,9 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
               <div className = { 'pt-4' } />
             </>)
         }
-        <div className = { styles['burger-constructor__filling'] }>
+        <div
+          data-test-id = 'burger-constructor-filling'
+          className = { styles['burger-constructor__filling'] }>
           {
             actualIngredients
               .slice(1, -1)
@@ -199,7 +199,9 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
             </>)
         }
       </div>
-      <div className = { `${styles['burger-constructor__total-wrapper']} pt-10` }>
+      <div
+        className = { cs(styles['burger-constructor__total-wrapper'], 'pt-10') }
+        data-test-id = 'total-wrapper'>
         <Amount
           amount = { totalAmount }
           className = { styles['burger-constructor__total'] }

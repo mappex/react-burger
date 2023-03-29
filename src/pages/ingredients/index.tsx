@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import {
   Navigate,
   useParams,
@@ -12,7 +13,7 @@ import {
 import styles from './index.module.css';
 import r from '../../utils/routes';
 
-const IngredientsPage = () => {
+const IngredientsPage: FC = () => {
   const { id } = useParams() as { id: string };
   const { idToIngredientMap, ingredientsRequest } = useAppSelector(getIngredients);
 

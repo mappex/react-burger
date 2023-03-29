@@ -9,6 +9,7 @@ import {
   TAuthUserResponse,
   IRefreshTokensResponse,
 } from '../../utils/types';
+import { UserReducerInitialStateType } from '../reducers/user';
 
 const authRefreshTokenKey = 'authRefreshToken';
 const cookiesCtrl = new Cookies();
@@ -74,12 +75,17 @@ export const getAuthHeaderValue = (): string | undefined => {
   }
 };
 
-export const setUser = (state: any, user: any) => {
+type Writeable<T> = { -readonly [P in keyof T]: T[P] };
+
+export const setUser = (
+  state: Writeable<UserReducerInitialStateType>,
+  user: NonNullable<UserReducerInitialStateType['user']>,
+) => {
   state.user = user;
   state.userTimeStamp = new Date().getTime();
 };
 
-export const resetUser = (state: any) => {
+export const resetUser = (state: Writeable<UserReducerInitialStateType>) => {
   delete state.user;
   delete state.userTimeStamp;
 };

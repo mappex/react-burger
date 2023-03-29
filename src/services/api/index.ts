@@ -84,7 +84,7 @@ export const fetchCreateOrder = async ({
 
 /* AUTH ***************************************************************************************************************/
 // Login
-interface IAuthLoginRequestParams {
+export interface IAuthLoginRequestParams {
   email: string;
   password: string;
 }
@@ -157,7 +157,7 @@ export const fetchAuthTokens = async ({
 };
 
 // Register
-interface IAuthRegisterRequestParams {
+export interface IAuthRegisterRequestParams {
   email: string;
   name: string;
   password: string;

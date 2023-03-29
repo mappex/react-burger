@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import cs from 'classnames';
 
 import { TIngredient } from '../../../utils/types';
@@ -11,17 +12,12 @@ export enum IngredientIconRenderType {
 
 const ingredientIconCls = 'ingredient-icon';
 
-const IngredientIcon = ({
-  className,
-  ingredient,
-  moreIngredientsCount,
-  tag,
-}: {
+const IngredientIcon: FC<{
   className?: string;
   ingredient: TIngredient;
   moreIngredientsCount?: number;
   tag?: IngredientIconRenderType;
-}) => {
+}> = ({ className, ingredient, moreIngredientsCount, tag }) => {
   const Tag = tag!;
 
   return (
@@ -44,6 +40,10 @@ const IngredientIcon = ({
       ) : null }
     </Tag>
   );
+};
+
+IngredientIcon.defaultProps = {
+  tag: IngredientIconRenderType.div,
 };
 
 export { IngredientIcon };

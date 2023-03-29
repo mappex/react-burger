@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import {
   Link,
   Outlet,
@@ -15,7 +16,7 @@ import styles from './index.module.css';
 import l from '../../utils/lang';
 import r from '../../utils/routes';
 
-const ProfilePage = () => {
+const ProfilePage: FC = () => {
   const dispatch = useAppDispatch();
   const { pathname } = useLocation();
 

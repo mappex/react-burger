@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import cs from 'classnames';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend as Html5Backend } from 'react-dnd-html5-backend';
@@ -22,7 +23,7 @@ import {
 
 const MainPageCls = 'main-page';
 
-const MainPage = () => {
+const MainPage: FC = () => {
   const { orderDetails } = useAppSelector(getOrderDetails);
   const dispatch = useAppDispatch();
 

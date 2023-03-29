@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import cs from 'classnames';
 
 import { TOrderDetails } from '../../utils/types';
@@ -10,13 +11,10 @@ import l from '../../utils/lang';
 
 const placedOrderDetailsCls = 'placed-order-details';
 
-const PlacedOrderDetails = ({
-  className,
-  orderDetails: { id, status, message },
-}: {
+const PlacedOrderDetails: FC<{
   className?: string;
   orderDetails: TOrderDetails;
-}) => (
+}> = ({ className, orderDetails: { id, status, message } }) => (
   <div className = { cs(styles[placedOrderDetailsCls], className) }>
     <div
       className = { cs(

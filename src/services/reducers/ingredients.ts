@@ -3,6 +3,7 @@ import {
   createAsyncThunk,
 } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import { v4 as uuidV4 } from 'uuid';
 
 import {
   IngredientType,
@@ -14,6 +15,8 @@ import {
 import {
   fetchIngredients as apiFetchIngredients,
 } from '../api';
+
+const generateIngredientId = () => uuidV4();
 
 const initialState: Readonly<{
   actualIngredients: TActualIngredient[];
@@ -31,11 +34,11 @@ const initialState: Readonly<{
   ingredientsRequest: true,
 };
 
-type InitialState_t = typeof initialState;
+export type TInitialState = typeof initialState;
 
 const buildIdToActualIngredientsCountMap =  ({
   actualIngredients,
-}: InitialState_t): InitialState_t['idToActualIngredientsCountMap'] => actualIngredients
+}: TInitialState): TInitialState['idToActualIngredientsCountMap'] => actualIngredients
   .reduce((map, actualIngredient) => {
     if (Object.prototype.hasOwnProperty.call(map, actualIngredient.refId)) {
       map[actualIngredient.refId] += 1;
@@ -44,7 +47,7 @@ const buildIdToActualIngredientsCountMap =  ({
     }
 
     return map;
-  }, {} as InitialState_t['idToActualIngredientsCountMap']);
+  }, {} as TInitialState['idToActualIngredientsCountMap']);
 
 export const fetchIngredients = createAsyncThunk('ingredients/fetchIngredients', apiFetchIngredients);
 
@@ -52,7 +55,7 @@ export const ingredientsSlice = createSlice({
   name: 'ingredients',
   initialState,
   reducers: {
-    addIngredient(state, { payload: { id, ingredient } }) {
+    addIngredient(state, { payload: ingredient }) {
       const { actualIngredients } = state;
       const { _id, type } = ingredient;
 
@@ -61,7 +64,7 @@ export const ingredientsSlice = createSlice({
           ActualIngredientType.TOP,
           ActualIngredientType.BOTTOM,
         ].map(item => ({
-          id,
+          id: generateIngredientId(),
           type: item,
           isLocked: true,
           refId: _id,
@@ -72,11 +75,11 @@ export const ingredientsSlice = createSlice({
           ...actualIngredients.slice(1, -1),
           bottomBun,
         ];
-      } else {
+      } else if (actualIngredients.length > 0) {
         const newValue = [...actualIngredients];
 
         newValue.splice(-1, 0, {
-          id,
+          id: generateIngredientId(),
           refId: _id,
         });
 
@@ -86,7 +89,20 @@ export const ingredientsSlice = createSlice({
       state.idToActualIngredientsCountMap = buildIdToActualIngredientsCountMap(state);
     },
     moveIngredient(state, { payload: [fromIndex, toIndex] }: PayloadAction<[number, number]>) {
+      if (fromIndex === toIndex) {
+        return;
+      }
+
+      if (fromIndex < 1 || toIndex < 1) {
+        return;
+      }
+
       const { actualIngredients: actualIngredientsFromState } = state;
+
+      if (fromIndex >= actualIngredientsFromState.length - 1 || toIndex >= actualIngredientsFromState.length - 1) {
+        return;
+      }
+
       const actualIngredients = [...actualIngredientsFromState];
 
       actualIngredients.splice(
@@ -120,7 +136,7 @@ export const ingredientsSlice = createSlice({
         });
       })
       .addCase(fetchIngredients.fulfilled, (state, { payload: ingredients }: PayloadAction<TIngredient[]>) => {
-        const idToIngredientMap: InitialState_t['idToIngredientMap'] = {};
+        const idToIngredientMap: TInitialState['idToIngredientMap'] = {};
 
         ingredients.forEach((ingredient) => {
           idToIngredientMap[ingredient._id] = ingredient;
@@ -141,10 +157,12 @@ export const ingredientsSlice = createSlice({
   },
 });
 
+const { reducer } = ingredientsSlice;
+
+export { reducer as ingredientsReducer };
+
 export const {
   addIngredient,
   moveIngredient,
   removeIngredient,
 } = ingredientsSlice.actions;
-
-export default ingredientsSlice.reducer;

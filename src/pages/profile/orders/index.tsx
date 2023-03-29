@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { FC, useEffect } from 'react';
 
 import { Feed } from '../../../components/feed';
 
@@ -12,7 +12,7 @@ import {
 } from '../../../services/store';
 import { getOrders } from '../../../services/selectors';
 
-const OrdersProfile = () => {
+const OrdersProfile: FC = () => {
   const dispatch = useAppDispatch();
   const { orders } = useAppSelector(getOrders);
 

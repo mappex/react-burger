@@ -25,13 +25,13 @@ const initialState: Readonly<{
 };
 
 export const createOrder = createAsyncThunk('order/createOrder', (ingredients: TIngredient['_id'][]) => {
-  const { accessSchema, accessToken } = getAccessSchemaAndToken();
-
   if (ingredients.length === 0) {
     throw new Error(
       'Unable to place an order for the empty ingredients list',
     );
   }
+
+  const { accessSchema, accessToken } = getAccessSchemaAndToken();
 
   if (!accessSchema || !accessToken) {
     throw new Error('Action cannot be handled');
@@ -81,8 +81,10 @@ export const orderDetailsSlice = createSlice({
   },
 });
 
+const { reducer } = orderDetailsSlice;
+
+export { reducer as orderDetailsReducer };
+
 export const {
   resetOrderDetails,
 } = orderDetailsSlice.actions;
-
-export default orderDetailsSlice.reducer;

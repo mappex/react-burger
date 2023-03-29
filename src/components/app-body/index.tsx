@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import cs from 'classnames';
 import {
   Route,
@@ -38,7 +39,7 @@ import {
   getUser,
 } from '../../services/selectors';
 
-const AppBody = () => {
+const AppBody: FC = () => {
   const navigate = useNavigate();
   const { userTimeStamp } = useAppSelector(getUser);
   const { state: locationState } = useLocation() as {

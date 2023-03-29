@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import cs from 'classnames';
 import {
   DragPreviewImage,
@@ -17,13 +18,10 @@ import {
 import { useAppSelector } from '../../../../services/store';
 import { getIngredients } from '../../../../services/selectors';
 
-const BurgerIngredient = ({
-  ingredient: { _id, image, name: title, price, type },
-  onClick,
-}: {
+const BurgerIngredient: FC<{
   ingredient: TIngredient;
   onClick?: () => void;
-}) => {
+}> = ({ ingredient: { _id, image, name: title, price, type }, onClick }) => {
   const { idToActualIngredientsCountMap } = useAppSelector(getIngredients);
 
   const [{ isItPicked }, dragRef, preview] = useDrag({
@@ -45,6 +43,7 @@ const BurgerIngredient = ({
   return (
     <li
       ref = { dragRef }
+      data-test-id = 'burger-ingredient'
       className = { cs(styles['burger-ingredient'], {
         [styles['burger-ingredient_interactive']]: onClick,
         [styles['burger-ingredient_is-picked']]: isItPicked,

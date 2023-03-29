@@ -1,3 +1,4 @@
+import React, { FC } from 'react';
 import cs from 'classnames';
 import {
   useNavigate,
@@ -14,13 +15,10 @@ import styles from './index.module.css';
 
 const orderCls = 'order';
 
-const Order = ({
-  order,
-  renderStatus,
-}: {
+const Order: FC<{
   order: OrderType;
   renderStatus?: boolean;
-}) => {
+}> = ({ order, renderStatus }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
