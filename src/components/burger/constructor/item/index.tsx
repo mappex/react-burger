@@ -47,7 +47,7 @@ const BurgerConstructorItem: FC<{
   type,
 }) => {
   const dispatch = useAppDispatch();
-  const orderDetailsRequest = useAppSelector(getOrderDetails);
+  const { orderDetailsRequest } = useAppSelector(getOrderDetails);
 
   const [{ isItPicked }, dragRef, preview] = useDrag({
     type: DraggableTypes.ACTUALINGREDIENT,
