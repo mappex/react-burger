@@ -2,7 +2,6 @@ import React, { FC } from 'react';
 import cs from 'classnames';
 import {
   useNavigate,
-  useLocation,
 } from 'react-router-dom';
 
 import { OrderStatus } from '../../order/status';
@@ -20,7 +19,6 @@ const Order: FC<{
   renderStatus?: boolean;
 }> = ({ order, renderStatus }) => {
   const navigate = useNavigate();
-  const location = useLocation();
 
   return (
     <li
@@ -28,7 +26,7 @@ const Order: FC<{
       onClick = { () => {
         navigate(`/feed/${order._id}`, {
           state: {
-            background: location,
+            background: true,
           },
         });
       } }>
