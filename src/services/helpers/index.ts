@@ -9,7 +9,7 @@ import {
   TAuthUserResponse,
   IRefreshTokensResponse,
 } from '../../utils/types';
-import { UserReducerInitialStateType } from '../reducers/user';
+import { TInitialState as UserReducerInitialStateType } from '../reducers/user';
 
 const authRefreshTokenKey = 'authRefreshToken';
 const cookiesCtrl = new Cookies();

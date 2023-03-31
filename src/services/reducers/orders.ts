@@ -14,7 +14,7 @@ import {
 } from '../helpers';
 import { WsActionTypes } from '../middleware';
 
-const initialState: Readonly<{
+export const initialState: Readonly<{
   orders: Order[];
   total?: number;
   totalToday?: number;
@@ -23,6 +23,8 @@ const initialState: Readonly<{
   orders: [],
   userOrders: [],
 };
+
+export type TInitialState = typeof initialState;
 
 const chunkCodeToUrlMap: {
   orders: string;

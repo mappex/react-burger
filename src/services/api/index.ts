@@ -39,16 +39,27 @@ const checkReponse = (response: Response) => {
   });
 };
 
+interface ICheckSuccessResponse {
+  success: boolean;
+  data: any;
+}
+
+const checkSuccess = (response: ICheckSuccessResponse) => {
+  if (response && response.success) {
+    return response.data;
+  }
+
+  throw new Error('Can\'t get data from server');
+};
+
 /* INGREDIENTS ********************************************************************************************************/
 // GET
 export const fetchIngredients = async (): Promise<TIngredient[]> => {
-  const response = await fetch(`${API_HOST}/api/ingredients`).then(checkReponse);
+  const response = await fetch(`${API_HOST}/api/ingredients`)
+    .then(checkReponse)
+    .then(checkSuccess);
 
-  if (response.success !== true) {
-    throw new Error('Can\'t get data from server');
-  }
-
-  return response.data;
+  return response;
 };
 
 /* ORDERS *************************************************************************************************************/
@@ -69,11 +80,9 @@ export const fetchCreateOrder = async ({
 
     },
     method: 'POST',
-  }).then(checkReponse);
-
-  if (response.success !== true) {
-    throw new Error('Can\'t get data from server');
-  }
+  })
+    .then(checkReponse)
+    .then(checkSuccess);
 
   return {
     id: response.order.number,
@@ -98,11 +107,9 @@ export const fetchAuthLogin = async ({
       'Content-Type': 'application/json;charset=utf-8',
     },
     method: 'POST',
-  }).then(checkReponse);
-
-  if (response.success !== true) {
-    throw new Error('Can\'t get data from server');
-  }
+  })
+    .then(checkReponse)
+    .then(checkSuccess);
 
   const {
     user: {
@@ -124,17 +131,15 @@ export const fetchAuthLogin = async ({
 export const fetchAuthLogout = async ({
   refreshToken: token,
 }: Pick<IRefreshTokensResponse, 'refreshToken'>): Promise<void> => {
-  const response = await fetch(`${API_HOST}/api/auth/logout`, {
+  await fetch(`${API_HOST}/api/auth/logout`, {
     body: JSON.stringify({ token }),
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
     },
     method: 'POST',
-  }).then(checkReponse);
-
-  if (response.success !== true) {
-    throw new Error('Can\'t get data from server');
-  }
+  })
+    .then(checkReponse)
+    .then(checkSuccess);
 };
 
 // Token
@@ -147,11 +152,9 @@ export const fetchAuthTokens = async ({
       'Content-Type': 'application/json;charset=utf-8',
     },
     method: 'POST',
-  }).then(checkReponse);
-
-  if (response.success !== true) {
-    throw new Error('Can\'t get data from server');
-  }
+  })
+    .then(checkReponse)
+    .then(checkSuccess);
 
   return getAccessSchemaAndTokenAndRefreshToken(response);
 };
@@ -173,11 +176,9 @@ export const fetchAuthRegister = async ({
       'Content-Type': 'application/json;charset=utf-8',
     },
     method: 'POST',
-  }).then(checkReponse);
-
-  if (response.success !== true) {
-    throw new Error('Can\'t get data from server');
-  }
+  })
+    .then(checkReponse)
+    .then(checkSuccess);
 
   const {
     refreshToken,
@@ -215,11 +216,9 @@ export const fetchAuthUserData = async ({
       Authorization: `${accessSchema} ${accessToken}`,
     },
     method: 'GET',
-  }).then(checkReponse);
-
-  if (response.success !== true) {
-    throw new Error(response.message || 'Can\'t get data from server');
-  }
+  })
+    .then(checkReponse)
+    .then(checkSuccess);
 
   return response.user;
 };
@@ -244,11 +243,9 @@ export const fetchAuthUserDataUpdate = async ({
       Authorization: `${accessSchema} ${accessToken}`,
     },
     method: 'PATCH',
-  }).then(checkReponse);
-
-  if (response.success !== true) {
-    throw new Error(response.message || 'Can\'t get data from server');
-  }
+  })
+    .then(checkReponse)
+    .then(checkSuccess);
 
   return {
     user: response.user,
@@ -263,17 +260,15 @@ interface IPasswordResetForEmailRequestParams {
 export const fetchPasswordResetForEmail = async ({
   email,
 }: IPasswordResetForEmailRequestParams): Promise<void> => {
-  const response = await fetch(`${API_HOST}/api/password-reset`, {
+  await fetch(`${API_HOST}/api/password-reset`, {
     body: JSON.stringify({ email }),
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
     },
     method: 'POST',
-  }).then(checkReponse);
-
-  if (response.success !== true) {
-    throw new Error('Can\'t get data from server');
-  }
+  })
+    .then(checkReponse)
+    .then(checkSuccess);
 };
 
 // Reset password
@@ -285,15 +280,13 @@ export const fetchPasswordNew = async ({
   password,
   token,
 }: IPasswordNewRequestParams): Promise<void> => {
-  const response = await fetch(`${API_HOST}/api/password-reset/reset`, {
+  await fetch(`${API_HOST}/api/password-reset/reset`, {
     body: JSON.stringify({ password, token }),
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
     },
     method: 'POST',
-  }).then(checkReponse);
-
-  if (response.success !== true) {
-    throw new Error('Can\'t get data from server');
-  }
+  })
+    .then(checkReponse)
+    .then(checkSuccess);
 };

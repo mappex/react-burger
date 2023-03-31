@@ -4,11 +4,11 @@ import Cookies from 'universal-cookie';
 import * as apiModule from '../api';
 import { TAuthUserResponse } from '../../utils/types';
 import {
+  initialState,
   AutoLoginPhase,
   doAutoLogin,
   login,
   logout,
-  PasswordResettingPhase,
   registerUser,
   updateUserData,
   UpdateUserDataPhase,
@@ -27,14 +27,6 @@ jest.mock('../api', () => ({
 }));
 
 describe('user reducer', () => {
-  const initialState = Object.freeze({
-    autoLoginPhase: AutoLoginPhase.initial,
-    passwordResettingPhase: PasswordResettingPhase.initial,
-    userLoginPhase: UserLoginPhase.initial,
-    userRegistrationPhase: UserRegistrationPhase.initial,
-    updateUserDataPhase: UpdateUserDataPhase.initial,
-  });
-
   afterAll(() => {
     jest.unmock('../api');
   });

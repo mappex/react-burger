@@ -9,4 +9,7 @@ export default defineConfig({
     },
     baseUrl: 'http://localhost:3000/',
   },
+  env: {
+    BASE_URL: 'https://norma.nomoreparties.space/api'
+  }
 })

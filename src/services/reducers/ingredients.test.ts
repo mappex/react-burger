@@ -4,6 +4,7 @@ import { v4 } from 'uuid';
 import { IngredientType } from '../../utils/types';
 import * as apiModule from '../api';
 import {
+  initialState,
   addIngredient,
   ingredientsReducer,
   fetchIngredients,
@@ -64,15 +65,6 @@ const aSauce = Object.freeze({
 });
 
 describe('burger reducer', () => {
-  const initialState = Object.freeze({
-    actualIngredients: [],
-    idToActualIngredientsCountMap: {},
-    idToIngredientMap: {},
-    ingredients: [],
-    ingredientsError: null,
-    ingredientsRequest: true,
-  });
-
   afterAll(() => {
     jest.unmock('uuid');
     jest.unmock('../api');

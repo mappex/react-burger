@@ -14,7 +14,7 @@ import {
   fetchCreateOrder as apiCreateOrder,
 } from '../api';
 
-const initialState: Readonly<{
+export const initialState: Readonly<{
   orderDetails: TOrderDetails | null;
   orderDetailsError: unknown | null;
   orderDetailsRequest: boolean;
@@ -23,6 +23,8 @@ const initialState: Readonly<{
   orderDetailsError: null,
   orderDetailsRequest: false,
 };
+
+export type TInitialState = typeof initialState;
 
 export const createOrder = createAsyncThunk('order/createOrder', (ingredients: TIngredient['_id'][]) => {
   if (ingredients.length === 0) {

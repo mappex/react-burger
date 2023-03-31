@@ -18,7 +18,7 @@ import {
 
 const generateIngredientId = () => uuidV4();
 
-const initialState: Readonly<{
+export const initialState: Readonly<{
   actualIngredients: TActualIngredient[];
   idToIngredientMap: { [key: string]: TIngredient };
   idToActualIngredientsCountMap: { [key: string]: number };

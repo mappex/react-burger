@@ -1,7 +1,7 @@
 describe('burger constructor functional tests', () => {
   beforeEach(() => {
     cy.visit('/');
-    cy.intercept('GET', 'https://norma.nomoreparties.space/api/ingredients', {
+    cy.intercept('GET', `${Cypress.env('BASE_URL')}/ingredients`, {
       fixture: 'ingredients.json',
     });
     cy.get('[data-test-id="burger-constructor"]').as('constructor');

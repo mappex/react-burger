@@ -1,5 +1,6 @@
 /* eslint-disable no-extra-parens */
 import {
+  initialState,
   ordersReducer,
   subscribeForOrders,
   subscribeForUserOrders,
@@ -7,11 +8,6 @@ import {
 } from './orders';
 
 describe('orders reducer', () => {
-  const initialState = Object.freeze({
-    orders: [],
-    userOrders: [],
-  });
-
   it('has initial state', () => {
     expect(ordersReducer(undefined, { type: 'some action' })).toEqual(
       initialState,

@@ -69,9 +69,8 @@ export enum AutoLoginPhase {
   rejected = 'rejected',
 }
 
-export type UserReducerInitialStateType = typeof initialState;
 
-const initialState: Readonly<{
+export const initialState: Readonly<{
   accessToken?: string;
   autoLoginPhase: AutoLoginPhase;
   passwordResettingPhase: PasswordResettingPhase;
@@ -88,6 +87,8 @@ const initialState: Readonly<{
   userRegistrationPhase: UserRegistrationPhase.initial,
   updateUserDataPhase: UpdateUserDataPhase.initial,
 };
+
+export type TInitialState = typeof initialState;
 
 export const doAutoLogin = createAsyncThunk('user/doAutoLogin', async () => {
   const { accessSchema, accessToken } = getAccessSchemaAndToken();

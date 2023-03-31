@@ -2,8 +2,9 @@
 import { IngredientType } from '../../utils/types';
 import * as apiModule from '../api';
 import {
-  orderDetailsReducer,
   createOrder,
+  initialState,
+  orderDetailsReducer,
 } from './order-details';
 
 jest.mock('../api', () => ({
@@ -41,12 +42,6 @@ const aSauce = Object.freeze({
 });
 
 describe('orderDetails reducer', () => {
-  const initialState = Object.freeze({
-    orderDetails: null,
-    orderDetailsError: null,
-    orderDetailsRequest: false,
-  });
-
   afterAll(() => {
     jest.unmock('../api');
   });
