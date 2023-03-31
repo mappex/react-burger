@@ -161,7 +161,7 @@ describe('burger constructor functional tests', () => {
       .eq(2)
       .trigger('drop', { force: true });
     // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(200).should(() => {
+    cy.wait(200).then(() => {
       const $ingredients = Cypress.$(
         SELECTORS.BURGER_CONSTRUCTOR_INGREDIENT
       );
