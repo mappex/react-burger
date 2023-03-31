@@ -37,7 +37,9 @@ const AppHeader: FC = () => {
             text = { l('order_feed') }
             isActive = {  pathname === r.feed }
             onClick = { () => navigate(r.feed) } />
-          <li className = { styles['app-header__logo-wrapper'] }>
+          <li
+            className = { styles['app-header__logo-wrapper'] }
+            onClick = { () => navigate(r.home) }>
             <Logo />
           </li>
           <MenuItem
