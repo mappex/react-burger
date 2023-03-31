@@ -28,7 +28,7 @@ const MainPage: FC = () => {
   const { orderDetails, orderDetailsRequest } = useAppSelector(getOrderDetails);
   const dispatch = useAppDispatch();
 
-  if (!orderDetailsRequest) {
+  if (orderDetailsRequest) {
     return <Loader />;
   }
 

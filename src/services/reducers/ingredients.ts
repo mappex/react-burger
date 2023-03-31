@@ -126,6 +126,12 @@ export const ingredientsSlice = createSlice({
         state.idToActualIngredientsCountMap = buildIdToActualIngredientsCountMap(state);
       }
     },
+    resetIngredients(state) {
+      Object.assign(state, {
+        actualIngredients: [],
+        idToActualIngredientsCountMap: {},
+      });
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -165,4 +171,5 @@ export const {
   addIngredient,
   moveIngredient,
   removeIngredient,
+  resetIngredients,
 } = ingredientsSlice.actions;

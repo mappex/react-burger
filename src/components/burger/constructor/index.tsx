@@ -31,6 +31,7 @@ import {
 import {
   addIngredient,
   removeIngredient,
+  resetIngredients,
 } from '../../../services/reducers/ingredients';
 import { createOrder } from '../../../services/reducers/order-details';
 
@@ -69,7 +70,12 @@ const BurgerConstructor: FC<{ className?: string }> = ({ className }) => {
     if (!user) {
       navigate(r.login);
     } else if (!orderDetailsRequest) {
-      dispatch(createOrder(actualIngredients.map(({ refId }: TActualIngredient) => refId)));
+      const orderIngredients = actualIngredients.map(({ refId }: TActualIngredient) => refId);
+
+      // eslint-disable-next-line promise/catch-or-return, promise/always-return
+      dispatch(createOrder(orderIngredients)).then(() => {
+        dispatch(resetIngredients());
+      });
     }
   }, [actualIngredients, dispatch, orderDetailsRequest, user, state, pathname, url]);
 
