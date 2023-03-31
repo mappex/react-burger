@@ -11,6 +11,7 @@ import { Modal } from '../../components/modal';
 import { BurgerIngredients } from '../../components/burger/ingredients';
 import { BurgerConstructor } from '../../components/burger/constructor';
 import { PlacedOrderDetails } from '../../components/placed-order-details';
+import Loader from '../../components/loader';
 
 import { resetOrderDetails } from '../../services/reducers/order-details';
 import {
@@ -24,8 +25,12 @@ import {
 const MainPageCls = 'main-page';
 
 const MainPage: FC = () => {
-  const { orderDetails } = useAppSelector(getOrderDetails);
+  const { orderDetails, orderDetailsRequest } = useAppSelector(getOrderDetails);
   const dispatch = useAppDispatch();
+
+  if (!orderDetailsRequest) {
+    return <Loader />;
+  }
 
   return (
     <div
