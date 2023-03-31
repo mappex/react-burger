@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import * as ReactDOMClient from 'react-dom/client';
 import { Provider } from 'react-redux';
 
 import './index.module.css';
@@ -7,12 +7,13 @@ import './index.module.css';
 import App from './components/app';
 import { store } from './services/store';
 
-ReactDOM.render(
+const container = document.getElementById('root') as HTMLElement;
+const root = ReactDOMClient.createRoot(container);
+
+root.render(
   <React.StrictMode>
     <Provider store = { store }>
       <App />
     </Provider>
     <div id = 'modal-container' />
-  </React.StrictMode>,
-  document.getElementById('root') as HTMLElement,
-);
+  </React.StrictMode>);
