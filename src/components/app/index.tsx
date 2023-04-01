@@ -2,7 +2,7 @@ import {
   FC,
   useEffect,
 } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 
 import {
   AutoLoginPhase,
@@ -51,10 +51,10 @@ const App: FC = () => {
 
   return (
     <div className = { style.app }>
-      <BrowserRouter>
+      <HashRouter >
         <AppHeader />
         { !ingredientsRequest && !ingredientsError && <AppBody /> }
-      </BrowserRouter>
+      </HashRouter >
     </div>
   );
 };
