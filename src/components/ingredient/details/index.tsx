@@ -1,4 +1,7 @@
-import React, { useMemo } from 'react';
+import React, {
+  FC,
+  useMemo,
+} from 'react';
 import {
   useParams,
 } from 'react-router-dom';
@@ -11,7 +14,7 @@ import {
   getIngredients,
 } from '../../../services/selectors';
 
-const IngredientDetails = ({ className }: { className?: string }) => {
+const IngredientDetails: FC<{ className?: string }> = ({ className }) => {
   const { id } = useParams() as { id: string };
 
   const { idToIngredientMap } = useAppSelector(getIngredients);

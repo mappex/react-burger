@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import cs from 'classnames';
 
 import { FeedActivity } from '../../components/feed/activity';
@@ -11,7 +12,7 @@ import l from '../../utils/lang';
 
 const FeedPageCls = 'feed-page';
 
-const FeedPage = () => {
+const FeedPage: FC = () => {
   const { orders, total, totalToday } = useAppSelector(getOrders);
 
   if (orders.length === 0) {

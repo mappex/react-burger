@@ -14,7 +14,7 @@ import {
   fetchCreateOrder as apiCreateOrder,
 } from '../api';
 
-const initialState: Readonly<{
+export const initialState: Readonly<{
   orderDetails: TOrderDetails | null;
   orderDetailsError: unknown | null;
   orderDetailsRequest: boolean;
@@ -24,14 +24,16 @@ const initialState: Readonly<{
   orderDetailsRequest: false,
 };
 
-export const createOrder = createAsyncThunk('order/createOrder', (ingredients: TIngredient['_id'][]) => {
-  const { accessSchema, accessToken } = getAccessSchemaAndToken();
+export type TInitialState = typeof initialState;
 
+export const createOrder = createAsyncThunk('order/createOrder', (ingredients: TIngredient['_id'][]) => {
   if (ingredients.length === 0) {
     throw new Error(
       'Unable to place an order for the empty ingredients list',
     );
   }
+
+  const { accessSchema, accessToken } = getAccessSchemaAndToken();
 
   if (!accessSchema || !accessToken) {
     throw new Error('Action cannot be handled');
@@ -81,8 +83,10 @@ export const orderDetailsSlice = createSlice({
   },
 });
 
+const { reducer } = orderDetailsSlice;
+
+export { reducer as orderDetailsReducer };
+
 export const {
   resetOrderDetails,
 } = orderDetailsSlice.actions;
-
-export default orderDetailsSlice.reducer;

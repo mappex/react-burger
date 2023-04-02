@@ -11,6 +11,8 @@ import {
   IRefreshTokensResponse,
 } from '../../utils/types';
 import {
+  IAuthLoginRequestParams,
+  IAuthRegisterRequestParams,
   fetchAuthLogin as apiAuthLogin,
   fetchAuthLogout as apiAuthLogout,
   fetchAuthTokens as apiAuthTokens,
@@ -67,7 +69,8 @@ export enum AutoLoginPhase {
   rejected = 'rejected',
 }
 
-const initialState: Readonly<{
+
+export const initialState: Readonly<{
   accessToken?: string;
   autoLoginPhase: AutoLoginPhase;
   passwordResettingPhase: PasswordResettingPhase;
@@ -85,6 +88,8 @@ const initialState: Readonly<{
   updateUserDataPhase: UpdateUserDataPhase.initial,
 };
 
+export type TInitialState = typeof initialState;
+
 export const doAutoLogin = createAsyncThunk('user/doAutoLogin', async () => {
   const { accessSchema, accessToken } = getAccessSchemaAndToken();
 
@@ -94,6 +99,7 @@ export const doAutoLogin = createAsyncThunk('user/doAutoLogin', async () => {
 
   try {
     return await apiAuthUserDataUpdate({ auth: { accessSchema, accessToken } });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     if (error.message !== 'jwt expired') {
       throw error;
@@ -123,17 +129,31 @@ export const doAutoLogin = createAsyncThunk('user/doAutoLogin', async () => {
   }
 });
 
-export const login = createAsyncThunk('user/login', apiAuthLogin);
+export const login = createAsyncThunk('user/login', async (params: IAuthLoginRequestParams) => {
+  const result = await apiAuthLogin(params);
 
-export const logout = createAsyncThunk('user/logout', () => {
+  authenticationSideEffect(result);
+
+  return result;
+});
+
+export const logout = createAsyncThunk('user/logout', async () => {
   const refreshToken = getRefreshToken();
 
   if (refreshToken) {
-    return apiAuthLogout({ refreshToken: refreshToken });
+    await apiAuthLogout({ refreshToken: refreshToken });
+
+    cleanUpAuthenticationSideEffect();
   }
 });
 
-export const registerUser = createAsyncThunk('user/registerUser', apiAuthRegister);
+export const registerUser = createAsyncThunk('user/registerUser', async (params: IAuthRegisterRequestParams) => {
+  const result = await apiAuthRegister(params);
+
+  authenticationSideEffect(result);
+
+  return result;
+});
 
 export const requestNewPasswordSetting = createAsyncThunk('user/requestNewPasswordSetting', apiPasswordNew);
 
@@ -169,6 +189,7 @@ export const updateUserData = createAsyncThunk('user/updateUserData', async ({
         password,
       },
     });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     if (error.message !== 'jwt expired') {
       throw error;
@@ -244,7 +265,6 @@ const userSlice = createSlice({
         state.userRegistrationPhase = UserRegistrationPhase.pending;
       })
       .addCase(registerUser.fulfilled, (state, { payload }: PayloadAction<TAuthUserResponse>) => {
-        authenticationSideEffect(payload);
         state.userRegistrationPhase = UserRegistrationPhase.fulfilled;
         state.userLoginPhase = UserLoginPhase.fulfilled;
         setUser(state, payload.user);
@@ -258,7 +278,6 @@ const userSlice = createSlice({
         state.userLoginPhase = UserLoginPhase.pending;
       })
       .addCase(login.fulfilled, (state, { payload }: PayloadAction<TAuthUserResponse>) => {
-        authenticationSideEffect(payload);
         state.userLoginPhase = UserLoginPhase.fulfilled;
         setUser(state, payload.user);
       })
@@ -269,7 +288,6 @@ const userSlice = createSlice({
     builder
       .addCase(logout.pending, () => {})
       .addCase(logout.fulfilled, (state) => {
-        cleanUpAuthenticationSideEffect();
         resetUser(state);
         state.userLoginPhase = UserLoginPhase.initial;
       })
@@ -302,12 +320,13 @@ const userSlice = createSlice({
   },
 });
 
+const { reducer } = userSlice;
+
+export { reducer as userReducer };
+
 export const {
   interruptUserLogin,
   interruptUpdateUserData,
   interruptUserRegistration,
   interruptPasswordResettingWorkflow,
 } = userSlice.actions;
-
-export default userSlice.reducer;
-

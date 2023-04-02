@@ -1,7 +1,7 @@
 import React, {
   ReactNode,
   useMemo,
-} from 'react';
+  FC } from 'react';
 import cs from 'classnames';
 
 import {
@@ -15,17 +15,12 @@ import l from '../../../utils/lang';
 
 const feedActivityCls = 'feed-activity';
 
-const FeedActivity = ({
-  className,
-  orders,
-  total,
-  totalToday,
-}: {
+const FeedActivity: FC<{
   className?: string;
   orders: Order[];
   total?: number;
   totalToday?: number;
-}) => {
+}> = ({ className, orders, total, totalToday }) => {
   const statusToOrdersMap = useMemo(() => {
     return orders.reduce(
       (result, order) => {

@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import {
   Logo,
   BurgerIcon,
@@ -15,7 +16,7 @@ import r from '../../utils/routes';
 
 import MenuItem from './menu-item';
 
-const AppHeader = () => {
+const AppHeader: FC = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
@@ -36,7 +37,9 @@ const AppHeader = () => {
             text = { l('order_feed') }
             isActive = {  pathname === r.feed }
             onClick = { () => navigate(r.feed) } />
-          <li className = { styles['app-header__logo-wrapper'] }>
+          <li
+            className = { styles['app-header__logo-wrapper'] }
+            onClick = { () => navigate(r.home) }>
             <Logo />
           </li>
           <MenuItem

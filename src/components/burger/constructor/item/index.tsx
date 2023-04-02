@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import cs from 'classnames';
 import {
   DragPreviewImage,
@@ -28,15 +29,7 @@ import {
   getOrderDetails,
 } from '../../../../services/selectors';
 
-const BurgerConstructorItem = ({
-  className,
-  index,
-  ingredient: { _id, image, name, price },
-  isLocked,
-  onShowIngredientInfo,
-  onDelete,
-  type,
-}: {
+const BurgerConstructorItem: FC<{
   className?: string;
   index?: number;
   ingredient: TIngredient;
@@ -44,9 +37,17 @@ const BurgerConstructorItem = ({
   onShowIngredientInfo?: () => void;
   onDelete?: () => void;
   type?: ActualIngredientType;
+}> = ({
+  className,
+  index,
+  ingredient: { image, name, price },
+  isLocked,
+  onShowIngredientInfo,
+  onDelete,
+  type,
 }) => {
   const dispatch = useAppDispatch();
-  const orderDetailsRequest = useAppSelector(getOrderDetails);
+  const { orderDetailsRequest } = useAppSelector(getOrderDetails);
 
   const [{ isItPicked }, dragRef, preview] = useDrag({
     type: DraggableTypes.ACTUALINGREDIENT,
@@ -89,6 +90,7 @@ const BurgerConstructorItem = ({
   return (
     <div
       ref = { dropRef }
+      data-test-id = 'burger-constructor-ingredient'
       className = { cs(
         styles['burger-constructor-item'],
         {

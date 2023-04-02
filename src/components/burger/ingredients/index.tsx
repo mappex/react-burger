@@ -1,9 +1,10 @@
-import {
+import { FC,
   useEffect,
   useMemo,
   useRef,
   useState,
 } from 'react';
+import cs from 'classnames';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styles from './index.module.css';
@@ -33,7 +34,7 @@ const thresholds = [
   1,
 ];
 
-const BurgerIngredients = ({ className }: { className?: string }) => {
+const BurgerIngredients: FC<{ className?: string }> = ({ className }) => {
   const { ingredients } = useAppSelector(getIngredients);
   const [selectedIngredientType, setSelectedIngredientType] = useState(
     ingredientTypes[0],
@@ -114,7 +115,9 @@ const BurgerIngredients = ({ className }: { className?: string }) => {
   }, []);
 
   return (
-    <div className = { `${styles['burger-ingredients']} pb-5 ${className}` }>
+    <div
+      className = { cs(styles['burger-ingredients'], 'pb-5', className) }
+      data-test-id = 'burger-ingredients'>
       <div className = { `${styles['burger-ingredients__title']} pt-10 pb-5 text text_type_main-large` }>
         { l('assemble_burger') }
       </div>

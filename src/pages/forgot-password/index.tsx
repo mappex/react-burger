@@ -1,5 +1,6 @@
 /* eslint-disable id-blacklist */
 import {
+  FC,
   useState,
   MouseEvent,
 } from 'react';
@@ -28,7 +29,7 @@ import styles from './index.module.css';
 import l from '../../utils/lang';
 import r from '../../utils/routes';
 
-const ForgotPasswordPage = () => {
+const ForgotPasswordPage: FC = () => {
   const dispatch = useAppDispatch();
   const { passwordResettingPhase } = useAppSelector(getUser);
 

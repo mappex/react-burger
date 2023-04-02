@@ -1,5 +1,6 @@
 /* eslint-disable id-blacklist */
 import {
+  FC,
   useRef,
   useEffect,
   ReactNode,
@@ -14,17 +15,12 @@ import styles from './index.module.css';
 
 import ModalOverlay from './overlay';
 
-const Modal = ({
-  children,
-  className,
-  onClose,
-  title,
-}: {
+const Modal: FC<{
   children?: ReactNode | ReactPortal;
   className?: string;
   onClose: () => void;
   title?: string;
-}) => {
+}> = ({ children, className, onClose, title }) => {
   const modalElementRef = useRef(null);
 
   useEffect(() => {

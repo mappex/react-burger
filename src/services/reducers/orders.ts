@@ -1,8 +1,11 @@
 import {
-  createAsyncThunk,
   createSlice,
+  createAsyncThunk,
 } from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit';
+import type {
+  PayloadAction,
+  AsyncThunk,
+} from '@reduxjs/toolkit';
 
 import { Order } from '../../utils/types';
 import {
@@ -11,7 +14,7 @@ import {
 } from '../helpers';
 import { WsActionTypes } from '../middleware';
 
-const initialState: Readonly<{
+export const initialState: Readonly<{
   orders: Order[];
   total?: number;
   totalToday?: number;
@@ -20,6 +23,8 @@ const initialState: Readonly<{
   orders: [],
   userOrders: [],
 };
+
+export type TInitialState = typeof initialState;
 
 const chunkCodeToUrlMap: {
   orders: string;
@@ -31,10 +36,8 @@ const chunkCodeToUrlMap: {
 
 type ChunkCodeToChunkWsDataMap = {
   [key in keyof typeof chunkCodeToUrlMap]: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    subscribe: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    unsubscribe: any;
+    subscribe: AsyncThunk<void, void, {}>;
+    unsubscribe: AsyncThunk<void, void, {}>;
     url: string;
     wsActionTypes: WsActionTypes;
   };
@@ -135,8 +138,10 @@ export const urlAndWaActionTypesPairs = Object
     wsActionTypes,
   ]);
 
+const { reducer } = ordersSlice;
+
+export { reducer as ordersReducer };
+
 export const subscribeForOrders = chunkCodeToChunkWsDataMap.orders.subscribe;
 export const subscribeForUserOrders = chunkCodeToChunkWsDataMap.userOrders.subscribe;
 export const unsubscribeForUserOrders = chunkCodeToChunkWsDataMap.userOrders.unsubscribe;
-
-export default ordersSlice.reducer;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import {
   useNavigate,
 } from 'react-router-dom';
@@ -8,17 +8,12 @@ import styles from './index.module.css';
 import { TIngredient } from '../../../../utils/types';
 import BurgerIngredient from '../ingredient';
 
-const BurgerIngredientType = ({
-  className,
-  ingredients,
-  title,
-  type,
-}: {
+const BurgerIngredientType: FC<{
   className?: string;
   ingredients: TIngredient[];
   title: string;
   type: string;
-}) => {
+}> = ({ className, ingredients, title, type }) => {
   const navigate = useNavigate();
 
   return (

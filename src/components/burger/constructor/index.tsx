@@ -1,9 +1,8 @@
-import {
+import { FC,
   useMemo,
   useCallback,
 } from 'react';
 import { useDrop } from 'react-dnd';
-import { v4 as uuidV4 } from 'uuid';
 import cs from 'classnames';
 import {
   useNavigate,
@@ -32,6 +31,7 @@ import {
 import {
   addIngredient,
   removeIngredient,
+  resetIngredients,
 } from '../../../services/reducers/ingredients';
 import { createOrder } from '../../../services/reducers/order-details';
 
@@ -41,9 +41,7 @@ import {
   getOrderDetails,
 } from '../../../services/selectors';
 
-const generateIngredientId = () => uuidV4();
-
-const BurgerConstructor = ({ className }: { className?: string }) => {
+const BurgerConstructor: FC<{ className?: string }> = ({ className }) => {
   const dispatch = useAppDispatch();
   const {
     actualIngredients,
@@ -72,7 +70,12 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
     if (!user) {
       navigate(r.login);
     } else if (!orderDetailsRequest) {
-      dispatch(createOrder(actualIngredients.map(({ refId }: TActualIngredient) => refId)));
+      const orderIngredients = actualIngredients.map(({ refId }: TActualIngredient) => refId);
+
+      // eslint-disable-next-line promise/catch-or-return, promise/always-return
+      dispatch(createOrder(orderIngredients)).then(() => {
+        dispatch(resetIngredients());
+      });
     }
   }, [actualIngredients, dispatch, orderDetailsRequest, user, state, pathname, url]);
 
@@ -88,10 +91,7 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
       const { refId } = item as TIngredientDragItem;
 
       if (!orderDetailsRequest) {
-        dispatch(addIngredient({
-          id: generateIngredientId(),
-          ingredient: idToIngredientMap[refId],
-        }));
+        dispatch(addIngredient(idToIngredientMap[refId]));
       }
     },
     collect(monitor) {
@@ -104,6 +104,7 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
 
   return (
     <div
+      data-test-id = 'burger-constructor'
       className = { cs(
         styles['burger-constructor'],
         'pt-25 pb-5',
@@ -142,7 +143,9 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
               <div className = { 'pt-4' } />
             </>)
         }
-        <div className = { styles['burger-constructor__filling'] }>
+        <div
+          data-test-id = 'burger-constructor-filling'
+          className = { styles['burger-constructor__filling'] }>
           {
             actualIngredients
               .slice(1, -1)
@@ -199,7 +202,9 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
             </>)
         }
       </div>
-      <div className = { `${styles['burger-constructor__total-wrapper']} pt-10` }>
+      <div
+        className = { cs(styles['burger-constructor__total-wrapper'], 'pt-10') }
+        data-test-id = 'total-wrapper'>
         <Amount
           amount = { totalAmount }
           className = { styles['burger-constructor__total'] }

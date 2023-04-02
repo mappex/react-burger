@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import cs from 'classnames';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend as Html5Backend } from 'react-dnd-html5-backend';
@@ -10,6 +11,7 @@ import { Modal } from '../../components/modal';
 import { BurgerIngredients } from '../../components/burger/ingredients';
 import { BurgerConstructor } from '../../components/burger/constructor';
 import { PlacedOrderDetails } from '../../components/placed-order-details';
+import Loader from '../../components/loader';
 
 import { resetOrderDetails } from '../../services/reducers/order-details';
 import {
@@ -22,9 +24,13 @@ import {
 
 const MainPageCls = 'main-page';
 
-const MainPage = () => {
-  const { orderDetails } = useAppSelector(getOrderDetails);
+const MainPage: FC = () => {
+  const { orderDetails, orderDetailsRequest } = useAppSelector(getOrderDetails);
   const dispatch = useAppDispatch();
+
+  if (orderDetailsRequest) {
+    return <Loader />;
+  }
 
   return (
     <div

@@ -1,3 +1,5 @@
+import React, { FC } from 'react';
+
 import {
   IngredientIcon,
   IngredientIconRenderType,
@@ -13,7 +15,7 @@ import l from '../../../../utils/lang';
 const ingredientsAndPriceClassname = 'ingredients-and-price';
 const ingredientsToRenderLimit = 6;
 
-const IngredientsAndPrice = ({ order }: { order: Order }) => {
+const IngredientsAndPrice: FC<{ order: Order }> = ({ order }) => {
   const {
     ingredientQuantityPairs,
     isItValid,

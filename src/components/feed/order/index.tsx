@@ -1,7 +1,7 @@
+import React, { FC } from 'react';
 import cs from 'classnames';
 import {
   useNavigate,
-  useLocation,
 } from 'react-router-dom';
 
 import { OrderStatus } from '../../order/status';
@@ -14,15 +14,11 @@ import styles from './index.module.css';
 
 const orderCls = 'order';
 
-const Order = ({
-  order,
-  renderStatus,
-}: {
+const Order: FC<{
   order: OrderType;
   renderStatus?: boolean;
-}) => {
+}> = ({ order, renderStatus }) => {
   const navigate = useNavigate();
-  const location = useLocation();
 
   return (
     <li
@@ -30,7 +26,7 @@ const Order = ({
       onClick = { () => {
         navigate(`/feed/${order._id}`, {
           state: {
-            background: location,
+            background: true,
           },
         });
       } }>

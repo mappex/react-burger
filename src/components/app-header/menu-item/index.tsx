@@ -1,3 +1,7 @@
+import {
+  FC,
+  MouseEventHandler,
+} from 'react';
 import cs from 'classnames';
 import { TIconProps } from '@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/utils';
 
@@ -5,19 +9,13 @@ import styles from './index.module.css';
 
 type TIcon = ({ type }: TIconProps) => JSX.Element;
 
-const MenuItem = ({
-  className,
-  Icon,
-  isActive,
-  onClick,
-  text,
-}: {
+const MenuItem: FC<{
   className?: string;
   Icon: TIcon;
   isActive?: boolean;
-  onClick?: () => void;
+  onClick?: MouseEventHandler<HTMLLIElement>;
   text: string;
-}) => {
+}> = ({ className, Icon, isActive, onClick, text }) => {
   return (
     <li
       className = { cs(
@@ -37,6 +35,10 @@ const MenuItem = ({
       <span className = 'ml-2'>{ text }</span>
     </li>
   );
+};
+
+MenuItem.defaultProps = {
+  isActive: true,
 };
 
 export default MenuItem;

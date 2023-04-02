@@ -1,5 +1,6 @@
 /* eslint-disable id-blacklist */
 import {
+  FC,
   useState,
   useEffect,
   MouseEvent,
@@ -33,7 +34,7 @@ import styles from './index.module.css';
 import l from '../../utils/lang';
 import r from '../../utils/routes';
 
-const RegistrationPage = () => {
+const RegistrationPage: FC = () => {
   const dispatch = useAppDispatch();
   const {
     userRegistrationPhase,

@@ -2,6 +2,7 @@
   "name": "react-burger",
   "version": "0.1.0",
   "private": true,
+  "homepage": "./",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -9,13 +10,18 @@
     "eject": "react-scripts eject",
     "format": "prettier-eslint --list-different $PWD/'src/**/*.{js,jsx}'; prettier-eslint --write $PWD/'src/**/*.{js,jsx}'",
     "lint": "eslint ./src/** --ext .{js,jsx} -c .eslintrc --no-error-on-unmatched-pattern",
-    "lint:fix": "eslint ./src/** --ext .{js,jsx} -c .eslintrc --no-error-on-unmatched-pattern --fix"
+    "lint:fix": "eslint ./src/** --ext .{js,jsx} -c .eslintrc --no-error-on-unmatched-pattern --fix",
+    "cypress:open": "./node_modules/.bin/cypress open",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.3",
     "@ya.praktikum/react-developer-burger-ui-components": "^1.14.0",
     "classnames": "^2.3.2",
     "date-fns": "^2.29.3",
+    "eslint-plugin-cypress": "^2.13.1",
+    "mock-socket": "^9.2.1",
     "react": "^18.2.0",
     "react-dnd": "14.0.2",
     "react-dnd-html5-backend": "14.0.0",
@@ -56,6 +62,7 @@
     "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "5.55.0",
     "@typescript-eslint/parser": "5.55.0",
+    "cypress": "^12.9.0",
     "eslint": "8.36.0",
     "eslint-config-airbnb-typescript": "17.0.0",
     "eslint-plugin-import": "2.27.5",
@@ -64,7 +71,12 @@
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-promise": "6.1.1",
     "eslint-plugin-react": "7.32.2",
-    "react-hook-form": "^7.43.7"
+    "fetch-mock": "^9.11.0",
+    "gh-pages": "^5.0.0",
+    "jest": "^29.5.0",
+    "react-hook-form": "^7.43.7",
+    "react-test-renderer": "^18.2.0",
+    "redux-mock-store": "^1.5.4"
   },
   "eslintConfig": {
     "extends": [

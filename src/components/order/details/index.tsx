@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import cs from 'classnames';
 import { useParams } from 'react-router-dom';
 
@@ -15,7 +15,7 @@ import l from '../../../utils/lang';
 
 const orderDetailsCls = 'order-details';
 
-const OrderDetails = () => {
+const OrderDetails: FC = () => {
   const { id } = useParams() as { id: string };
   const orders = useAppSelector(state => state.orders.orders);
   const order = orders.find(({ _id }) => id === _id)!;
